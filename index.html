@@ -1,0 +1,977 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Priyansh Jain · Product & Space</title>
+<meta name="description" content="Priyansh Jain builds products for what comes next. NYU Stern student working across product management, hands-on hardware, and the space industry.">
+<meta property="og:title" content="Priyansh Jain · Product & Space">
+<meta property="og:description" content="I build products for what comes next.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#05060d">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='14' fill='%237fe3ff'/%3E%3Cellipse cx='32' cy='32' rx='28' ry='9' fill='none' stroke='%23b69cff' stroke-width='3' transform='rotate(-20 32 32)'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05060d; --ink:#e9edf7; --ink-2:#c3c9d8; --muted:#949cb2; --dim:#5d657c;
+  --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.15);
+  --cyan:#7fe3ff; --violet:#b69cff; --amber:#ffbf73; --mint:#7cf2b9;
+  --display:'Space Grotesk',system-ui,sans-serif; --body:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --gutter:clamp(16px,4vw,40px); --maxw:1160px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit}
+button{font:inherit;color:inherit}
+::selection{background:rgba(127,227,255,.3)}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:8px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+#sky{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.nebula{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(60vw 45vw at 90% 5%,rgba(120,90,255,.11),transparent 60%),
+             radial-gradient(55vw 45vw at -5% 85%,rgba(60,170,255,.08),transparent 60%)}
+header,main,footer{position:relative;z-index:1}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--gutter)}
+
+/* ---------- nav ---------- */
+.nav{position:fixed;top:0;left:0;right:0;z-index:60;border-bottom:1px solid transparent;transition:background .4s,border-color .4s}
+.nav.scrolled{background:rgba(5,6,13,.72);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-color:var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;font-family:var(--display);font-weight:500;letter-spacing:.02em}
+.logo-mark{position:relative;width:28px;height:28px;border-radius:50%;border:1px solid var(--line-2);display:grid;place-items:center;font:500 10px var(--mono);letter-spacing:.05em}
+.logo-mark i{position:absolute;inset:-1px;border-radius:50%;animation:spin 7s linear infinite}
+.logo-mark i::before{content:"";position:absolute;top:-3px;left:50%;margin-left:-3px;width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+.nav-links{display:flex;gap:30px;list-style:none}
+.nav-links a{text-decoration:none;font-size:14px;color:var(--muted);position:relative;transition:color .3s}
+.nav-links a::after{content:"";position:absolute;left:0;bottom:-6px;height:1px;width:100%;background:var(--cyan);transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease)}
+.nav-links a:hover{color:var(--ink)} .nav-links a:hover::after{transform:scaleX(1)}
+.menu-btn{display:none;background:none;border:1px solid var(--line-2);border-radius:999px;width:42px;height:42px;cursor:pointer;position:relative}
+.menu-btn span{position:absolute;left:13px;right:13px;height:1px;background:var(--ink);transition:transform .35s var(--ease),top .35s var(--ease)}
+.menu-btn span:nth-child(1){top:17px} .menu-btn span:nth-child(2){top:24px}
+.nav.open .menu-btn span:nth-child(1){top:20px;transform:rotate(45deg)} .nav.open .menu-btn span:nth-child(2){top:20px;transform:rotate(-45deg)}
+
+/* ---------- hero ---------- */
+.hero{min-height:100vh;min-height:100svh;display:flex;align-items:center;padding:110px 0 90px;position:relative;overflow:hidden}
+.hero .wrap{position:relative;width:100%}
+.eyebrow{font:500 12px var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.hero h1{font-family:var(--display);font-weight:600;font-size:clamp(56px,11vw,140px);line-height:.92;letter-spacing:-.035em;margin:20px 0 26px}
+.hero h1 .ln{display:block;overflow:hidden;padding-bottom:.04em}
+.hero h1 .ln span{display:inline-block;transform:translateY(110%);animation:rise 1.2s var(--ease) forwards}
+.hero h1 .ln:nth-child(2) span{animation-delay:.12s;color:transparent;-webkit-text-stroke:1px rgba(233,237,247,.55)}
+.tagline{font-family:var(--display);font-size:clamp(22px,3vw,34px);line-height:1.2;font-weight:400;max-width:20ch}
+.tagline em{font-style:normal;background:linear-gradient(90deg,var(--cyan),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-sub{color:var(--muted);max-width:50ch;margin-top:16px;font-size:17px}
+.status{display:inline-flex;align-items:center;gap:10px;margin-top:30px;padding:8px 16px 8px 12px;border:1px solid var(--line-2);border-radius:999px;background:rgba(255,255,255,.03);font-size:13px;color:var(--ink-2);text-decoration:none;transition:border-color .3s,background .3s}
+.status:hover{border-color:rgba(127,227,255,.5);background:rgba(127,227,255,.06)}
+.status b{font-weight:500;color:var(--ink)}
+.pulse{position:relative;width:8px;height:8px;border-radius:50%;background:var(--mint);flex:none}
+.pulse::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--mint);animation:ping 2s var(--ease) infinite}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:13px 22px;border-radius:999px;font-size:15px;font-weight:500;text-decoration:none;cursor:pointer;border:1px solid transparent;transition:transform .35s var(--ease),background .3s,border-color .3s,box-shadow .3s}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:var(--ink);color:#05060d}
+.btn-primary:hover{box-shadow:0 10px 40px -10px rgba(127,227,255,.6)}
+.btn-ghost{border-color:var(--line-2);background:rgba(255,255,255,.02)}
+.btn-ghost:hover{border-color:rgba(255,255,255,.35)}
+.btn svg{width:16px;height:16px}
+.fade-in{opacity:0;transform:translateY(16px);animation:fadeUp 1s var(--ease) forwards}
+
+.hero-art{position:absolute;right:-3vw;top:50%;width:min(54vw,660px);aspect-ratio:1;transform:translateY(-50%);pointer-events:none;perspective:1400px;opacity:0;animation:fade 2.4s .5s var(--ease) forwards}
+.ha-planet{position:absolute;top:3%;left:5%;width:25%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle at 32% 28%,#3e5596 0%,#16204a 36%,#080b1a 72%);
+  box-shadow:inset -20px -26px 60px rgba(0,0,0,.75),0 0 0 1px rgba(127,227,255,.12),0 0 90px rgba(127,227,255,.16),0 0 200px rgba(150,120,255,.12)}
+.ha-planet::after{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 28% 22%,rgba(255,255,255,.22),transparent 38%)}
+.ha-back,.ha-front{position:absolute;inset:0;perspective:1400px}
+/* front copy of the rings shows only the near (lower) half, so orbits pass behind the head at the top and in front at the bottom */
+.ha-front{clip-path:polygon(0 66.2%,100% 33.8%,100% 100%,0 100%)}
+.ha-rings{position:absolute;inset:0;transform:rotateX(72deg) rotateZ(-18deg);transform-style:preserve-3d}
+.ha-face{position:absolute;inset:29%;border-radius:50%;overflow:hidden;
+  box-shadow:0 0 0 1px rgba(255,255,255,.16),0 0 0 7px rgba(127,227,255,.05),0 30px 90px -20px rgba(127,227,255,.45),0 0 140px rgba(150,120,255,.16)}
+.ha-face img{width:100%;height:100%;object-fit:cover}
+.ha-face::after{content:"";position:absolute;inset:0;border-radius:50%;box-shadow:inset 0 0 40px rgba(5,6,13,.55),inset 8px 10px 30px rgba(127,227,255,.10)}
+.ring{position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.09);animation:spin linear infinite}
+.ring i{position:absolute;top:-4px;left:50%;width:8px;height:8px;margin-left:-4px;border-radius:50%;background:var(--cyan);box-shadow:0 0 14px var(--cyan)}
+.r1{inset:16%;animation-duration:38s;border-color:rgba(127,227,255,.25)}
+.r2{inset:4%;animation-duration:70s;animation-direction:reverse}
+.r2 i{background:var(--violet);box-shadow:0 0 14px var(--violet)}
+.r3{inset:-10%;animation-duration:120s;border-style:dashed;border-color:rgba(255,255,255,.06)}
+.r3 i{width:5px;height:5px;margin-left:-2.5px;top:-3px;background:#fff;box-shadow:0 0 10px #fff}
+.scroll-cue{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;font:500 10px var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--dim);text-decoration:none}
+.scroll-cue i{width:1px;height:38px;background:linear-gradient(var(--muted),transparent);transform-origin:top;animation:drip 2.4s var(--ease) infinite}
+
+/* ---------- sections ---------- */
+section{padding:clamp(84px,12vw,150px) 0;scroll-margin-top:40px}
+.sec-head{margin-bottom:clamp(36px,5vw,56px)}
+.sec-num{font:500 12px var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--cyan);display:flex;align-items:center;gap:12px}
+.sec-num::after{content:"";height:1px;width:48px;background:linear-gradient(90deg,var(--cyan),transparent)}
+.sec-title{font-family:var(--display);font-weight:500;font-size:clamp(34px,5.4vw,60px);line-height:1.04;letter-spacing:-.025em;margin-top:14px}
+.sec-kicker{color:var(--muted);max-width:58ch;margin-top:16px;font-size:17px}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity 1.1s var(--ease),transform 1.1s var(--ease);transition-delay:var(--d,0s)}
+.reveal.in{opacity:1;transform:none}
+
+/* ---------- universe ---------- */
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:16px;flex-wrap:wrap}
+.tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;max-width:100%;padding:3px;margin:-3px}
+.tabs::-webkit-scrollbar{display:none}
+.tab{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--muted);font-size:13px;font-weight:500;cursor:pointer;transition:color .3s,border-color .3s,background .3s}
+.tab:hover{color:var(--ink)}
+.tab i{width:7px;height:7px;border-radius:50%;background:var(--c,#fff);box-shadow:0 0 8px var(--c,#fff)}
+.tab[aria-pressed="true"]{color:var(--ink);border-color:var(--line-2);background:rgba(255,255,255,.06)}
+.viewtoggle{display:flex;padding:3px;border:1px solid var(--line);border-radius:999px;flex:none}
+.viewtoggle button{border:0;background:transparent;color:var(--muted);font-size:13px;font-weight:500;padding:6px 14px;border-radius:999px;cursor:pointer;transition:background .3s,color .3s}
+.viewtoggle button[aria-pressed="true"]{background:var(--ink);color:#05060d}
+
+.stage{position:relative;height:min(78vh,760px);min-height:580px;border:1px solid var(--line);border-radius:24px;overflow:hidden;
+  background:radial-gradient(ellipse at 50% 45%,rgba(22,28,58,.55),rgba(5,6,13,.25) 70%);touch-action:pan-y;-webkit-user-select:none;user-select:none}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%}
+.stage.hovering canvas{cursor:pointer}
+.g-label{position:absolute;left:0;top:0;width:200px;margin-left:-100px;display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center;background:none;border:0;cursor:pointer;padding:6px;border-radius:12px;will-change:transform,opacity}
+.gl-num{font:500 10px var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--c)}
+.gl-name{font-family:var(--display);font-size:15px;line-height:1.25;color:var(--ink)}
+.gl-count{font:400 10.5px var(--mono);color:var(--dim);letter-spacing:.08em;margin-top:2px}
+.g-label:hover .gl-name{color:#fff;text-shadow:0 0 18px var(--c)}
+
+.planet{position:absolute;left:0;top:0;width:44px;height:44px;margin:-22px 0 0 -22px;border:0;background:none;cursor:pointer;display:grid;place-items:center;will-change:transform;z-index:2}
+.orb{position:relative;display:block;width:16px;height:16px;border-radius:50%;
+  background:radial-gradient(circle at 34% 30%,#fff 0%,var(--c) 42%,color-mix(in srgb,var(--c) 30%,#05060d) 100%);
+  box-shadow:0 0 14px color-mix(in srgb,var(--c) 80%,transparent),0 0 34px color-mix(in srgb,var(--c) 35%,transparent);
+  transition:transform .45s var(--ease)}
+.planet.planet-lg .orb::after{content:"";position:absolute;left:-55%;top:28%;width:210%;height:44%;border-radius:50%;border:1px solid color-mix(in srgb,var(--c) 75%,transparent);transform:rotate(-22deg)}
+.planet.star .orb{width:7px;height:7px;background:#fff;box-shadow:0 0 8px #fff,0 0 18px var(--c),0 0 30px color-mix(in srgb,var(--c) 50%,transparent)}
+.planet.star .orb::before,.planet.star .orb::after{content:"";position:absolute;left:50%;top:50%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.8),transparent);width:22px;height:1px;transform:translate(-50%,-50%)}
+.planet.star .orb::after{transform:translate(-50%,-50%) rotate(90deg)}
+.planet.live .orb::before{content:"";position:absolute;inset:-4px;border-radius:50%;border:1px solid var(--mint);animation:ping 2.2s var(--ease) infinite}
+.planet:hover .orb,.planet.hl .orb{transform:scale(1.45)}
+.p-label{position:absolute;top:calc(50% + 15px);left:50%;transform:translate(-50%,4px);display:flex;flex-direction:column;align-items:center;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .4s,transform .4s var(--ease);text-shadow:0 1px 10px #000,0 0 4px #000}
+.p-label b{font:500 13px var(--display);color:var(--ink)}
+.p-label small{font:400 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--c)}
+.planet.show .p-label,.planet:hover .p-label,.planet.hl .p-label{opacity:1;transform:translate(-50%,0)}
+
+.hud{position:absolute;left:0;right:0;pointer-events:none;display:flex;align-items:center;gap:10px;padding:16px;z-index:5}
+.hud-top{top:0;justify-content:space-between}
+.hud-bottom{bottom:0;flex-direction:column;gap:12px;padding-bottom:18px}
+.hud > *, .hud-bottom > *{pointer-events:auto}
+.hud-title{font-family:var(--display);font-size:15px;opacity:0;transform:translateY(-6px);transition:opacity .5s,transform .5s var(--ease);text-align:right;pointer-events:none}
+.hud-title span{display:block;font:500 10px var(--mono);letter-spacing:.2em;text-transform:uppercase}
+.icon-btn{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;border:1px solid var(--line-2);background:rgba(5,6,13,.6);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-radius:999px;padding:8px 14px;font-size:13px;cursor:pointer;transition:border-color .3s,background .3s,opacity .5s,transform .5s var(--ease)}
+.icon-btn:hover{border-color:rgba(255,255,255,.4)}
+.hud-back{opacity:0;transform:translateY(-6px);pointer-events:none}
+.stage.zoomed .hud-back,.stage.zoomed .hud-title{opacity:1;transform:none;pointer-events:auto}
+.hint{font:400 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim);text-align:center;transition:opacity .5s}
+.stage.zoomed .hint{opacity:0}
+.hud-nav{display:flex;align-items:center;gap:8px;max-width:100%;opacity:0;transform:translateY(8px);transition:opacity .5s,transform .5s var(--ease);pointer-events:none}
+.stage.zoomed .hud-nav{opacity:1;transform:none;pointer-events:auto}
+.hud-chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:2px}
+.hud-chips::-webkit-scrollbar{display:none}
+.hchip{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;padding:8px 14px;border-radius:999px;border:1px solid var(--line-2);background:rgba(5,6,13,.65);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font-size:13px;cursor:pointer;transition:border-color .3s}
+.hchip i{width:6px;height:6px;border-radius:50%;background:var(--c);box-shadow:0 0 8px var(--c)}
+.hchip:hover{border-color:var(--c)}
+.round{width:36px;height:36px;padding:0;justify-content:center;flex:none}
+.hud-bottom .hint{position:absolute;bottom:20px;left:16px;right:16px}
+
+.list{display:none}
+.universe.is-list .stage{display:none}
+.universe.is-list .list{display:block}
+.lgroup{margin-bottom:56px}
+.lgroup[hidden]{display:none}
+.lgroup-head{display:flex;align-items:baseline;gap:14px;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.lgroup-head span{font:500 11px var(--mono);letter-spacing:.18em;color:var(--c);text-transform:uppercase}
+.lgroup-head h3{font:500 22px var(--display);letter-spacing:-.01em}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:16px}
+.card{position:relative;border:1px solid var(--line);border-radius:20px;padding:24px;background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01));overflow:hidden;transition:border-color .4s,transform .4s var(--ease)}
+.card::before{content:"";position:absolute;top:-60px;right:-60px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--c) 22%,transparent),transparent 70%);opacity:.6;transition:opacity .4s}
+.card:hover{border-color:color-mix(in srgb,var(--c) 40%,transparent);transform:translateY(-3px)}
+.card:hover::before{opacity:1}
+.card-kind{font:500 10.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--c)}
+.card h4{font:500 22px var(--display);margin-top:8px;letter-spacing:-.01em}
+.card .sub{color:var(--muted);font-size:14px}
+.card .pdr{margin-top:18px}
+
+.pdr{display:grid;gap:16px}
+.pdr-row .k{display:block;font:500 10.5px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:4px}
+.pdr-row p{color:var(--ink-2);font-size:15px}
+.pdr-row.res{padding-left:14px;border-left:2px solid var(--c)}
+.pdr-row.res p{color:var(--ink)}
+.tools{display:flex;flex-wrap:wrap;gap:6px;margin-top:20px}
+.tools span{font:400 12px var(--mono);color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:4px 10px}
+.award{display:inline-flex;align-items:center;gap:6px;font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#05060d;background:var(--amber);border-radius:999px;padding:3px 10px;margin-left:8px;vertical-align:middle}
+.ph{display:inline;color:var(--amber);background:rgba(255,191,115,.08);border:1px dashed rgba(255,191,115,.55);border-radius:6px;padding:1px 6px;font:500 12.5px var(--mono)}
+.media-ph{margin-top:20px;aspect-ratio:16/9;border:1px dashed rgba(255,191,115,.45);border-radius:14px;display:grid;place-items:center;text-align:center;padding:16px;font:500 12px var(--mono);letter-spacing:.06em;color:var(--amber);background:repeating-linear-gradient(135deg,rgba(255,191,115,.03) 0 10px,transparent 10px 20px)}
+
+/* ---------- panel ---------- */
+.scrim{position:fixed;inset:0;z-index:80;background:rgba(2,3,8,.55);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .5s}
+.scrim.open{opacity:1;pointer-events:auto}
+.panel{position:fixed;top:0;right:0;z-index:90;height:100%;width:min(500px,100%);overflow-y:auto;overscroll-behavior:contain;
+  background:linear-gradient(180deg,rgba(15,19,38,.97),rgba(7,9,20,.985));border-left:1px solid var(--line-2);
+  padding:24px clamp(20px,3vw,32px) 40px;transform:translateX(102%);transition:transform .65s var(--ease);box-shadow:-30px 0 80px rgba(0,0,0,.5)}
+.panel.open{transform:none}
+.panel-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:26px}
+.gchip{display:inline-flex;align-items:center;gap:8px;font:500 10.5px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--c)}
+.gchip i{width:7px;height:7px;border-radius:50%;background:var(--c);box-shadow:0 0 10px var(--c)}
+.p-kind{font:400 12px var(--mono);color:var(--muted);letter-spacing:.06em}
+.p-title{font:500 clamp(30px,4vw,38px)/1.05 var(--display);letter-spacing:-.02em;margin-top:10px}
+.p-sub{color:var(--muted);margin-top:6px}
+.panel .pdr{margin-top:26px;gap:22px}
+.panel .pdr-row p{font-size:16px}
+.p-nav{display:flex;justify-content:space-between;align-items:center;margin-top:36px;padding-top:20px;border-top:1px solid var(--line)}
+.p-nav span{font:400 12px var(--mono);color:var(--dim)}
+#pbody{animation:fadeUp .6s var(--ease)}
+
+/* ---------- timeline ---------- */
+.timeline{position:relative;max-width:860px;padding-left:40px}
+.timeline::before{content:"";position:absolute;left:6px;top:10px;bottom:20px;width:1px;background:linear-gradient(var(--cyan),var(--violet) 55%,transparent)}
+.wp{position:relative;padding-bottom:52px}
+.wp::before{content:"";position:absolute;left:-40px;top:8px;width:13px;height:13px;border-radius:50%;background:var(--bg);border:1px solid var(--cyan);box-shadow:0 0 0 4px rgba(127,227,255,.07),0 0 14px rgba(127,227,255,.4)}
+.wp.minor::before{border-color:var(--dim);box-shadow:none;width:9px;height:9px;left:-38px;top:10px}
+.wp-date{font:500 11.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.wp h3{font:500 clamp(20px,2.4vw,24px)/1.25 var(--display);letter-spacing:-.01em;margin-top:6px}
+.wp h3 .org{color:var(--muted);font-weight:400}
+.wp-loc{font-size:14px;color:var(--dim);margin-top:2px}
+.wp ul{margin-top:14px;padding-left:18px;color:var(--ink-2);display:grid;gap:8px;font-size:15.5px}
+.wp li::marker{color:var(--dim)}
+.wp p.one{margin-top:10px;color:var(--ink-2);font-size:15.5px}
+.linkish{display:inline-flex;align-items:center;gap:6px;margin-top:14px;background:none;border:0;padding:0;color:var(--cyan);font-size:14px;cursor:pointer;text-decoration:none}
+.linkish:hover{text-decoration:underline;text-underline-offset:4px}
+
+/* ---------- skills ---------- */
+.skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:16px}
+.skill{border:1px solid var(--line);border-radius:20px;padding:24px;background:rgba(255,255,255,.015);transition:border-color .4s}
+.skill:hover{border-color:var(--line-2)}
+.skill svg{width:100%;height:70px;display:block;margin-bottom:16px;overflow:visible}
+.skill svg line{stroke:color-mix(in srgb,var(--c) 55%,transparent);stroke-width:1;stroke-dasharray:200;stroke-dashoffset:200;transition:stroke-dashoffset 2.2s var(--ease)}
+.skill.in svg line{stroke-dashoffset:0}
+.skill svg circle{fill:#fff}
+.skill h3{font:500 19px var(--display);display:flex;align-items:center;gap:10px}
+.skill h3 i{width:7px;height:7px;border-radius:50%;background:var(--c);box-shadow:0 0 10px var(--c)}
+.skill ul{list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.skill li{font-size:13px;color:var(--ink-2);border:1px solid var(--line);border-radius:999px;padding:5px 11px}
+
+/* ---------- contact ---------- */
+.contact{text-align:center;padding-bottom:110px}
+.contact .sec-num{justify-content:center}
+.contact .sec-num::before{content:"";height:1px;width:48px;background:linear-gradient(270deg,var(--cyan),transparent)}
+.contact .sec-title{font-size:clamp(40px,7vw,84px);max-width:14ch;margin:16px auto 0}
+.contact .sec-kicker{margin:20px auto 0}
+.email{display:inline-flex;align-items:center;gap:12px;margin-top:40px;font:400 clamp(17px,2.6vw,26px) var(--display);text-decoration:none;border-bottom:1px solid var(--line-2);padding-bottom:6px;transition:border-color .3s,color .3s;word-break:break-all}
+.email:hover{border-color:var(--cyan);color:#fff}
+.contact .cta-row{justify-content:center;margin-top:30px}
+.toast{position:fixed;left:50%;bottom:28px;z-index:100;transform:translate(-50%,20px);opacity:0;padding:10px 18px;border-radius:999px;background:var(--ink);color:#05060d;font-size:14px;font-weight:500;transition:opacity .4s,transform .4s var(--ease);pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+footer{border-top:1px solid var(--line);padding:28px 0;font-size:13px;color:var(--dim)}
+footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+/* ---------- keyframes ---------- */
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes rise{to{transform:none}}
+@keyframes fade{to{opacity:1}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes ping{0%{transform:scale(1);opacity:.8}80%,100%{transform:scale(2.6);opacity:0}}
+@keyframes drip{0%{transform:scaleY(0)}50%{transform:scaleY(1);opacity:1}100%{transform:scaleY(1);opacity:0}}
+
+/* ---------- responsive ---------- */
+@media (max-width:860px){
+}
+@media (max-width:760px){
+  .menu-btn{display:block}
+  .nav-links{position:absolute;top:64px;left:0;right:0;flex-direction:column;gap:0;padding:8px var(--gutter) 20px;background:rgba(5,6,13,.95);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);opacity:0;transform:translateY(-8px);pointer-events:none;transition:opacity .35s,transform .35s var(--ease)}
+  .nav.open .nav-links{opacity:1;transform:none;pointer-events:auto}
+  .nav.open{background:rgba(5,6,13,.95)}
+  .nav-links a{display:block;padding:14px 0;font-size:17px;color:var(--ink);border-bottom:1px solid var(--line)}
+  .nav-links a::after{display:none}
+  .hero{flex-direction:column;align-items:stretch;justify-content:flex-end;padding:76px 0 110px}
+  .hero-art{position:relative;right:auto;top:auto;transform:none;flex:none;width:min(76vw,320px);margin:0 0 -6px calc(var(--gutter) - min(76vw,320px) * .29)}
+  .hero h1{margin-top:14px}
+  .ha-planet{left:auto;right:3%;top:1%;width:27%}
+  .hint{display:none}
+  .hud-title{font-size:13px;max-width:52%}
+  .hud{padding:12px}
+  .eyebrow{letter-spacing:.12em;font-size:11px}
+  .stage{height:660px;min-height:0;border-radius:20px}
+  .toolbar{flex-direction:column;align-items:stretch}
+  .viewtoggle{align-self:flex-start}
+  .timeline{padding-left:30px}
+  .wp::before{left:-30px} .wp.minor::before{left:-28px}
+  .panel{top:auto;bottom:0;height:auto;max-height:88vh;max-height:88svh;width:100%;border-left:0;border-top:1px solid var(--line-2);border-radius:22px 22px 0 0;transform:translateY(102%)}
+  .panel::before{content:"";display:block;width:40px;height:4px;border-radius:4px;background:var(--line-2);margin:-10px auto 16px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+  .hero h1 .ln span,.fade-in{transform:none;opacity:1}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<canvas id="sky" aria-hidden="true"></canvas>
+<div class="nebula" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a href="#top" class="logo" aria-label="Priyansh Jain, back to top"><span class="logo-mark">PJ<i></i></span><span>Priyansh Jain</span></a>
+    <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><span></span><span></span></button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#universe">Universe</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero" aria-label="Introduction">
+    <div class="hero-art">
+      <div class="ha-planet" aria-hidden="true"></div>
+      <div class="ha-back" aria-hidden="true"><div class="ha-rings"><div class="ring r1"><i></i></div><div class="ring r2"><i></i></div><div class="ring r3"><i></i></div></div></div>
+      <div class="ha-face"><img src="assets/priyansh.jpg" alt="Portrait of Priyansh Jain" width="560" height="560"></div>
+      <div class="ha-front" aria-hidden="true"><div class="ha-rings"><div class="ring r1"><i></i></div><div class="ring r2"><i></i></div><div class="ring r3"><i></i></div></div></div>
+    </div>
+    <div class="wrap">
+      <p class="eyebrow fade-in" style="animation-delay:.05s">Product Management · Space · NYU Stern</p>
+      <h1><span class="ln"><span>Priyansh</span></span><span class="ln"><span>Jain</span></span></h1>
+      <p class="tagline fade-in" style="animation-delay:.45s">I build products for <em>what comes next.</em></p>
+      <p class="hero-sub fade-in" style="animation-delay:.6s">I study Business, Technology &amp; Entrepreneurship at NYU Stern. What I love most are answers that open up new questions, and I bring that same curiosity to building products.</p>
+      <a class="status fade-in" style="animation-delay:.75s" href="#universe" data-open="ai:0"><span class="pulse"></span><span>Currently building <b>Mission 001</b>: autonomous spacecraft inspection</span></a>
+      <div class="cta-row fade-in" style="animation-delay:.9s">
+        <a class="btn btn-primary" href="#universe">Explore my universe
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v10M3.5 8.5 8 13l4.5-4.5"/></svg></a>
+        <a class="btn btn-ghost" href="assets/Priyansh_Jain_Resume.pdf" target="_blank" rel="noopener">Resume
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 11 11 5M6 5h5v5"/></svg></a>
+      </div>
+    </div>
+    <a class="scroll-cue" href="#universe" aria-label="Scroll to projects">Scroll<i></i></a>
+  </section>
+
+  <!-- UNIVERSE -->
+  <section id="universe" class="universe">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <p class="sec-num">01 · The Universe</p>
+        <h2 class="sec-title">Four galaxies of work.</h2>
+        <p class="sec-kicker">Each kind of work is its own galaxy. Planets are featured projects and stars are smaller builds. Select a galaxy to fly in, then open any world for the problem, what I did, and the result.</p>
+      </div>
+      <div class="toolbar reveal">
+        <div class="tabs" id="tabs" role="group" aria-label="Filter by galaxy"></div>
+        <div class="viewtoggle" role="group" aria-label="View">
+          <button type="button" data-view="map" aria-pressed="true">Map</button>
+          <button type="button" data-view="list" aria-pressed="false">List</button>
+        </div>
+      </div>
+      <div class="stage reveal" id="stage">
+        <canvas id="ucanvas" aria-hidden="true"></canvas>
+        <div class="hud hud-top">
+          <button class="icon-btn hud-back" id="hudBack" type="button" aria-label="Back to all galaxies">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 8H3M7.5 3.5 3 8l4.5 4.5"/></svg>All galaxies</button>
+          <p class="hud-title" id="hudTitle" aria-live="polite"></p>
+        </div>
+        <div class="hud hud-bottom">
+          <div class="hud-nav">
+            <button class="icon-btn round" id="gPrev" type="button" aria-label="Previous galaxy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 3 5 8l5 5"/></svg></button>
+            <div class="hud-chips" id="hudChips"></div>
+            <button class="icon-btn round" id="gNext" type="button" aria-label="Next galaxy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3l5 5-5 5"/></svg></button>
+          </div>
+          <p class="hint" id="hint">Select a galaxy to fly in</p>
+        </div>
+      </div>
+      <div class="list" id="list"></div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <p class="sec-num">02 · Flight Log</p>
+        <h2 class="sec-title">Experience.</h2>
+      </div>
+      <div class="timeline">
+        <article class="wp reveal">
+          <p class="wp-date">Jun – Aug 2026</p>
+          <h3>Business Analyst Intern <span class="org">· Livegage</span></h3>
+          <p class="wp-loc">New York, NY</p>
+          <ul>
+            <li>Engineered a loan-level mortgage cash-flow engine modeling paydown, prepayment, defaults, valuation, and waterfalls across hundreds of scenarios.</li>
+            <li>Scoped, built, and shipped a credit-enhancement model, calibrated against 50 real deals and deployed as a service.</li>
+            <li>Integrated both tools into Livegage's INSAITS platform, connecting the analytics to the interface for a complete user workflow.</li>
+            <li>Built pricing, customer-acquisition, revenue, cost, margin, and two-year ARR forecasts for INSAITS with the Capital Markets Products team.</li>
+          </ul>
+        </article>
+        <article class="wp reveal">
+          <p class="wp-date">Jan – May 2026</p>
+          <h3>Product Management Intern <span class="org">· CoreWeave</span></h3>
+          <p class="wp-loc">New York, NY · via NYU Stern</p>
+          <ul>
+            <li>Conducted 20 customer interviews across 4 AI-native verticals to define ICPs and prioritize go-to-market opportunities.</li>
+            <li>Partnered with Solution Architects and Product Marketing to design 5 workflows integrating ML tooling into CoreWeave's Kubernetes ecosystem.</li>
+            <li>Authored the PR/FAQ for a two-sided AI infrastructure marketplace, mapping 30 partners to 10 enterprise use cases.</li>
+          </ul>
+          <button class="linkish" type="button" data-open="ps:0">View it in the Universe →</button>
+        </article>
+        <article class="wp reveal">
+          <p class="wp-date">May 2025 – May 2026</p>
+          <h3>President <span class="org">· Business, Technology &amp; Entrepreneurship Leadership</span></h3>
+          <p class="wp-loc">NYU Stern</p>
+          <ul>
+            <li>Led a 9-member executive board across strategy, budgeting, and outreach.</li>
+            <li>Ran 20 social and professional events with 20+ attendees each, three of them drawing 60+.</li>
+            <li>Sourced 17 speakers from outreach to 150+ professionals across VC, PE, and consumer, including Mike Pell, inventor of the PDF.</li>
+          </ul>
+        </article>
+        <article class="wp reveal">
+          <p class="wp-date">Jun – Jul 2025</p>
+          <h3>Summer Intern, Operational &amp; Financial Restructuring <span class="org">· EY</span></h3>
+          <p class="wp-loc">Mumbai, India</p>
+          <ul>
+            <li>Spotted a bottleneck in company research and built a Python/Playwright tool that pulls financial data from PrivateCircle based on Excel inputs, cutting manual research time by 70%.</li>
+            <li>Supported insolvency resolution processes: condensed resolution plans, ran compliance checks, and prepared 3 presentations for the Committee of Creditors.</li>
+            <li>Analyzed a hospital restructuring, including fair and liquidation values, financial projections, and buyer proposals, and flagged financial and operational red flags for the team.</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <p class="sec-num">03 · Skills</p>
+        <h2 class="sec-title">Constellations.</h2>
+      </div>
+      <div class="skills" id="skillGrid"></div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact">
+    <div class="wrap">
+      <div class="reveal">
+        <p class="sec-num">04 · Contact</p>
+        <h2 class="sec-title">Let's build what comes next.</h2>
+        <p class="sec-kicker">I'm looking for PM internships and full-time roles, especially at space companies. If you're building something ambitious, I'd love to hear about it.</p>
+        <a class="email" href="mailto:priyansh.jain@stern.nyu.edu" id="email">priyansh.jain@stern.nyu.edu</a>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="https://www.linkedin.com/in/priyanshjain05/" target="_blank" rel="noopener">LinkedIn
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 11 11 5M6 5h5v5"/></svg></a>
+          <a class="btn btn-ghost" href="assets/Priyansh_Jain_Resume.pdf" target="_blank" rel="noopener">Resume (PDF)</a>
+          <button class="btn btn-ghost" type="button" id="copyEmail">Copy email</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Priyansh Jain</span>
+    <span>Made in New York, looking up.</span>
+  </div>
+</footer>
+
+<div class="scrim" id="scrim"></div>
+<aside class="panel" id="panel" role="dialog" aria-modal="true" aria-labelledby="ptitle" aria-hidden="true">
+  <div class="panel-top">
+    <span class="gchip" id="pgal"></span>
+    <button class="icon-btn" id="pclose" type="button" aria-label="Close project">Close
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3l10 10M13 3 3 13"/></svg></button>
+  </div>
+  <div id="pbody"></div>
+  <div class="p-nav">
+    <button class="icon-btn" id="pprev" type="button">← Prev</button>
+    <span id="pcount"></span>
+    <button class="icon-btn" id="pnext" type="button">Next →</button>
+  </div>
+</aside>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ======================= CONTENT ======================= */
+const GALAXIES = [
+  { id:'ai', num:'01', name:'AI, Software & Startups', color:'#7fe3ff', projects:[
+    { title:'Mission 001', sub:'Autonomous Spacecraft Inspection', kind:'planet', live:true, label:'In progress',
+      meta:'Project · Solo · In progress',
+      problem:'Inspecting a spacecraft in orbit calls for a robot that can work around the vehicle on its own: seeing it, spotting anomalies, planning its moves, and recovering when something goes wrong.',
+      did:'Building the simulation and full technical stack myself in Python and MuJoCo, centered on a free-flying 6-DOF robot operating around a spacecraft. The architecture covers perception, anomaly detection, planning, failure recovery, and mission evaluation.',
+      result:'In active development, with a working prototype coming soon. [[target date + first milestone reached]]',
+      tools:['Python','MuJoCo','Physics simulation','Robotics'], media:'Simulation demo video or GIF' },
+    { title:'Unblur', sub:'AI Onboarding Assistant', kind:'planet', label:'AI startup concept',
+      meta:'Project · Solo',
+      problem:'Interns and early-career employees lose momentum when their supervisors aren\'t around to explain company-specific context.',
+      did:'Generated 10 startup concepts, narrowed them down, and chose Unblur as the strongest. Ran 20 user interviews and shaped the product direction around closing onboarding knowledge gaps.',
+      result:'Product direction grounded in 20 user interviews; mockup in progress. [[top interview insight]]',
+      tools:['Customer discovery','User interviews','Product strategy','AI'], media:'Product mockup' },
+    { title:'Astryn', sub:'Dream-Logging Experience', kind:'star', label:'Product concept',
+      meta:'Project · Solo',
+      problem:'Most dream apps pitch themselves as lucid-dreaming tools. I wanted reflecting on your dreams to feel immersive instead.',
+      did:'Developed the product concept and interaction direction: you explore your "inner galaxy" through journaling, emotional visualization, and streak-based engagement.',
+      result:'[[prototype status, screens, or early user feedback]]',
+      tools:['Product design','Interaction design','Engagement loops'], media:'Prototype screens' },
+  ]},
+  { id:'im', num:'02', name:'Interactive Media & Creative Tech', color:'#b69cff', projects:[
+    { title:'Dreamweaver', sub:'Hand-Tracking Interactive Experience', kind:'planet', label:'Hand-tracking',
+      meta:'Class project · Public showcase',
+      problem:'Could you move through a dreamlike story using only your hands, with no mouse or keyboard?',
+      did:'Designed and programmed the full interaction system in p5.js and ml5.js: hand tracking, gesture recognition, particle effects, scene transitions, and a typewriter sequence.',
+      result:'Five scenes, played live by 25 people at a public showcase.',
+      tools:['p5.js','ml5.js','JavaScript','Gesture recognition'], media:'Demo video' },
+    { title:'Velostat Heart', sub:'Touch-Responsive Physical Interface', kind:'star', label:'Physical computing',
+      meta:'Project',
+      problem:'Can a few simple conductive materials turn touch into something that feels alive?',
+      did:'Built a heart-shaped interface from pressure-sensitive Velostat, with sensing and LEDs that turn touch into an ambient visual response.',
+      result:'[[photo or video + how people interacted with it]]',
+      tools:['Velostat','Sensors','LEDs','Physical computing'], media:'Photo or video' },
+    { title:'After Effects Animation', sub:'Two People Falling in Love', kind:'star', label:'Motion design', pLabel:'Challenge',
+      meta:'Motion design',
+      problem:'Telling a love story through motion alone, without much prior drawing experience.',
+      did:'Developed the visual concept and animated it in After Effects, experimenting with motion, composition, and transitions.',
+      result:'[[link to the finished animation]]',
+      tools:['After Effects','Motion design','Visual storytelling'], media:'Animation video' },
+  ]},
+  { id:'hw', num:'03', name:'Hardware & Fabrication', color:'#ffbf73', projects:[
+    { title:'Rube Goldberg Machine', sub:'Arduino Nano 33 IoT Chain Reaction', kind:'planet', label:'Arduino build', pLabel:'Challenge',
+      meta:'Project',
+      problem:'Make every physical event reliably trigger the next, using sensors and actuators that don\'t always cooperate.',
+      did:'Designed and programmed a chain reaction on an Arduino Nano 33 IoT using a VL53L0X distance sensor, servo motor, force-sensitive resistor, and speaker, with each stage triggering the next. Troubleshot sensor readings and built conductive materials into the physical design.',
+      result:'[[number of stages, reliability, or run-through video]]',
+      tools:['Arduino','C++','VL53L0X','Servo','FSR'], media:'Run-through video' },
+    { title:'CNC Space "P"', sub:'Fusion 360 × ShopBot', kind:'star', label:'CAD + CNC', pLabel:'Challenge',
+      meta:'Project',
+      problem:'Turn a single letter into a small piece of the solar system.',
+      did:'Designed a plywood "P" with planets, orbital elements, contours, pockets, and engraving in Fusion 360, generated the CNC toolpaths, and machined it on a ShopBot.',
+      result:'A finished, machined piece. [[dimensions + photo]]',
+      tools:['Fusion 360','CAM toolpaths','ShopBot CNC'], media:'Photo of the finished piece' },
+  ]},
+  { id:'ps', num:'04', name:'Product, Design & Strategy', color:'#7cf2b9', projects:[
+    { title:'AI Infrastructure Marketplace', sub:'CoreWeave · Product Management Intern', kind:'planet', label:'CoreWeave',
+      meta:'Experience · Jan – May 2026 · via NYU Stern',
+      problem:'CoreWeave was exploring an AI-native enterprise marketplace connecting infrastructure, software, tools, and enterprise customers, and needed to know who to serve first and with which partners.',
+      did:'Conducted 20 customer interviews across 4 AI-native verticals and defined ICP segments. Partnered with Solution Architects and Product Marketing to design 5 workflows integrating ML tooling into CoreWeave\'s Kubernetes ecosystem, and authored the PR/FAQ.',
+      result:'A PR/FAQ for a two-sided marketplace mapping 30 partners to 10 enterprise use cases, plus ICP segmentation and partner strategy to prioritize go-to-market.',
+      tools:['Customer discovery','ICP definition','PR/FAQ','GTM strategy'] },
+    { title:'Uber AV Strategy', sub:'Uber Case Competition · Beta Alpha Psi', kind:'planet', label:'1st place', award:'1st place',
+      meta:'Competition · Team of 4 · Spring 2026',
+      problem:'Where and how should Uber expand its autonomous-vehicle business following its Rivian partnership?',
+      did:'Analyzed demand, infrastructure, the competitive landscape, and the EV ecosystem to find high-utilization corridors. Built the model comparing fleet structures, recommended a phased Atlanta launch on Rivian\'s R2 fleet, and presented to Uber Finance leadership.',
+      result:'1st place of 9 teams. Projected $45M EBITDA from a 400-vehicle Rivian fleet and 80% higher revenue per trip.',
+      tools:['Financial modeling','Market strategy','Fleet economics','Excel'] },
+    { title:'Meroo Design Sprint', sub:'Gamified Career Discovery', kind:'star', label:'Design sprint',
+      meta:'BTE Design Sprint · Product Manager · Team of 4 · Nov 2024',
+      problem:'Meroo, a gamified career-discovery app, wanted to reach users beyond its original audience.',
+      did:'Led a 4-person team as PM through a one-week sprint with founder David Restrepo, from problem definition and user interviews to ideation and a prototype concept adapted for users at three career stages.',
+      result:'Pitched against two competing teams. The founder implemented some of our ideas, and our user interviews confirmed the positioning.',
+      tools:['Design thinking','User research','Prototyping','Project management'] },
+  ]},
+];
+
+const SKILLS = [
+  { name:'Product', color:'#7cf2b9', items:['User research','Customer discovery','PR/FAQs','ICP definition','Go-to-market strategy','Design thinking','Prioritization','Storytelling & pitching'] },
+  { name:'Technical', color:'#7fe3ff', items:['Python','SQL','HTML & CSS','Playwright','MuJoCo','p5.js & ml5.js','Claude Code'] },
+  { name:'Hardware & Making', color:'#ffbf73', items:['Arduino & C++','Sensors & physical computing','Fusion 360 (CAD/CAM)','ShopBot CNC','Fabrication'] },
+  { name:'Business & Creative', color:'#b69cff', items:['Financial modeling','Excel','QuickBooks','After Effects','Adobe Creative Cloud','Visual storytelling'] },
+];
+
+/* ======================= HELPERS ======================= */
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const hexRgb = h => [1,3,5].map(i => parseInt(h.slice(i, i+2), 16));
+const rgba = (c, a) => `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+const ph = s => s.replace(/\[\[(.+?)\]\]/g, '<span class="ph">[PLACEHOLDER: $1]</span>');
+function mulberry(a){ return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function toast(msg){ const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), 1800); }
+const pdrHTML = (p, c) => `
+  <div class="pdr" style="--c:${c}">
+    <div class="pdr-row"><span class="k">${p.pLabel || 'Problem'}</span><p>${ph(p.problem)}</p></div>
+    <div class="pdr-row"><span class="k">What I did</span><p>${ph(p.did)}</p></div>
+    <div class="pdr-row res"><span class="k">Result</span><p>${ph(p.result)}</p></div>
+  </div>`;
+
+/* ======================= BACKGROUND SKY ======================= */
+(function sky(){
+  const c = $('#sky'), x = c.getContext('2d');
+  let W, H, stars = [], mx = 0, my = 0, tmx = 0, tmy = 0, shoot = null, nextShoot = performance.now() + 3500;
+  function resize(){
+    const d = Math.min(devicePixelRatio || 1, 2); W = innerWidth; H = innerHeight;
+    c.width = W * d; c.height = H * d; x.setTransform(d, 0, 0, d, 0, 0);
+    const n = Math.min(420, Math.round(W * H / 4800)), rnd = mulberry(42);
+    stars = Array.from({length:n}, () => ({ x:rnd()*W, y:rnd()*H, z:rnd(), tw:rnd()*6.28, ts:.4+rnd()*1.4, blue:rnd()<.12 }));
+    if (RM) draw(0);
+  }
+  function draw(t){
+    x.clearRect(0, 0, W, H);
+    mx += (tmx - mx) * .04; my += (tmy - my) * .04;
+    const sy = RM ? 0 : scrollY;
+    for (const s of stars){
+      const depth = .15 + s.z * .85;
+      let py = (s.y - sy * depth * .12 + my * depth * 16) % H; if (py < 0) py += H;
+      const px = s.x + mx * depth * 16;
+      x.globalAlpha = (.18 + s.z * .62) * (RM ? 1 : .6 + .4 * Math.sin(t * .001 * s.ts + s.tw));
+      x.fillStyle = s.blue ? '#bfe6ff' : '#fff';
+      const r = .35 + s.z * 1.05;
+      x.beginPath(); x.arc(px, py, r, 0, 6.2832); x.fill();
+    }
+    if (!RM){
+      if (!shoot && t > nextShoot){ shoot = { x: W*(.35+Math.random()*.65), y: H*Math.random()*.4, vx: -(7+Math.random()*4), vy: 2.4+Math.random()*1.6, life: 0 }; }
+      if (shoot){
+        shoot.life++; shoot.x += shoot.vx; shoot.y += shoot.vy;
+        const a = Math.sin(Math.min(1, shoot.life / 50) * Math.PI);
+        const g = x.createLinearGradient(shoot.x, shoot.y, shoot.x - shoot.vx * 16, shoot.y - shoot.vy * 16);
+        g.addColorStop(0, `rgba(255,255,255,${.9*a})`); g.addColorStop(1, 'rgba(255,255,255,0)');
+        x.globalAlpha = 1; x.strokeStyle = g; x.lineWidth = 1.2;
+        x.beginPath(); x.moveTo(shoot.x, shoot.y); x.lineTo(shoot.x - shoot.vx * 16, shoot.y - shoot.vy * 16); x.stroke();
+        if (shoot.life > 50){ shoot = null; nextShoot = t + 6000 + Math.random() * 9000; }
+      }
+      requestAnimationFrame(draw);
+    }
+    x.globalAlpha = 1;
+  }
+  addEventListener('resize', resize);
+  addEventListener('pointermove', e => { tmx = e.clientX / innerWidth - .5; tmy = e.clientY / innerHeight - .5; }, {passive:true});
+  resize(); if (!RM) requestAnimationFrame(draw);
+})();
+
+/* ======================= NAV ======================= */
+(function nav(){
+  const nav = $('#nav'), btn = $('#menuBtn');
+  const onScroll = () => nav.classList.toggle('scrolled', scrollY > 20);
+  addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  btn.addEventListener('click', () => { const o = nav.classList.toggle('open'); btn.setAttribute('aria-expanded', o); btn.setAttribute('aria-label', o ? 'Close menu' : 'Open menu'); });
+  $$('#navLinks a').forEach(a => a.addEventListener('click', () => { nav.classList.remove('open'); btn.setAttribute('aria-expanded', false); }));
+})();
+
+/* ======================= LIST VIEW ======================= */
+$('#list').innerHTML = GALAXIES.map((g, gi) => `
+  <div class="lgroup" data-g="${gi}" style="--c:${g.color}">
+    <div class="lgroup-head"><span>Galaxy ${g.num}</span><h3>${g.name}</h3></div>
+    <div class="cards">${g.projects.map(p => `
+      <article class="card" style="--c:${g.color}">
+        <p class="card-kind">${p.kind === 'planet' ? 'Planet' : 'Star'} · ${p.meta}</p>
+        <h4>${p.title}${p.award ? `<span class="award">${p.award}</span>` : ''}</h4>
+        <p class="sub">${p.sub}</p>
+        ${pdrHTML(p, g.color)}
+      </article>`).join('')}
+    </div>
+  </div>`).join('');
+
+/* ======================= SKILLS ======================= */
+$('#skillGrid').innerHTML = SKILLS.map((s, i) => {
+  const rnd = mulberry(i * 31 + 5), n = Math.min(7, s.items.length), pts = [];
+  for (let k = 0; k < n; k++) pts.push([ 8 + (k / (n - 1)) * 224 + (rnd() - .5) * 20, 10 + rnd() * 50 ]);
+  const lines = pts.slice(1).map((p, k) => `<line x1="${pts[k][0].toFixed(1)}" y1="${pts[k][1].toFixed(1)}" x2="${p[0].toFixed(1)}" y2="${p[1].toFixed(1)}"/>`).join('');
+  const dots = pts.map((p, k) => `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${k === 2 ? 2.6 : 1.6}" opacity="${k === 2 ? 1 : .75}"/>`).join('');
+  return `<div class="skill reveal" style="--c:${s.color};--d:${i * .08}s">
+    <svg viewBox="0 0 240 70" preserveAspectRatio="none" aria-hidden="true">${lines}${dots}</svg>
+    <h3><i></i>${s.name}</h3>
+    <ul>${s.items.map(t => `<li>${t}</li>`).join('')}</ul></div>`;
+}).join('');
+
+/* ======================= PANEL ======================= */
+const Panel = (function(){
+  const panel = $('#panel'), scrim = $('#scrim'), body = $('#pbody');
+  let cur = null, lastFocus = null;
+  panel.inert = true;
+  function fill(gi, pi){
+    const g = GALAXIES[gi], p = g.projects[pi]; cur = { gi, pi };
+    $('#pgal').style.setProperty('--c', g.color);
+    $('#pgal').innerHTML = `<i></i>Galaxy ${g.num} · ${g.name}`;
+    body.innerHTML = `
+      <p class="p-kind">${p.meta}</p>
+      <h3 class="p-title" id="ptitle">${p.title}${p.award ? `<span class="award">${p.award}</span>` : ''}</h3>
+      <p class="p-sub">${p.sub}</p>
+      ${p.media ? `<div class="media-ph">[MEDIA PLACEHOLDER]<br>${p.media}</div>` : ''}
+      ${pdrHTML(p, g.color)}
+      <div class="tools">${p.tools.map(t => `<span>${t}</span>`).join('')}</div>`;
+    body.style.animation = 'none'; body.offsetHeight; body.style.animation = '';
+    $('#pcount').textContent = `${pi + 1} / ${g.projects.length}`;
+    panel.scrollTop = 0;
+  }
+  function open(gi, pi){
+    fill(gi, pi);
+    if (!panel.classList.contains('open')){
+      lastFocus = document.activeElement;
+      panel.classList.add('open'); scrim.classList.add('open');
+      panel.inert = false; panel.setAttribute('aria-hidden', 'false');
+      document.documentElement.style.overflow = 'hidden';
+      setTimeout(() => $('#pclose').focus({preventScroll:true}), 60);
+    }
+  }
+  function close(){
+    if (!panel.classList.contains('open')) return;
+    panel.classList.remove('open'); scrim.classList.remove('open');
+    panel.inert = true; panel.setAttribute('aria-hidden', 'true');
+    document.documentElement.style.overflow = '';
+    if (lastFocus && lastFocus.focus) lastFocus.focus({preventScroll:true});
+  }
+  const step = d => { const n = GALAXIES[cur.gi].projects.length; fill(cur.gi, (cur.pi + d + n) % n); };
+  $('#pclose').addEventListener('click', close);
+  scrim.addEventListener('click', close);
+  $('#pprev').addEventListener('click', () => step(-1));
+  $('#pnext').addEventListener('click', () => step(1));
+  addEventListener('keydown', e => {
+    if (!panel.classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowRight') step(1);
+    if (e.key === 'ArrowLeft') step(-1);
+  });
+  // bottom-sheet swipe-down to close (mobile)
+  let sy = null;
+  panel.addEventListener('touchstart', e => { sy = panel.scrollTop <= 0 ? e.touches[0].clientY : null; }, {passive:true});
+  panel.addEventListener('touchend', e => { if (sy !== null && e.changedTouches[0].clientY - sy > 90 && innerWidth <= 760) close(); sy = null; }, {passive:true});
+  return { open, close, isOpen: () => panel.classList.contains('open') };
+})();
+
+/* ======================= UNIVERSE ======================= */
+const Universe = (function(){
+  const stage = $('#stage'), cv = $('#ucanvas'), ctx = cv.getContext('2d');
+  const TILT = [-.35, .45, -.55, .3], FLAT = [.5, .58, .46, .55], SPIN = [.05, -.04, .055, -.045], ARMS = [2, 3, 2, 4], TWIST = [3.4, 2.7, 4, 2.3];
+  const LD = [[.17,.36],[.39,.63],[.62,.3],[.84,.6]], LM = [[.3,.12],[.7,.34],[.3,.56],[.7,.77]];
+  const cam = {x:0, y:0, s:1}, tgt = {x:0, y:0, s:1};
+  let W = 0, H = 0, R = 100, mobile = null, focused = -1, hoverG = -1, hoverP = 0, speed = 1, sim = 30, last = performance.now(), raf = 0, inView = true;
+
+  const G = GALAXIES.map((g, i) => {
+    const rgb = hexRgb(g.color);
+    return { ...g, i, rgb, tilt:TILT[i], flat:FLAT[i], spin:SPIN[i], x:0, y:0, f:0, h:0, pb:null,
+      fills: ['rgba(255,247,235,.9)', rgba(rgb, .8), rgba(rgb, .36), 'rgba(205,220,255,.5)'],
+      pl: g.projects.map((p, j, arr) => ({ p, j, r: arr.length > 1 ? .44 + j / (arr.length - 1) * .54 : .7, a0: j * 2.3 + i * 1.1, el:null })) };
+  });
+
+  function build(n){
+    G.forEach(g => {
+      const rnd = mulberry(g.i * 977 + 13), pb = [[], [], [], []], arms = ARMS[g.i], tw = TWIST[g.i] * -Math.sign(SPIN[g.i]);
+      for (let k = 0; k < n; k++){
+        let r, a; const q = rnd();
+        if (q < .16){ r = Math.pow(rnd(), 1.8) * .28; a = rnd() * 6.2832; }
+        else if (q < .3){ r = Math.pow(rnd(), .7) * 1.05; a = rnd() * 6.2832; }
+        else { r = .08 + Math.pow(rnd(), .65) * .95; a = (k % arms) / arms * 6.2832 + r * tw + (rnd() - .5) * (.9 - r * .45) * .9; r += (rnd() - .5) * .05; }
+        const b = r < .2 ? 0 : (rnd() < .12 ? 3 : (rnd() < .55 ? 1 : 2));
+        pb[b].push({ r, a, s: rnd() < .04 ? 2.1 : .6 + rnd() });
+      }
+      g.pb = pb;
+    });
+  }
+
+  // DOM: galaxy labels + planets
+  G.forEach(g => {
+    const lab = document.createElement('button');
+    lab.type = 'button'; lab.className = 'g-label'; lab.style.setProperty('--c', g.color);
+    lab.innerHTML = `<span class="gl-num">Galaxy ${g.num}</span><span class="gl-name">${g.name}</span><span class="gl-count">${g.projects.length} worlds</span>`;
+    lab.addEventListener('click', () => focus(g.i));
+    stage.appendChild(lab); g.lab = lab;
+    g.pl.forEach(pl => {
+      const p = pl.p, b = document.createElement('button');
+      b.type = 'button'; b.tabIndex = -1; b.setAttribute('aria-hidden', 'true');
+      b.className = `planet ${p.kind === 'planet' ? 'planet-lg' : 'star'}${p.live ? ' live' : ''}`;
+      b.style.setProperty('--c', g.color);
+      b.innerHTML = `<span class="orb"></span><span class="p-label"><b>${p.title}</b><small>${p.label}</small></span>`;
+      b.addEventListener('pointerenter', () => hoverP++);
+      b.addEventListener('pointerleave', () => hoverP = Math.max(0, hoverP - 1));
+      b.addEventListener('click', e => { e.stopPropagation(); if (focused !== g.i) focus(g.i); Panel.open(g.i, pl.j); });
+      stage.appendChild(b); pl.el = b; pl.lab = b.querySelector('.p-label');
+    });
+  });
+
+  function setTarget(){
+    if (focused < 0){ tgt.x = W / 2; tgt.y = H / 2; tgt.s = 1; return; }
+    const g = G[focused];
+    tgt.s = Math.min(W, H) * (mobile ? .46 : .42) / R;
+    tgt.x = g.x; tgt.y = g.y + R * .12;
+  }
+  function resize(){
+    const r = stage.getBoundingClientRect(); if (!r.width) return;
+    W = r.width; H = r.height;
+    const d = Math.min(devicePixelRatio || 1, 2);
+    cv.width = Math.round(W * d); cv.height = Math.round(H * d); ctx.setTransform(d, 0, 0, d, 0, 0);
+    const m = W < 700; if (m !== mobile){ mobile = m; build(m ? 650 : 1150); }
+    const L = m ? LM : LD;
+    R = m ? Math.min(W * .21, H * .125) : Math.min(W * .125, H * .21);
+    G.forEach((g, i) => { g.x = L[i][0] * W; g.y = L[i][1] * H; });
+    G.forEach(g => g.pl.forEach(pl => pl.lw = 0));
+    setTarget(); Object.assign(cam, tgt); kick();
+  }
+
+  function frame(now){
+    raf = 0;
+    const dt = Math.min(.05, (now - last) / 1000); last = now;
+    speed += ((hoverP ? 0 : 1) - speed) * Math.min(1, dt * 5);
+    if (!RM) sim += dt * speed;
+    const e = RM ? 1 : 1 - Math.exp(-dt * 3);
+    cam.x += (tgt.x - cam.x) * e; cam.y += (tgt.y - cam.y) * e; cam.s += (tgt.s - cam.s) * e;
+    let anyF = 0;
+    G.forEach(g => { g.f += ((focused === g.i ? 1 : 0) - g.f) * e; g.h += ((hoverG === g.i ? 1 : 0) - g.h) * (RM ? 1 : Math.min(1, dt * 6)); anyF = Math.max(anyF, g.f); });
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.globalCompositeOperation = 'lighter';
+    const pscale = Math.min(2.2, .9 + (cam.s - 1) * .3);
+    G.forEach(g => {
+      const k = R * cam.s, cx = (g.x - cam.x) * cam.s + W / 2, cy = (g.y - cam.y) * cam.s + H / 2;
+      const ct = Math.cos(g.tilt), st = Math.sin(g.tilt);
+      g.sx = cx; g.sy = cy; g.k = k;
+      // planets + labels (DOM)
+      const show = g.f > .5;
+      g.pl.forEach(pl => {
+        const a = pl.a0 + sim * .07 * Math.sign(g.spin) / Math.pow(pl.r, 1.5);
+        const u = Math.cos(a) * pl.r, v = Math.sin(a) * pl.r * g.flat;
+        const px = cx + (u * ct - v * st) * k;
+        pl.el.style.transform = `translate3d(${px.toFixed(1)}px,${(cy + (u * st + v * ct) * k).toFixed(1)}px,0)`;
+        if (pl.show !== show){ pl.show = show; pl.el.classList.toggle('show', show); }
+        // keep the label inside the stage
+        if (!pl.lw) pl.lw = pl.lab.offsetWidth;
+        const shift = Math.round(Math.min(0, W - 10 - (px + pl.lw / 2)) + Math.max(0, 10 - (px - pl.lw / 2)));
+        if (shift !== pl.shift){ pl.shift = shift; pl.lab.style.marginLeft = shift + 'px'; }
+      });
+      const lo = (1 - anyF);
+      g.lab.style.transform = `translate3d(${cx.toFixed(1)}px,${(cy + k * .8).toFixed(1)}px,0)`;
+      g.lab.style.opacity = lo.toFixed(3);
+      g.lab.style.pointerEvents = lo > .5 ? 'auto' : 'none';
+      g.lab.tabIndex = lo > .5 ? 0 : -1;
+
+      if (cx + k * 1.3 < 0 || cx - k * 1.3 > W || cy + k * 1.3 < 0 || cy - k * 1.3 > H) return;
+      const dim = 1 - .6 * anyF * (1 - g.f), glow = 1 + g.h * .6;
+      // haze
+      let gr = ctx.createRadialGradient(cx, cy, 0, cx, cy, k * 1.15);
+      gr.addColorStop(0, rgba(g.rgb, .16 * dim * glow)); gr.addColorStop(1, rgba(g.rgb, 0));
+      ctx.globalAlpha = 1; ctx.fillStyle = gr; ctx.fillRect(cx - k * 1.15, cy - k * 1.15, k * 2.3, k * 2.3);
+      // particles
+      ctx.globalAlpha = Math.min(1, dim * (.85 + g.h * .3));
+      const rot = sim * g.spin;
+      for (let b = 0; b < 4; b++){
+        ctx.fillStyle = g.fills[b];
+        for (const p of g.pb[b]){
+          const a = p.a + rot * (1.25 - p.r * .7);
+          const u = Math.cos(a) * p.r, v = Math.sin(a) * p.r * g.flat;
+          const s = p.s * pscale;
+          ctx.fillRect(cx + (u * ct - v * st) * k - s / 2, cy + (u * st + v * ct) * k - s / 2, s, s);
+        }
+      }
+      // core
+      ctx.globalAlpha = dim;
+      gr = ctx.createRadialGradient(cx, cy, 0, cx, cy, k * .3);
+      gr.addColorStop(0, 'rgba(255,250,240,.95)'); gr.addColorStop(.2, rgba(g.rgb, .4)); gr.addColorStop(1, rgba(g.rgb, 0));
+      ctx.fillStyle = gr; ctx.fillRect(cx - k * .3, cy - k * .3, k * .6, k * .6);
+      // orbits
+      ctx.strokeStyle = rgba(g.rgb, (.1 + .2 * g.f + .1 * g.h) * dim); ctx.lineWidth = 1;
+      g.pl.forEach(pl => { ctx.beginPath(); ctx.ellipse(cx, cy, pl.r * k, pl.r * k * g.flat, g.tilt, 0, 6.2832); ctx.stroke(); });
+    });
+    ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1;
+
+    const settling = Math.abs(tgt.s - cam.s) > .002 || Math.abs(tgt.x - cam.x) > .3 || G.some(g => Math.abs((focused === g.i ? 1 : 0) - g.f) > .01);
+    if (inView && (!RM || settling)) raf = requestAnimationFrame(frame);
+  }
+  function kick(){ if (!raf){ last = performance.now(); raf = requestAnimationFrame(frame); } }
+
+  function focus(i){
+    focused = i; hoverG = -1; stage.classList.remove('hovering');
+    stage.classList.toggle('zoomed', i >= 0);
+    setTarget(); updateHud(); syncTabs(); kick();
+  }
+  function updateHud(){
+    const title = $('#hudTitle'), chips = $('#hudChips');
+    if (focused < 0){ title.textContent = ''; chips.innerHTML = ''; return; }
+    const g = G[focused];
+    title.innerHTML = `<span style="color:${g.color}">Galaxy ${g.num}</span>${g.name}`;
+    chips.innerHTML = g.projects.map((p, j) => `<button class="hchip" type="button" data-j="${j}" style="--c:${g.color}"><i></i>${p.title}</button>`).join('');
+    $$('.hchip', chips).forEach(b => {
+      const pl = g.pl[+b.dataset.j];
+      b.addEventListener('click', () => Panel.open(g.i, pl.j));
+      b.addEventListener('pointerenter', () => { pl.el.classList.add('hl'); hoverP++; });
+      b.addEventListener('pointerleave', () => { pl.el.classList.remove('hl'); hoverP = Math.max(0, hoverP - 1); });
+      b.addEventListener('focus', () => pl.el.classList.add('hl'));
+      b.addEventListener('blur', () => pl.el.classList.remove('hl'));
+    });
+  }
+  const step = d => focus(((focused < 0 ? 0 : focused) + d + G.length) % G.length);
+
+  // pointer interaction on canvas
+  function galaxyAt(x, y){
+    let best = -1, bd = Infinity;
+    G.forEach(g => { const d = Math.hypot(x - g.sx, (y - g.sy) / .75); if (d < g.k * 1.0 && d < bd){ bd = d; best = g.i; } });
+    return best;
+  }
+  stage.addEventListener('pointermove', e => {
+    if (focused >= 0 || e.pointerType === 'touch') return;
+    const r = stage.getBoundingClientRect(), h = galaxyAt(e.clientX - r.left, e.clientY - r.top);
+    if (h !== hoverG){ hoverG = h; stage.classList.toggle('hovering', h >= 0); kick(); }
+  });
+  stage.addEventListener('pointerleave', () => { hoverG = -1; stage.classList.remove('hovering'); });
+  cv.addEventListener('click', e => {
+    const r = stage.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+    if (focused < 0){ const h = galaxyAt(x, y); if (h >= 0) focus(h); }
+    else { const g = G[focused]; if (Math.hypot(x - g.sx, y - g.sy) > g.k * 1.25) focus(-1); }
+  });
+  $('#hudBack').addEventListener('click', () => focus(-1));
+  $('#gPrev').addEventListener('click', () => step(-1));
+  $('#gNext').addEventListener('click', () => step(1));
+  stage.addEventListener('keydown', e => {
+    if (Panel.isOpen()) return;
+    if (e.key === 'Escape' && focused >= 0) focus(-1);
+    if (focused >= 0 && e.key === 'ArrowRight') step(1);
+    if (focused >= 0 && e.key === 'ArrowLeft') step(-1);
+  });
+  // swipe between galaxies on touch
+  let tx = null, ty = null;
+  stage.addEventListener('touchstart', e => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, {passive:true});
+  stage.addEventListener('touchend', e => {
+    if (tx === null || focused < 0) return;
+    const dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) step(dx < 0 ? 1 : -1);
+    tx = null;
+  }, {passive:true});
+
+  new ResizeObserver(resize).observe(stage);
+  new IntersectionObserver(([en]) => { inView = en.isIntersecting; if (inView) kick(); }).observe(stage);
+  resize();
+  return { focus, get focused(){ return focused; } };
+})();
+
+/* ======================= TABS + VIEW ======================= */
+const universeEl = $('#universe');
+let filter = -1;
+$('#tabs').innerHTML = `<button class="tab" type="button" data-g="-1" aria-pressed="true">All galaxies</button>` +
+  GALAXIES.map((g, i) => `<button class="tab" type="button" data-g="${i}" aria-pressed="false" style="--c:${g.color}"><i></i>${g.num} · ${g.name}</button>`).join('');
+function syncTabs(){
+  const cur = universeEl.classList.contains('is-list') ? filter : Universe.focused;
+  $$('.tab').forEach(t => t.setAttribute('aria-pressed', +t.dataset.g === cur));
+}
+$$('.tab').forEach(t => t.addEventListener('click', () => {
+  filter = +t.dataset.g;
+  if (universeEl.classList.contains('is-list')) $$('.lgroup').forEach(gr => gr.hidden = filter >= 0 && +gr.dataset.g !== filter);
+  else Universe.focus(filter);
+  syncTabs();
+}));
+$$('.viewtoggle button').forEach(b => b.addEventListener('click', () => {
+  const list = b.dataset.view === 'list';
+  universeEl.classList.toggle('is-list', list);
+  $$('.viewtoggle button').forEach(x => x.setAttribute('aria-pressed', x === b));
+  if (list){ filter = Universe.focused; $$('.lgroup').forEach(gr => gr.hidden = filter >= 0 && +gr.dataset.g !== filter); }
+  else Universe.focus(filter);
+  syncTabs();
+}));
+
+/* deep links: hero status chip + experience "view in universe" */
+$$('[data-open]').forEach(el => el.addEventListener('click', e => {
+  e.preventDefault();
+  const [gid, pi] = el.dataset.open.split(':'), gi = GALAXIES.findIndex(g => g.id === gid);
+  if (universeEl.classList.contains('is-list')) $('.viewtoggle [data-view="map"]').click();
+  $('#stage').scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'center' });
+  setTimeout(() => Universe.focus(gi), RM ? 0 : 500);
+  setTimeout(() => Panel.open(gi, +pi), RM ? 0 : 1500);
+}));
+
+/* ======================= REVEAL + CONTACT ======================= */
+const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } }), { threshold: .12, rootMargin: '0px 0px -40px 0px' });
+$$('.reveal').forEach(el => io.observe(el));
+$('#copyEmail').addEventListener('click', async () => {
+  try { await navigator.clipboard.writeText('priyansh.jain@stern.nyu.edu'); toast('Email copied'); }
+  catch { location.href = 'mailto:priyansh.jain@stern.nyu.edu'; }
+});
+</script>
+</body>
+</html>
