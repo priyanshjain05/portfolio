@@ -203,7 +203,7 @@ section{padding:clamp(84px,12vw,150px) 0;scroll-margin-top:40px}
 .tools span{font:400 12px var(--mono);color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:4px 10px}
 .award{display:inline-flex;align-items:center;gap:6px;font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#05060d;background:var(--amber);border-radius:999px;padding:3px 10px;margin-left:8px;vertical-align:middle}
 .ph{display:inline;color:var(--amber);background:rgba(255,191,115,.08);border:1px dashed rgba(255,191,115,.55);border-radius:6px;padding:1px 6px;font:500 12.5px var(--mono)}
-.media-ph{margin-top:20px;aspect-ratio:16/9;border:1px dashed rgba(255,191,115,.45);border-radius:14px;display:grid;place-items:center;text-align:center;padding:16px;font:500 12px var(--mono);letter-spacing:.06em;color:var(--amber);background:repeating-linear-gradient(135deg,rgba(255,191,115,.03) 0 10px,transparent 10px 20px)}
+.media{display:block;width:100%;margin-top:20px;border-radius:14px;border:1px solid var(--line);background:#000}
 
 /* ---------- panel ---------- */
 .scrim{position:fixed;inset:0;z-index:80;background:rgba(2,3,8,.55);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .5s}
@@ -500,20 +500,20 @@ const GALAXIES = [
       meta:'Project · Solo · In progress',
       problem:'Inspecting a spacecraft in orbit calls for a robot that can work around the vehicle on its own: seeing it, spotting anomalies, planning its moves, and recovering when something goes wrong.',
       did:'Building the simulation and full technical stack myself in Python and MuJoCo, centered on a free-flying 6-DOF robot operating around a spacecraft. The architecture covers perception, anomaly detection, planning, failure recovery, and mission evaluation.',
-      result:'In active development, with a working prototype coming soon. [[target date + first milestone reached]]',
-      tools:['Python','MuJoCo','Physics simulation','Robotics'], media:'Simulation demo video or GIF' },
+      result:'In active development, with a working prototype coming soon.',
+      tools:['Python','MuJoCo','Physics simulation','Robotics'] },
     { title:'Unblur', sub:'AI Onboarding Assistant', kind:'planet', label:'AI startup concept',
       meta:'Project · Solo',
       problem:'Interns and early-career employees lose momentum when their supervisors aren\'t around to explain company-specific context.',
       did:'Generated 10 startup concepts, narrowed them down, and chose Unblur as the strongest. Ran 20 user interviews and shaped the product direction around closing onboarding knowledge gaps.',
-      result:'Product direction grounded in 20 user interviews; mockup in progress. [[top interview insight]]',
-      tools:['Customer discovery','User interviews','Product strategy','AI'], media:'Product mockup' },
+      result:'Product direction grounded in 20 user interviews; mockup in progress.',
+      tools:['Customer discovery','User interviews','Product strategy','AI'] },
     { title:'Astryn', sub:'Dream-Logging Experience', kind:'star', label:'Product concept',
       meta:'Project · Solo',
       problem:'Most dream apps pitch themselves as lucid-dreaming tools. I wanted reflecting on your dreams to feel immersive instead.',
       did:'Developed the product concept and interaction direction: you explore your "inner galaxy" through journaling, emotional visualization, and streak-based engagement.',
-      result:'[[prototype status, screens, or early user feedback]]',
-      tools:['Product design','Interaction design','Engagement loops'], media:'Prototype screens' },
+      result:'',
+      tools:['Product design','Interaction design','Engagement loops'] },
   ]},
   { id:'im', num:'02', name:'Interactive Media & Creative Tech', color:'#b69cff', projects:[
     { title:'Dreamweaver', sub:'Hand-Tracking Interactive Experience', kind:'planet', label:'Hand-tracking',
@@ -521,33 +521,33 @@ const GALAXIES = [
       problem:'Could you move through a dreamlike story using only your hands, with no mouse or keyboard?',
       did:'Designed and programmed the full interaction system in p5.js and ml5.js: hand tracking, gesture recognition, particle effects, scene transitions, and a typewriter sequence.',
       result:'Five scenes, played live by 25 people at a public showcase.',
-      tools:['p5.js','ml5.js','JavaScript','Gesture recognition'], media:'Demo video' },
+      tools:['p5.js','ml5.js','JavaScript','Gesture recognition'] },
     { title:'Velostat Heart', sub:'Touch-Responsive Physical Interface', kind:'star', label:'Physical computing',
       meta:'Project',
       problem:'Can a few simple conductive materials turn touch into something that feels alive?',
       did:'Built a heart-shaped interface from pressure-sensitive Velostat, with sensing and LEDs that turn touch into an ambient visual response.',
-      result:'[[photo or video + how people interacted with it]]',
-      tools:['Velostat','Sensors','LEDs','Physical computing'], media:'Photo or video' },
+      result:'',
+      tools:['Velostat','Sensors','LEDs','Physical computing'] },
     { title:'After Effects Animation', sub:'Two People Falling in Love', kind:'star', label:'Motion design', pLabel:'Challenge',
       meta:'Motion design',
       problem:'Telling a love story through motion alone, without much prior drawing experience.',
       did:'Developed the visual concept and animated it in After Effects, experimenting with motion, composition, and transitions.',
-      result:'[[link to the finished animation]]',
-      tools:['After Effects','Motion design','Visual storytelling'], media:'Animation video' },
+      result:'',
+      tools:['After Effects','Motion design','Visual storytelling'] },
   ]},
   { id:'hw', num:'03', name:'Hardware & Fabrication', color:'#ffbf73', projects:[
     { title:'Rube Goldberg Machine', sub:'Arduino Nano 33 IoT Chain Reaction', kind:'planet', label:'Arduino build', pLabel:'Challenge',
       meta:'Project',
       problem:'Make every physical event reliably trigger the next, using sensors and actuators that don\'t always cooperate.',
       did:'Designed and programmed a chain reaction on an Arduino Nano 33 IoT using a VL53L0X distance sensor, servo motor, force-sensitive resistor, and speaker, with each stage triggering the next. Troubleshot sensor readings and built conductive materials into the physical design.',
-      result:'[[number of stages, reliability, or run-through video]]',
-      tools:['Arduino','C++','VL53L0X','Servo','FSR'], media:'Run-through video' },
+      result:'',
+      tools:['Arduino','C++','VL53L0X','Servo','FSR'] },
     { title:'CNC Space "P"', sub:'Fusion 360 × ShopBot', kind:'star', label:'CAD + CNC', pLabel:'Challenge',
       meta:'Project',
       problem:'Turn a single letter into a small piece of the solar system.',
       did:'Designed a plywood "P" with planets, orbital elements, contours, pockets, and engraving in Fusion 360, generated the CNC toolpaths, and machined it on a ShopBot.',
-      result:'A finished, machined piece. [[dimensions + photo]]',
-      tools:['Fusion 360','CAM toolpaths','ShopBot CNC'], media:'Photo of the finished piece' },
+      result:'A finished, machined piece.',
+      tools:['Fusion 360','CAM toolpaths','ShopBot CNC'] },
   ]},
   { id:'ps', num:'04', name:'Product, Design & Strategy', color:'#7cf2b9', projects:[
     { title:'AI Infrastructure Marketplace', sub:'CoreWeave · Product Management Intern', kind:'planet', label:'CoreWeave',
@@ -591,7 +591,7 @@ const pdrHTML = (p, c) => `
   <div class="pdr" style="--c:${c}">
     <div class="pdr-row"><span class="k">${p.pLabel || 'Problem'}</span><p>${ph(p.problem)}</p></div>
     <div class="pdr-row"><span class="k">What I did</span><p>${ph(p.did)}</p></div>
-    <div class="pdr-row res"><span class="k">Result</span><p>${ph(p.result)}</p></div>
+    ${p.result ? `<div class="pdr-row res"><span class="k">Result</span><p>${ph(p.result)}</p></div>` : ''}
   </div>`;
 
 /* ======================= BACKGROUND SKY ======================= */
@@ -686,7 +686,9 @@ const Panel = (function(){
       <p class="p-kind">${p.meta}</p>
       <h3 class="p-title" id="ptitle">${p.title}${p.award ? `<span class="award">${p.award}</span>` : ''}</h3>
       <p class="p-sub">${p.sub}</p>
-      ${p.media ? `<div class="media-ph">[MEDIA PLACEHOLDER]<br>${p.media}</div>` : ''}
+      ${p.media ? (/\.(mp4|webm|mov)$/i.test(p.media)
+          ? `<video class="media" src="${p.media}" autoplay muted loop playsinline></video>`
+          : `<img class="media" src="${p.media}" alt="${p.title}" loading="lazy">`) : ''}
       ${pdrHTML(p, g.color)}
       <div class="tools">${p.tools.map(t => `<span>${t}</span>`).join('')}</div>`;
     body.style.animation = 'none'; body.offsetHeight; body.style.animation = '';
