@@ -18,7 +18,7 @@ const ROLES_NEWEST = [...EXPERIENCE].reverse();
 /* ============================ layout: where the station and its labels go ============================ */
 const menu = $("#stationMenu"), lines = $("#hot-lines"), hint = $("#hint");
 const hots = Object.fromEntries($$(".hot", menu).map((a) => [a.dataset.part, a]));
-let tall = false, labelMode = true, homeBox = null, sideBox = null, panelW = 0;
+let tall = false, labelMode = true, homeBox = null, sideBox = null;
 // label offsets as a share of the drawn station width (tuned to the drawing)
 const OFFSET = { work: [0.06, 0.22], experience: [0.12, -0.2], skills: [0.1, -0.2], about: [-0.15, 0.13], contact: [-0.12, -0.2], resume: [0.16, 0.08] };
 function measure() {
@@ -35,9 +35,8 @@ function measure() {
   const w = Math.max(160, Math.min(slot.width - mx * 2, ((slot.height - my * 2) * 900) / 560));
   homeBox = { cx: slot.left + slot.width / 2, cy: slot.top + slot.height / 2 + (labelMode ? 10 : 0), w };
   Space.setHomeBox(homeBox);
-  panelW = tall ? innerWidth : Math.min(740, innerWidth * 0.58);
-  const free = innerWidth - panelW - 36 * 2;
-  sideBox = tall ? { cx: innerWidth / 2, cy: innerHeight / 2, w: innerWidth * 0.9 } : { cx: free / 2 + 20, cy: innerHeight / 2 + 24, w: Math.max(200, Math.min(free * 0.92, (innerHeight - 200) * 1.6)) };
+  // the module panel is centred, so a destination in the universe is framed behind its glass
+  sideBox = { cx: innerWidth / 2, cy: innerHeight / 2, w: Math.min(innerWidth, innerHeight * 1.3) * 0.9 };
 }
 function slotRect() {
   const el = document.createElement("div"); el.id = "station-slot"; document.body.appendChild(el);
@@ -47,7 +46,7 @@ function slotRect() {
 /* ============================ hotspots follow the station every frame ============================ */
 let lineEls = {}, hintPos = null;
 function frame(f) {
-  const show = Space.scene === "home" && !panelOpen && f.station.visible && f.station.alpha > 0.15;
+  const show = Space.scene === "home" && !panelOpen && !dive && performance.now() > menuHold && f.station.visible && f.station.alpha > 0.15;
   menu.style.visibility = show ? "visible" : "hidden";
   menu.style.opacity = show ? Math.min(1, f.station.alpha).toFixed(3) : "0";
   for (const a of Object.values(hots)) a.tabIndex = show ? 0 : -1;
@@ -194,9 +193,9 @@ function openSection(sec, sub) {
   const explore = fromExplore || (body.classList.contains("explore") && origin === "explore");
   fromExplore = false;
   seenHint();
-  render(sec, sub);
   const dest = destFor(sec, sub);
   if (explore && dest && sec !== "about") {
+    render(sec, sub);
     origin = "explore"; setExploreUI(true);
     Space.setPanel({ origin, dest });
     const already = Space.scene === "explore" && current && current.dest === dest;
@@ -205,10 +204,24 @@ function openSection(sec, sub) {
     else { hidePanelVisual(); Space.travelTo(dest, sideBox).then(() => { if (current && current.dest === dest) showPanel(true); }); }
   } else {
     if (origin === "explore") setExploreUI(false);
+    const prev = current;
     origin = "home"; current = { sec, sub, dest };
     Space.setPanel({ origin });
-    Space.home(tall ? homeBox : sideBox, { dim: tall ? 0 : 0.4 });
-    showPanel(firstOpen);
+    if (!panelOpen && !dive && booted && !RM && !document.hidden) {
+      // from the station: fly into the part, cycle its airlock, push through into the module
+      hidePanelVisual(); render(sec, sub, false);
+      runDive(sec).then((ok) => { if (ok && current && current.sec === sec) showPanel(true); });
+    } else if (dive && dive.sec === sec) {
+      render(sec, sub, false);
+    } else if (dive) {
+      cancelDive(); render(sec, sub, false); Space.focus(sec, insideView()); showPanel(true);
+    } else if (!panelOpen) {
+      render(sec, sub, false); Space.focus(sec, { ...insideView(), instant: true }); showPanel(firstOpen);
+    } else if (prev && prev.sec !== sec && !RM) {
+      transit(prev.sec, sec, sub);
+    } else {
+      render(sec, sub); Space.focus(sec, insideView());
+    }
   }
 }
 function showPanel(focusTitle) {
@@ -216,13 +229,17 @@ function showPanel(focusTitle) {
   void wrap.offsetWidth; wrap.classList.add("open");
   body.classList.add("panel-open");
   for (const el of $$(".home, .hud, .tabbar, #labels, #beacons, .radar-wrap")) el.inert = true;
-  fit();
+  fit(); enterAnim();
   if (focusTitle) setTimeout(() => focusHeading(), RM ? 0 : 60);
 }
 function hidePanelVisual() { wrap.classList.remove("open"); wrap.inert = true; }
 function closePanel() {
+  clearTimeout(transitT); panel.classList.remove("transit");
+  if (dive) { cancelDive(); menuHold = performance.now() + 700; burst("out"); }
   if (!panelOpen) return;
   panelOpen = false; current = null;
+  menuHold = performance.now() + (RM ? 0 : 700);
+  if (!RM) burst("out");
   wrap.classList.remove("open"); wrap.inert = true; body.classList.remove("panel-open");
   for (const el of $$(".home, .hud, .tabbar, #labels, #beacons, .radar-wrap")) el.inert = false;
   unmountFigures();
@@ -237,7 +254,7 @@ function focusHeading() {
   if (h) h.setAttribute("tabindex", "-1");
   target.focus({ preventScroll: true });
 }
-function render(sec, sub) {
+function render(sec, sub, animate = true) {
   const i = SECTIONS.indexOf(sec);
   for (const s of $$(".sec", panel)) s.hidden = s.dataset.sec !== sec;
   pTitle.textContent = LABEL[sec];
@@ -247,7 +264,6 @@ function render(sec, sub) {
   const pp = $("#pPrev"), pn = $("#pNext");
   pp.href = `#/${prev}`; pp.textContent = `← ${LABEL[prev]}`; pn.href = `#/${next}`; pn.textContent = `${LABEL[next]} →`;
   const el = $(`#sec-${sec}`);
-  el.classList.remove("fadein"); void el.offsetWidth; el.classList.add("fadein");
   el.scrollTop = 0;
   unmountFigures();
   if (sec === "work") {
@@ -270,6 +286,7 @@ function render(sec, sub) {
     if (sec === "contact") mountFigure(el);
   }
   fit();
+  if (animate) enterAnim();
 }
 // fit: never let the page scroll. If a case doesn't fit, split it into steps; a small inner scroll is the last resort.
 function fit() {
@@ -323,11 +340,114 @@ async function mountFigure(scope) {
 }
 function unmountFigures() { for (const [m, h] of figs) { h.destroy?.(); } figs.clear(); }
 
+/* ============================ cinematic: dive into a part, cycle its airlock, move between modules ============================ */
+const airlock = $("#airlock"), alFig = $(".al-fig", airlock), alLight = $(".al-light", airlock), zoomfx = $("#zoomfx");
+const TAG = { work: "LAB", experience: "TRUSS", skills: "OBS", about: "CREW", contact: "COMMS" };
+let dive = null, booted = false, menuHold = 0, transitT = 0, hatchMod = null;
+const clamp01 = (x) => Math.max(0, Math.min(1, x));
+const smooth = (a, b, x) => { const t = clamp01((x - a) / (b - a)); return t * t * (3 - 2 * t); };
+// inside a module the part sits behind the glass, close up
+const insideView = () => ({ at: [innerWidth / 2, innerHeight / 2], zoom: tall ? 2.4 : 3.4, dim: tall ? 0.5 : 0.8, tau: 0.6 });
+function burst(kind) {
+  zoomfx.classList.remove("in", "out"); void zoomfx.offsetWidth; zoomfx.classList.add(kind);
+}
+function runDive(sec) {
+  const quick = session.get("pj-airlock") === "1";
+  session.set("pj-airlock", "1");
+  body.classList.add("diving");
+  setHot(null); Space.highlight(sec);
+  Space.focus(sec, { at: [innerWidth / 2, innerHeight / 2], zoom: tall ? 2 : 2.6, tau: 0.34 });
+  burst("in");
+  live(`Entering ${PART[sec]}`);
+  const d = dive = { sec };
+  return new Promise(async (resolve) => {
+    d.resolve = resolve;
+    try { hatchMod = hatchMod || (await import("./fig/hatch.mjs")); } catch { hatchMod = null; }
+    if (dive !== d) return resolve(false);
+    if (!hatchMod) { finishDive(d); return resolve(true); }
+    const host = document.createElement("div"); alFig.replaceChildren(host);
+    const h = hatchMod.mount(host, { label: `${TAG[sec]} 0${SECTIONS.indexOf(sec) + 1}` });
+    $(".al-n", airlock).textContent = PART[sec];
+    airlock.classList.add("on");
+    const A = quick ? 0.4 : 0.55, CYC = quick ? 0.85 : 1.3, PUSH = 0.62;
+    const pushAt = A * 0.6 + CYC * 0.94, end = pushAt + PUSH + 0.35;
+    const V = hatchMod.VIEW, dw = hatchMod.DOORWAY;
+    const vw = innerWidth, vh = innerHeight, cx = vw / 2, cy = vh / 2;
+    const fitS = Math.min((vw * 0.9) / V.w, (vh * 0.74) / V.h);
+    const coverS = (Math.hypot(vw, vh) / 2 / Math.min(dw.rx, dw.ry)) * 1.25;
+    airlock.style.setProperty("--cx", `${cx}px`); airlock.style.setProperty("--cy", `${cy}px`);
+    d.t0 = performance.now(); d.pushAt = pushAt; d.shown = false;
+    const step = (now) => {
+      if (dive !== d) return;
+      const t = ((now - d.t0) / 1000) * (globalThis.__diveSpeed || 1);
+      const a = smooth(0, A, t), p = clamp01((t - pushAt) / PUSH);
+      h.play(clamp01((t - A * 0.6) / CYC));
+      const grow = 0.5 + 0.5 * (1 - Math.pow(1 - a, 3));
+      const s = fitS * grow * Math.exp(Math.log(coverS / fitS) * p * p * p);
+      alFig.style.transform = `translate3d(${(cx - dw.x * s).toFixed(1)}px,${(cy - dw.y * s).toFixed(1)}px,0) scale(${s.toFixed(4)})`;
+      alFig.style.opacity = (a * (1 - smooth(0.55, 0.95, p))).toFixed(3);
+      airlock.style.setProperty("--bg", (a * (1 - smooth(0.4, 1, p))).toFixed(3));
+      alLight.style.opacity = (smooth(0.3, 0.8, p) * (1 - smooth(pushAt + PUSH, end, t))).toFixed(3);
+      if (p > 0 && !d.pushed) { d.pushed = true; Space.focus(sec, insideView()); }
+      if (p >= 0.6 && !d.shown) { d.shown = true; resolve(true); }
+      if (t >= end) { finishDive(d); return; }
+      requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+    // if frames stall (a background tab), never leave the visitor outside the hatch
+    d.guard = setTimeout(() => finishDive(d), (end / (globalThis.__diveSpeed || 1)) * 1000 + 1500);
+  });
+}
+function skipDive() {
+  const d = dive; if (!d || d.t0 == null) return;
+  const k = globalThis.__diveSpeed || 1, t = ((performance.now() - d.t0) / 1000) * k;
+  if (t < d.pushAt) d.t0 -= ((d.pushAt - t) * 1000) / k;
+}
+function finishDive(d) {
+  if (dive !== d) return;
+  clearTimeout(d.guard);
+  dive = null; airlock.classList.remove("on"); body.classList.remove("diving");
+  alFig.replaceChildren(); alLight.style.opacity = "0";
+  if (!d.shown) { d.shown = true; Space.focus(d.sec, insideView()); d.resolve?.(true); }
+}
+function cancelDive() {
+  const d = dive; if (!d) return;
+  clearTimeout(d.guard);
+  dive = null; airlock.classList.remove("on"); body.classList.remove("diving");
+  alFig.replaceChildren(); alLight.style.opacity = "0";
+  d.resolve?.(false);
+}
+airlock.addEventListener("click", skipDive);
+// moving between modules: the glass clears, the camera travels along the station, the next module's content arrives
+function transit(from, to, sub) {
+  const dir = SECTIONS.indexOf(to) > SECTIONS.indexOf(from) ? 1 : -1;
+  panel.style.setProperty("--dir", dir);
+  panel.classList.add("transit");
+  Space.focus(to, { ...insideView(), tau: 0.4 });
+  live(`Moving to ${PART[to]}`);
+  clearTimeout(transitT);
+  transitT = setTimeout(() => { panel.classList.remove("transit"); if (current && current.sec === to) render(to, sub); }, 620);
+}
+// content arrives in a short stagger from depth
+const STAG = ".chips, .cards li, .stats li, .timeline li, .skill, .about-photo, .about > div > *, .contact-text > *, .contact-fig, .back, .case-head, .case-media, .case-text > *, .case-grid > .part, .pager, .role-detail > *";
+function enterAnim() {
+  const el = $(".sec:not([hidden])", panel); if (!el || RM) return;
+  el.classList.remove("arrive");
+  let i = 0;
+  for (const n of $$(STAG, el)) { if (n.closest("[hidden]")) continue; n.style.setProperty("--i", Math.min(i++, 12)); }
+  void el.offsetWidth; el.classList.add("arrive");
+}
+
 /* ============================ keyboard: Esc, arrows, focus trap ============================ */
 addEventListener("keydown", (e) => {
   if (body.classList.contains("intro")) {
     if (e.key === "Enter" && !e.target.closest?.("button,a")) { e.preventDefault(); enter(); }
     if (e.key === "Escape") skip();
+    return;
+  }
+  if (dive) {
+    if (e.key === "Escape") { e.preventDefault(); go("#/"); }
+    else if (e.key === "Enter" || e.key === " ") { e.preventDefault(); skipDive(); }
     return;
   }
   if (!panelOpen) { if (e.key === "Escape" && body.classList.contains("explore")) go("#/"); return; }
@@ -388,12 +508,12 @@ Space.on("dest", (d) => {
 });
 Space.on("warpDone", () => {
   body.classList.remove("warping", "intro");
-  route();
+  route(); booted = true;
   setTimeout(() => $("#content").focus({ preventScroll: true }), 50);
 });
 Space.on("resize", () => {
   measure(); Space.relayout();
-  if (panelOpen && current) { if (origin === "home") Space.home(tall ? homeBox : sideBox, { dim: tall ? 0 : 0.4, instant: true }); else if (current.dest) Space.frameDest(current.dest, sideBox, true); fit(); }
+  if (panelOpen && current) { if (origin === "home") Space.focus(current.sec, { ...insideView(), instant: true }); else if (current.dest) Space.frameDest(current.dest, sideBox, true); fit(); }
   else if (Space.scene === "home") Space.home(homeBox, { instant: true });
   for (const a of Object.values(hots)) { a.lastElementChild._w = 0; a.lastElementChild._h = 0; }
 });
@@ -408,3 +528,6 @@ measure();
 if (showIntro) { body.classList.add("intro"); $("#intro").classList.remove("gone"); }
 Space.start({ intro: showIntro });
 if (!showIntro) { Space.home(homeBox, { instant: true }); route(); }
+booted = !showIntro;
+// fetch the airlock drawing while idle so the first dive starts at once
+(window.requestIdleCallback || ((f) => setTimeout(f, 1200)))(() => { if (!RM) import("./fig/hatch.mjs").then((m) => { hatchMod = m; }).catch(() => {}); });

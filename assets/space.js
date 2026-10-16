@@ -825,6 +825,16 @@ export const Space = {
     if (rocket.park.id !== "dock" && !flight) startFlight(dockWorld(), null, null), (rocket.park = { id: "dock", a: 0 });
   },
   setHomeBox(box) { homeBox = box; exploreS = boxFraming(homeBox).s; },
+  // move the camera onto one part of the station: its anchor lands on screen point `at`, `zoom` times the home scale
+  focus(mod, { at = [W / 2, H / 2], zoom = 3, tau = 0.5, dim = 1, instant = false } = {}) {
+    const a = ANCHORS[mod]; if (!a) return;
+    scene = "home"; stationDim = dim; vel.x = vel.y = 0;
+    const s = exploreS * zoom, wx = (a[0] - SV.w / 2) * SU, wy = (a[1] - SV.h / 2) * SU;
+    goal = { x: wx - (at[0] - W / 2) / s, y: wy - (at[1] - H / 2) / s, s }; camTau = tau;
+    if (instant || RM) { Object.assign(cam, goal); camV.x = camV.y = camV.l = 0; }
+  },
+  // where a part is on screen right now
+  partOnScreen(mod) { const a = ANCHORS[mod]; return a ? toScreen((a[0] - SV.w / 2) * SU, (a[1] - SV.h / 2) * SU) : [W / 2, H / 2]; },
   explore() { scene = "explore"; stationDim = 1; camTau = 0.75; goal = { x: cam.x, y: cam.y, s: exploreS }; if (rocket.park.id === "dock") rocket.park = { id: "crew", a: Math.atan2(rocket.y / 0.4, rocket.x) }; },
   // fly the rocket to a destination and frame it inside `box` (the space left beside a panel)
   travelTo(id, box) {
