@@ -1,7 +1,8 @@
-// The universe: one canvas, one camera, an explorable space. Home is an orbital station (anatomy figure);
-// the work lives out in the galaxies. Drag to pan, scroll or pinch to zoom, click anything to fly there.
-import { GALAXIES, SKILLS, EXPERIENCE, CREW, TICKER, CONTACT } from "./content.js";
-import { mount as mountStation, VIEW as SV, ANCHORS, MODULES } from "./fig/station.mjs";
+// The universe engine: one canvas, one camera. Home is the orbital station (an anatomy figure) that works as
+// the site menu; "Explore the universe" opens the wider map (galaxies, flight log, constellations).
+// The UI layer (assets/ui.js) drives it through the `Space` API at the bottom of this file.
+import { GALAXIES, SKILLS, EXPERIENCE } from "./content.js";
+import { mount as mountStation, VIEW as SV, ANCHORS, DOCK_DIR } from "./fig/station.mjs";
 import { galaxySprite, planetTexture, drawPlanet, sunSprite, nebulaSprite, milkyWay, drawStar, starRgb } from "./render.js";
 
 const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -237,12 +238,10 @@ function viewFraming(d) {
 
 /* ============================ station (anatomy figure, placed in the world) ============================ */
 const stationEl = $("#station");
-let stationHover = null;
-mountStation(stationEl, {
-  onHover: (mod) => { stationHover = mod; },
-  onSelect: (mod) => { if (dragMoved) return; go(mod === "crew" ? "#/about" : `#/${mod}`); },
+const station = mountStation(stationEl, {
+  onHover: (mod) => hooks.hover(mod),
+  onSelect: (mod) => { if (!dragMoved) hooks.part(mod); },
 });
-const modLabel = $("#modlabel");
 
 /* ============================ drawing: destinations ============================ */
 const state = { sel: { galaxy: [0, 0, 0, 0], log: EXPERIENCE.length - 1, skills: -1 } };
@@ -269,8 +268,7 @@ function drawGalaxyDest(d, t, alpha, f, pins) {
     drawStar(ctx, x, y, size, big ? [228, 236, 255] : [255, 238, 215], alpha, big ? 1 : 0.6);
     if (st.p.live && !RM) { const ph = (t * 0.5) % 1; ctx.strokeStyle = `rgba(124,242,185,${(1 - ph) * 0.55 * alpha})`; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(x, y, size * 3 + ph * 14, 0, TAU); ctx.stroke(); }
     if (f > 0.3 && st.j === sel) ringAt(x, y, size * 4 + 5 + (RM ? 0 : Math.sin(t * 2.5)), 0.8 * f);
-    if (f > 0.3) subs.push({ x, y, r: size * 4 + 10, side: true, key: `g${d.gi}:${st.j}`, act: () => selectProject(d.gi, st.j), label: st.p.title, small: st.p.label, color: GALAXIES[d.gi].color, sel: st.j === sel });
-    else if (pins > 0.02) subs.push({ x, y, r: size * 3 + 6, pin: true, vis: pins, key: `p${d.gi}:${st.j}`, act: () => go(`#/galaxy/${d.id}/${st.j + 1}`), label: st.p.title, color: GALAXIES[d.gi].color });
+    if (pins > 0.02) subs.push({ x, y, r: size * 3 + 6, pin: true, vis: pins, key: `p${d.gi}:${st.j}`, act: () => hooks.dest({ type: "project", slug: st.p.slug }), label: st.p.title, color: GALAXIES[d.gi].color });
   }
 }
 
@@ -351,8 +349,7 @@ function drawLogDest(d, t, alpha, f, pins) {
     const r = LOG_R[b.i] * cam.s * 1.15, tex = planetTex[b.i];
     if (tex) drawPlanet(ctx, tex, b.x, b.y, Math.max(2.2, r), Math.atan2(cy - b.y, cx - b.x), LOG_OPTS[b.i]);
     if (f > 0.3 && b.i === sel) ringAt(b.x, b.y, Math.max(2.2, r) * (b.i === 3 ? 2.3 : 1.4) + 6, 0.8 * f);
-    if (f > 0.3) subs.push({ x: b.x, y: b.y, r: Math.max(2.2, r) + 14, key: `l${b.i}`, act: () => selectRole(b.i), label: b.e.org.split(",")[0], small: b.e.when, color: b.e.color, sel: b.i === sel });
-    else if (pins > 0.02) subs.push({ x: b.x, y: b.y, r: Math.max(2.2, r) + 8, pin: true, vis: pins, key: `lp${b.i}`, act: () => { state.sel.log = b.i; go("#/log"); }, label: b.e.org.split(",")[0], color: b.e.color });
+    if (pins > 0.02) subs.push({ x: b.x, y: b.y, r: Math.max(2.2, r) + 8, pin: true, vis: pins, key: `lp${b.i}`, act: () => hooks.dest({ type: "role", id: b.e.id }), label: b.e.org.split(",")[0], color: b.e.color });
   };
   ctx.globalAlpha = alpha;
   pos.filter((b) => b.back).forEach(planet);
@@ -384,15 +381,13 @@ function drawSkillsDest(d, t, alpha, f, pins) {
     c.pts.forEach(([px, py], i) => {
       const x = ox + px * k, y = oy + py * k, L = c.look[i];
       drawStar(ctx, x, y, L.m * grow, L.c, alpha * (on < 1 ? 0.55 : 1), L.m > 2 ? 0.8 : 0.25);
-      if (f > 0.3) subs.push({ x, y, r: L.m * grow * 3 + 6, key: `s${c.gi}:${i}`, act: () => selectGroup(c.gi), label: c.grp.items[i], color: c.grp.color, star: true, side: true, dim: on < 1 });
     });
-    if (f > 0.3) subs.push({ x: ox - 0.06 * k, y: oy - 0.36 * k, key: `sg${c.gi}`, act: () => selectGroup(c.gi), label: c.grp.name, color: c.grp.color, head: true, side: true, dim: on < 1 });
-    else if (pins > 0.02) subs.push({ x: ox, y: oy - 0.38 * k, r: 0, pin: true, vis: pins, key: `sp${c.gi}`, act: () => { go("#/skills"); setTimeout(() => selectGroup(c.gi), 900); }, label: c.grp.name, color: c.grp.color });
+    if (pins > 0.02) subs.push({ x: ox, y: oy - 0.38 * k, r: 0, pin: true, vis: pins, key: `sp${c.gi}`, act: () => hooks.dest({ type: "dest", id: "skills" }), label: c.grp.name, color: c.grp.color });
   }
 }
 
 /* ============================ rocket ============================ */
-const rocket = { x: 0, y: 0, ang: 0, park: { id: "crew", a: 0.6 }, thrust: 0 };
+const rocket = { x: 0, y: 0, ang: 0, park: { id: "dock", a: 0 }, thrust: 0 };
 let flight = null, exhaust = [];
 function parkPos(id, a) {
   const d = D[id];
@@ -454,17 +449,17 @@ DESTS.forEach((d) => {
     b.className = `dlabel${d.type === "galaxy" ? " big" : ""}`; b.type = "button"; b.style.setProperty("--c", d.color);
     b.innerHTML = `<span class="k">${esc(d.kicker)}</span><span class="n">${esc(d.name)}</span>`;
     b.setAttribute("aria-label", `${d.name}, ${d.kicker}`);
-    b.addEventListener("click", () => go(routeOf(d.id)));
+    b.addEventListener("click", () => hooks.dest({ type: "dest", id: d.id }));
     b.addEventListener("pointerenter", () => { hoverId = d.id; });
     b.addEventListener("pointerleave", () => { if (hoverId === d.id) hoverId = null; });
-    b.addEventListener("focus", () => { hoverId = d.id; centerOn(d); });
+    b.addEventListener("focus", () => { hoverId = d.id; });
     labelsEl.appendChild(b); d.el = b;
   }
   const bc = document.createElement("button");
   bc.className = "beacon"; bc.type = "button"; bc.style.setProperty("--c", d.color); bc.tabIndex = -1;
-  bc.innerHTML = `<i class="arr"></i><span>${esc(d.type === "crew" ? "Home" : d.name)}</span><small></small>`;
+  bc.innerHTML = `<i class="arr" aria-hidden="true"></i><span>${esc(d.type === "crew" ? "Station" : d.name)}</span><small></small>`;
   bc.setAttribute("aria-label", `Fly to ${d.name}`);
-  bc.addEventListener("click", () => (d.type === "crew" ? flyHome() : go(routeOf(d.id))));
+  bc.addEventListener("click", () => hooks.dest(d.type === "crew" ? { type: "home" } : { type: "dest", id: d.id }));
   $("#beacons").appendChild(bc); d.beacon = bc; d.hover = 0; d._lv = 0; d._bv = 0;
 });
 const subPool = new Map();
@@ -531,222 +526,43 @@ function drawRadar(alpha) {
 radar.addEventListener("click", (e) => {
   const r = radar.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
   let best = null, bd = 14; for (const p of radarDots) { const dd = Math.hypot(p.x - x, p.y - y); if (dd < bd) { bd = dd; best = p.d; } }
-  if (best) (best.type === "crew" ? flyHome() : go(routeOf(best.id)));
-  else if (mode === "explore") { const S = radar.clientWidth, range = WORLD * 0.95; goal = { ...goal, x: ((x - S / 2) / (S / 2 - 2)) * range, y: ((y - S / 2) / (S / 2 - 2)) * range }; vel.x = vel.y = 0; camTau = 0.7; }
+  if (best) hooks.dest(best.type === "crew" ? { type: "home" } : { type: "dest", id: best.id });
+  else if (exploring()) { const S = radar.clientWidth, range = WORLD * 0.95; goal = { ...goal, x: ((x - S / 2) / (S / 2 - 2)) * range, y: ((y - S / 2) / (S / 2 - 2)) * range }; vel.x = vel.y = 0; camTau = 0.7; }
 });
 
-/* ============================ views ============================ */
-const views = Object.fromEntries($$(".view").map((v) => [v.dataset.view, v]));
-const live = $("#live");
-let figHandles = {};
-const icon = { prev: `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 3 5 8l5 5"/></svg>`, next: `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3l5 5-5 5"/></svg>` };
-const pdr = (p, c) => `<div class="pdr" style="--c:${c}">
-  <div><span class="k">${p.pLabel || "Problem"}</span><p>${esc(p.problem)}</p></div>
-  <div><span class="k">What I did</span><p>${esc(p.did)}</p></div>
-  ${p.result ? `<div class="res"><span class="k">Result</span><p>${esc(p.result)}</p></div>` : ""}</div>`;
-function renderGalaxy(gi) {
-  const g = GALAXIES[gi], pi = state.sel.galaxy[gi], p = g.projects[pi], next = GALAXIES[(gi + 1) % GALAXIES.length];
-  const el = $("#v-galaxy"); el.style.setProperty("--c", g.color);
-  el.innerHTML = `
-    <p class="v-kicker">Galaxy ${g.num} · ${esc(g.name)}</p>
-    <div><h2 class="v-title" id="g-title" tabindex="-1">${esc(p.title)}${p.award ? `<span class="award">${esc(p.award)}</span>` : ""}</h2><p class="v-sub">${esc(p.sub)}</p><p class="v-meta">${esc(p.meta)}</p></div>
-    ${pdr(p, g.color)}
-    <div class="tools">${p.tools.map((t) => `<span>${esc(t)}</span>`).join("")}</div>
-    ${gi === 0 && pi === 0 ? `<a class="linkish" href="#/mission">Open the Mission 001 figure →</a>` : ""}
-    <div><div class="worlds" role="group" aria-label="Worlds in this galaxy">${g.projects.map((q, j) => `<button type="button" data-j="${j}" aria-current="${j === pi}"><i></i>${esc(q.title)}</button>`).join("")}</div>
-    <div class="stepper"><button class="step" data-step="-1" aria-label="Previous world">${icon.prev}</button><button class="step" data-step="1" aria-label="Next world">${icon.next}</button><span>${pi + 1} / ${g.projects.length} · ← →</span></div>
-    <a class="linkish next-gal" href="#/galaxy/${next.id}" style="--c:${next.color}">Fly to Galaxy ${next.num} · ${esc(next.name)} →</a></div>`;
-  $$(".worlds button", el).forEach((b) => b.addEventListener("click", () => selectProject(gi, +b.dataset.j)));
-  $$("[data-step]", el).forEach((b) => b.addEventListener("click", () => selectProject(gi, (pi + +b.dataset.step + g.projects.length) % g.projects.length)));
+/* ============================ scenes, framing, travel ============================ */
+// scene: "intro" | "warp" | "home" | "explore". `panel` is set while a content panel is open.
+let scene = "intro", panel = null, hoverId = null, hubAlpha = 0, stationDim = 1;
+const hooks = { dest() {}, part() {}, hover() {}, frame() {}, warpDone() {} };
+let homeBox = null;                       // where the UI wants the station: { cx, cy, w } in screen px
+function boxFraming(box) {
+  const b = box || { cx: W / 2, cy: H / 2, w: W * 0.6 };
+  const s = b.w / STATION_W;
+  return { x: -(b.cx - W / 2) / s, y: -(b.cy - H / 2) / s, s };
 }
-function selectProject(gi, j) {
-  if (state.sel.galaxy[gi] === j) return;
-  state.sel.galaxy[gi] = j; renderGalaxy(gi); setHash(`#/galaxy/${GALAXIES[gi].id}/${j + 1}`);
-  live.textContent = GALAXIES[gi].projects[j].title;
+function destFraming(d, box) {
+  const b = box || { cx: W / 2, cy: H / 2, w: Math.min(W, H) * 0.8 };
+  const fill = { galaxy: 0.5, log: 0.56, skills: 0.52, mission: 0.34, comms: 0.34 }[d.type] || 0.5;
+  const s = (b.w * fill) / d.r;
+  return { x: d.x - (b.cx - W / 2) / s, y: d.y - (b.cy - H / 2) / s, s };
 }
-function renderMission() {
-  const p = GALAXIES[0].projects[0];
-  const el = $("#v-mission"); el.style.setProperty("--c", "#7cf2b9");
-  const stations = ["MLI blanket · +x face", "RCS thruster pod · near corner", "Solar array · +y wing", "High-gain antenna · dish", "Solar array · −y wing"];
-  el.innerHTML = `
-    <p class="v-kicker">Mission 001 · In flight</p>
-    <div><h2 class="v-title" id="m-title" tabindex="-1">${esc(p.sub)}</h2><p class="v-meta">${esc(p.meta)} · Python · MuJoCo</p></div>
-    ${pdr(p, "#7cf2b9")}
-    <div><span class="pdr"><span class="k" style="margin-top:4px">Inspection stations</span></span><div class="stations" role="group" aria-label="Inspection stations">${stations.map((s, i) => `<button type="button" data-i="${i}" aria-current="${i === 0}"><b>0${i + 1}</b>${s}</button>`).join("")}</div></div>
-    <p class="v-meta" style="line-height:1.6">Concept illustration of what the simulation models. Perception, anomaly detection, planning and failure recovery are in development.</p>`;
-  $$(".stations button", el).forEach((b) => b.addEventListener("click", () => figHandles.mission?.go(+b.dataset.i)));
-}
-function renderLog() {
-  const i = state.sel.log, e = EXPERIENCE[i];
-  const el = $("#v-log"); el.style.setProperty("--c", e.color);
-  el.innerHTML = `
-    <p class="v-kicker">Flight Log · Orbit ${i + 1} of ${EXPERIENCE.length}</p>
-    <div><h2 class="v-title" id="l-title" tabindex="-1">${esc(e.org)}</h2><p class="v-sub">${esc(e.role)}</p><p class="v-meta">${esc(e.when)} · ${esc(e.where)}</p></div>
-    <ul class="roles">${e.points.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
-    ${e.project ? `<a class="linkish" href="#/galaxy/ps/${e.project[1] + 1}">See the project in Galaxy 04 →</a>` : ""}
-    <div><div class="worlds" role="group" aria-label="Roles">${EXPERIENCE.map((x, j) => `<button type="button" data-j="${j}" aria-current="${j === i}" style="--c:${x.color}"><i></i>${esc(x.org.split(",")[0])}</button>`).join("")}</div>
-    <div class="stepper"><button class="step" data-step="-1" aria-label="Earlier role">${icon.prev}</button><button class="step" data-step="1" aria-label="Later role">${icon.next}</button><span>inner orbit = earliest · ← →</span></div></div>`;
-  $$(".worlds button", el).forEach((b) => b.addEventListener("click", () => selectRole(+b.dataset.j)));
-  $$("[data-step]", el).forEach((b) => b.addEventListener("click", () => selectRole((i + +b.dataset.step + EXPERIENCE.length) % EXPERIENCE.length)));
-}
-function selectRole(i) { if (state.sel.log === i) return; state.sel.log = i; renderLog(); live.textContent = EXPERIENCE[i].org; }
-function renderCrew() {
-  const el = $("#v-crew"); el.style.setProperty("--c", "#b69cff");
-  const bars = Array.from({ length: 26 }, (_, i) => `<i style="height:${30 + ((i * 37) % 70)}%"></i>`).join("");
-  el.innerHTML = `
-    <p class="v-kicker">Crew module · About me</p>
-    <h2 class="v-title" id="c-title" tabindex="-1">More questions than answers.</h2>
-    <p class="lead">I study Business, Technology &amp; Entrepreneurship at NYU Stern. What I love most are answers that open up new questions, and I bring that same curiosity to building products.</p>
-    <div class="badge" id="badge"><div class="badge-in">
-      <div class="face"><div class="b-top"><span>NYU Stern · Crew</span><b>${CREW.id}</b></div><div class="b-photo"><img src="assets/priyansh.jpg" alt="Portrait of Priyansh Jain"></div><div class="b-name">${CREW.name}</div><div class="b-role">${CREW.role}</div><div class="b-line"><span>BTE · DEC 2027<br>NEW YORK</span><span class="b-bars">${bars}</span></div></div>
-      <div class="face back"><div class="b-top"><span>Mission stats</span><b>${CREW.id}</b></div><div class="stats">${CREW.stats.map(([n, l]) => `<div><b>${esc(n)}</b><span>${esc(l)}</span></div>`).join("")}</div></div>
-    </div></div>
-    <button class="flip" id="flip" type="button">↻ Flip for mission stats</button>
-    <dl class="facts">${CREW.facts.map(([k2, v]) => `<div><dt>${esc(k2)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>`;
-  const flip = () => { const b = $("#badge"); const on = b.classList.toggle("flipped"); $("#flip").textContent = on ? "↻ Flip back to ID" : "↻ Flip for mission stats"; };
-  $("#flip").addEventListener("click", flip); $("#badge").addEventListener("click", flip);
-}
-function renderSkills() {
-  const el = $("#v-skills"); el.style.setProperty("--c", "#7fe3ff");
-  el.innerHTML = `
-    <p class="v-kicker">Constellations · Skills</p>
-    <h2 class="v-title" id="s-title" tabindex="-1">What I navigate by.</h2>
-    <p class="v-sub">Each constellation is a set of skills; every star is one of them.</p>
-    <div class="groups" id="groups">${SKILLS.map((g, i) => `<button type="button" data-i="${i}" style="--c:${g.color}"><h3><i></i>${esc(g.name)}</h3><p>${g.items.map(esc).join(" · ")}</p></button>`).join("")}</div>`;
-  $$("#groups button").forEach((b) => {
-    b.addEventListener("pointerenter", () => selectGroup(+b.dataset.i));
-    b.addEventListener("focus", () => selectGroup(+b.dataset.i));
-    b.addEventListener("click", () => selectGroup(+b.dataset.i, true));
-  });
-  $("#groups").addEventListener("pointerleave", () => selectGroup(-1));
-}
-function selectGroup(i, toggle) {
-  if (toggle && state.sel.skills === i) i = -1;
-  state.sel.skills = i;
-  $("#groups")?.classList.toggle("dim", i >= 0);
-  $$("#groups button").forEach((b) => b.classList.toggle("on", +b.dataset.i === i));
-}
-const CHANNELS = [{ name: "Email", az: 0, el: 34 }, { name: "LinkedIn", az: 48, el: 56 }, { name: "Resume", az: 92, el: 30 }];
-function renderComms() {
-  const el = $("#v-comms"); el.style.setProperty("--c", "#7fe3ff");
-  el.innerHTML = `
-    <p class="v-kicker">Comms · Contact</p>
-    <h2 class="v-title" id="x-title" tabindex="-1">Let's build what comes next.</h2>
-    <p class="v-sub">I'm looking for PM internships and full-time roles, especially at space companies. If you're building something ambitious, I'd love to hear about it.</p>
-    <div class="channels">
-      <a href="mailto:${CONTACT.email}" data-ch="Email"><span class="ch">CH 01</span><span class="nm">Email<small>${CONTACT.email}</small></span><span class="go">↗</span></a>
-      <a href="${CONTACT.linkedin}" target="_blank" rel="noopener" data-ch="LinkedIn"><span class="ch">CH 02</span><span class="nm">LinkedIn<small>in/priyanshjain05</small></span><span class="go">↗</span></a>
-      <a href="${CONTACT.resume}" target="_blank" rel="noopener" data-ch="Resume"><span class="ch">CH 03</span><span class="nm">Resume<small>PDF · one page</small></span><span class="go">↗</span></a>
-      <button type="button" id="copy" data-ch="Email"><span class="ch">CH 04</span><span class="nm">Copy email<small>to your clipboard</small></span><span class="go">⧉</span></button>
-    </div>`;
-  $$("[data-ch]", el).forEach((a) => {
-    a.addEventListener("pointerenter", () => figHandles.comms?.aim(a.dataset.ch));
-    a.addEventListener("focus", () => figHandles.comms?.aim(a.dataset.ch));
-    a.addEventListener("pointerleave", () => figHandles.comms?.release());
-    a.addEventListener("click", () => figHandles.comms?.transmit(a.dataset.ch));
-  });
-  $("#copy").addEventListener("click", async () => { try { await navigator.clipboard.writeText(CONTACT.email); $("#copy small").textContent = "copied ✓"; } catch { location.href = `mailto:${CONTACT.email}`; } });
-}
-async function mountFigure(which) {
-  const wrap = $(`#fig-${which} > div`);
-  const mod = which === "mission" ? await import("./fig/mission001.mjs") : await import("./fig/comms.mjs");
-  if (current !== which) return;
-  figHandles[which]?.destroy();
-  figHandles[which] = which === "mission"
-    ? mod.mount(wrap, { onReadout: (_, i) => $$("#v-mission .stations button").forEach((b) => b.setAttribute("aria-current", String(+b.dataset.i === i))) })
-    : mod.mount(wrap, { channels: CHANNELS });
-}
-function openView(id) {
-  const d = D[id], type = d.type;
-  ({ galaxy: () => renderGalaxy(d.gi), mission: renderMission, log: renderLog, crew: renderCrew, skills: renderSkills, comms: renderComms })[type]();
-  const v = views[type]; v.classList.add("on");
-  if (type === "mission" || type === "comms") { $(`#fig-${type}`).classList.add("on"); mountFigure(type); }
-  const name = type === "crew" ? "About" : d.name;
-  $("#crumb").classList.add("on"); $("#here").textContent = `/ ${name}`;
-  setTimeout(() => v.querySelector(".v-title")?.focus({ preventScroll: true }), 80);
-  document.title = `${name} · Priyansh Jain`;
-}
-function closeViews() {
-  Object.values(views).forEach((v) => v.classList.remove("on"));
-  $$(".figwrap").forEach((f) => f.classList.remove("on"));
-  for (const k2 of Object.keys(figHandles)) { const h = figHandles[k2]; setTimeout(() => { if (current !== k2) { h?.destroy(); if (figHandles[k2] === h) delete figHandles[k2]; } }, 900); }
-  $("#crumb").classList.remove("on");
-  document.title = "Priyansh Jain · Product & Space";
-}
-
-/* ============================ travel ============================ */
-let mode = "intro", current = null, hoverId = null, hubAlpha = 0, viewVis = 0, arrivedAt = 0;
-function arrive(id) {
-  flight = null; mode = "view"; current = id; arrivedAt = clock;
-  camTau = 0.62; goal = viewFraming(D[id]);
-  setTimeout(() => { if (current === id && mode === "view") openView(id); }, RM ? 0 : 380);
-}
-function travel(id, sub) {
-  const d = D[id];
-  if (sub !== undefined && d.type === "galaxy") state.sel.galaxy[d.gi] = sub;
-  if (mode === "view" && current === id) { if (d.type === "galaxy") renderGalaxy(d.gi); return; }
-  closeViews(); document.body.classList.remove("in-hub"); vel.x = vel.y = 0;
-  const from = [rocket.x, rocket.y];
-  const a = d.type === "crew" ? Math.atan2(from[1] / 0.4, from[0]) : Math.atan2((from[1] - d.y) / 0.55, from[0] - d.x);
-  const to = parkPos(id, a);
-  rocket.park = { id, a }; current = id;
-  const dist = Math.hypot(to[0] - from[0], to[1] - from[1]);
-  if (RM || dist < 4) { rocket.x = to[0]; rocket.y = to[1]; arrive(id); return; }
+const dockWorld = () => [(ANCHORS.dock[0] - SV.w / 2) * SU, (ANCHORS.dock[1] - SV.h / 2) * SU];
+let travelDone = null;
+function arrive() { const f = flight; flight = null; camTau = 0.62; if (f && f.box && f.id) goal = destFraming(D[f.id], f.box); const done = travelDone; travelDone = null; done?.(); }
+function startFlight(to, id, box) {
+  const from = [rocket.x, rocket.y], dist = Math.hypot(to[0] - from[0], to[1] - from[1]);
+  if (RM || dist < 4) { rocket.x = to[0]; rocket.y = to[1]; flight = { id, box, t: 1 }; arrive(); return; }
   const mid = [(from[0] + to[0]) / 2, (from[1] + to[1]) / 2], nx = -(to[1] - from[1]) / dist, ny = (to[0] - from[0]) / dist;
-  flight = { from, to, ctrl: [mid[0] + nx * dist * 0.2, mid[1] + ny * dist * 0.2], t: 0, dur: clamp(1.0 + dist / 1400, 1.1, 2.4), id, startS: cam.s };
-  mode = "travel"; camTau = 0.42;
+  flight = { from, to, ctrl: [mid[0] + nx * dist * 0.2, mid[1] + ny * dist * 0.2], t: 0, dur: clamp(1.0 + dist / 1400, 1.1, 2.4), id, box, startS: cam.s };
+  camTau = 0.42;
 }
-function explore(at) {
-  closeViews(); current = null; flight = null; mode = "explore";
-  camTau = 0.75; goal = at || { x: cam.x, y: cam.y, s: exploreS }; vel.x = vel.y = 0;
-  document.body.classList.add("in-hub");
-}
-function flyHome() {
-  if (mode !== "explore") { go("#/"); setTimeout(() => mode === "explore" && flyHome(), 30); return; }
-  camTau = 0.9; goal = homeFraming(); vel.x = vel.y = 0;
-  if (rocket.park.id !== "crew") {
-    const from = [rocket.x, rocket.y], to = parkPos("crew", 0.6); rocket.park = { id: "crew", a: 0.6 };
-    const dist = Math.hypot(to[0] - from[0], to[1] - from[1]), mid = [(from[0] + to[0]) / 2, (from[1] + to[1]) / 2];
-    flight = { from, to, ctrl: [mid[0] - (to[1] - from[1]) * 0.2, mid[1] + (to[0] - from[0]) * 0.2], t: 0, dur: clamp(1.0 + dist / 1400, 1.1, 2.4), id: null };
-  }
-}
-function centerOn(d) { if (mode !== "explore") return; const f = exploreAt(d); camTau = 0.9; goal = { ...goal, x: f.x, y: f.y }; vel.x = vel.y = 0; }
 
-/* ============================ routing ============================ */
-const routeOf = (id) => (D[id].type === "galaxy" ? `#/galaxy/${id}` : id === "crew" ? "#/about" : `#/${id}`);
-function parse(hash) {
-  const parts = hash.replace(/^#\/?/, "").split("/").filter(Boolean);
-  if (!parts.length) return { hub: true };
-  if (parts[0] === "galaxy" && D[parts[1]] && D[parts[1]].type === "galaxy") return { id: parts[1], sub: parts[2] ? clamp(+parts[2] - 1, 0, GALAXIES[D[parts[1]].gi].projects.length - 1) : undefined };
-  if (parts[0] === "about" || parts[0] === "crew") return { id: "crew" };
-  if (D[parts[0]] && D[parts[0]].type !== "galaxy") return { id: parts[0] };
-  return { hub: true };
-}
-let quietHash = false;
-function setHash(h) { quietHash = true; history.replaceState(null, "", h); quietHash = false; }
-function go(hash) { if (location.hash !== hash) location.hash = hash; else route(); }
-function route() {
-  if (quietHash || mode === "intro" || mode === "warp") return;
-  const r = parse(location.hash);
-  if (r.hub) { const was = current ? D[current] : null; explore(was ? exploreAt(was) : null); }
-  else travel(r.id, r.sub);
-}
-addEventListener("hashchange", route);
-
-/* ============================ intro + warp ============================ */
-function enter() { if (mode !== "intro") return; $("#intro").classList.add("gone"); if (RM) { finishWarp(); return; } mode = "warp"; warp = { t: 0 }; }
-function finishWarp() {
-  warp = null; mode = "explore"; hubAlpha = Math.max(hubAlpha, 0.6); document.body.classList.add("in-hub");
-  const r = parse(location.hash);
-  if (!r.hub) travel(r.id, r.sub);
-}
-$("#enter").addEventListener("click", enter);
-
-/* ============================ input: drag to pan, wheel / pinch to zoom ============================ */
+/* ============================ input: explore only (drag, wheel, pinch, keys) ============================ */
 const pointer = { x: -1, y: -1, sx: 0, sy: 0, tx: 0, ty: 0 };
 const ptrs = new Map();
 let drag = null, dragMoved = false, pinch = null;
-const pannable = (t) => t === cv || !!t.closest?.("#station") || (!!t.closest?.("#homeov") && !t.closest("a")) || !!t.closest?.("#labels:not(button)");
+const exploring = () => scene === "explore" && !panel;
+const pannable = (t) => t === cv || !!t.closest?.("#station");
 function hitDest(x, y) {
   let best = null, bd = Infinity;
   for (const d of DESTS) { if (d.type === "crew") continue; const [sx, sy] = toScreen(d.x, d.y); const dd = Math.hypot(sx - x, sy - y); const lim = Math.max(d.r * cam.s * 0.9, 44); if (dd < lim && dd < bd) { bd = dd; best = d.id; } }
@@ -758,11 +574,10 @@ function zoomAt(sx, sy, f) {
   goal = { x: wx - (sx - W / 2) / ns, y: wy - (sy - H / 2) / ns, s: ns }; camTau = 0.22;
 }
 addEventListener("pointerdown", (e) => {
-  if (mode !== "explore" || !pannable(e.target)) return;
+  if (!exploring() || !pannable(e.target)) return;
   ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
   if (ptrs.size === 2) { const [a, b] = [...ptrs.values()]; pinch = { d: Math.hypot(a.x - b.x, a.y - b.y), s: goal.s }; drag = null; return; }
-  drag = { x: e.clientX, y: e.clientY, t: performance.now(), lx: e.clientX, ly: e.clientY }; dragMoved = false; stationEl._dragged = false;
-  vel.x = vel.y = 0;
+  drag = { x: e.clientX, y: e.clientY, t: performance.now(), lx: e.clientX, ly: e.clientY }; dragMoved = false; vel.x = vel.y = 0;
 });
 addEventListener("pointermove", (e) => {
   pointer.x = e.clientX; pointer.y = e.clientY; pointer.tx = e.clientX / W - 0.5; pointer.ty = e.clientY / H - 0.5;
@@ -770,131 +585,71 @@ addEventListener("pointermove", (e) => {
   if (pinch && ptrs.size === 2) { const [a, b] = [...ptrs.values()]; const dd = Math.hypot(a.x - b.x, a.y - b.y); zoomAt((a.x + b.x) / 2, (a.y + b.y) / 2, (pinch.s * (dd / pinch.d)) / goal.s); return; }
   if (drag) {
     const dx = e.clientX - drag.lx, dy = e.clientY - drag.ly, now = performance.now(), dtm = Math.max(1, now - drag.t) / 1000;
-    if (!dragMoved && Math.hypot(e.clientX - drag.x, e.clientY - drag.y) > 5) { dragMoved = true; stationEl._dragged = true; document.body.classList.add("dragging"); }
+    if (!dragMoved && Math.hypot(e.clientX - drag.x, e.clientY - drag.y) > 5) { dragMoved = true; document.body.classList.add("dragging"); }
     if (dragMoved) {
-      goal.x -= dx / cam.s; goal.y -= dy / cam.s; camTau = 0.09;
+      goal = { ...goal, x: goal.x - dx / cam.s, y: goal.y - dy / cam.s }; camTau = 0.09;
       const vmax = 1600 / cam.s;
       vel.x = clamp(lerp(vel.x, -dx / cam.s / dtm, 0.35), -vmax, vmax); vel.y = clamp(lerp(vel.y, -dy / cam.s / dtm, 0.35), -vmax, vmax);
     }
     drag.lx = e.clientX; drag.ly = e.clientY; drag.t = now;
     return;
   }
-  if (mode === "explore" && e.target === cv) { const h = hitDest(e.clientX, e.clientY); hoverId = h; cv.style.cursor = h ? "pointer" : "grab"; }
-  else if (mode === "view" && e.target === cv) cv.style.cursor = nearestSub(e.clientX, e.clientY) ? "pointer" : "default";
+  if (exploring() && e.target === cv) { const h = hitDest(e.clientX, e.clientY); hoverId = h; cv.style.cursor = h ? "pointer" : "grab"; }
+  else if (e.target === cv) cv.style.cursor = "default";
 });
 const endPtr = (e) => {
-  ptrs.delete(e.pointerId);
-  if (ptrs.size < 2) pinch = null;
+  ptrs.delete(e.pointerId); if (ptrs.size < 2) pinch = null;
   if (!drag) return;
   document.body.classList.remove("dragging");
-  if (!dragMoved && e.type === "pointerup" && e.target === cv) { const h = hitDest(e.clientX, e.clientY); if (h) go(routeOf(h)); }
+  if (!dragMoved && e.type === "pointerup" && e.target === cv) { const h = hitDest(e.clientX, e.clientY); if (h) hooks.dest({ type: "dest", id: h }); }
   else if (dragMoved && performance.now() - drag.t > 90) { vel.x = vel.y = 0; }
-  drag = null; setTimeout(() => { dragMoved = false; stationEl._dragged = false; }, 0);
+  drag = null; setTimeout(() => { dragMoved = false; }, 0);
 };
 addEventListener("pointerup", endPtr); addEventListener("pointercancel", endPtr);
 addEventListener("wheel", (e) => {
-  if (mode !== "explore" || !pannable(e.target)) return;
+  if (!exploring() || !pannable(e.target)) return;
   e.preventDefault();
   if (e.ctrlKey) zoomAt(e.clientX, e.clientY, Math.exp(-e.deltaY * 0.01));
   else if (Math.abs(e.deltaX) > Math.abs(e.deltaY) * 0.6 && Math.abs(e.deltaX) > 2) { goal = { ...goal, x: goal.x + e.deltaX / cam.s, y: goal.y + e.deltaY / cam.s }; camTau = 0.12; }
   else zoomAt(e.clientX, e.clientY, Math.exp(-e.deltaY * 0.0016));
 }, { passive: false });
-cv.addEventListener("click", (e) => {
-  if (mode === "intro") { enter(); return; }
-  if (mode === "view") { const s = nearestSub(e.clientX, e.clientY); s?.act(); }
-});
-function nearestSub(x, y) { let best = null, bd = Infinity; for (const s of subs) { if (!s.act || s.head || s.pin) continue; const d = Math.hypot(s.x - x, s.y - y); if (d < Math.max(s.r || 12, 16) && d < bd) { bd = d; best = s; } } return best; }
 const keysDown = new Set();
 addEventListener("keydown", (e) => {
-  if (menuOpen) { if (e.key === "Escape") toggleMenu(false); return; }
-  if (mode === "intro" && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); enter(); return; }
-  if (e.key === "Escape" && (mode === "view" || mode === "travel")) { e.preventDefault(); go("#/"); return; }
-  if (mode === "explore") {
-    if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "w", "a", "s", "d"].includes(e.key) && !e.target.closest?.("input,textarea")) { keysDown.add(e.key); e.preventDefault(); }
-    if (e.key === "+" || e.key === "=") zoomAt(W / 2, H / 2, 1.2);
-    if (e.key === "-" || e.key === "_") zoomAt(W / 2, H / 2, 1 / 1.2);
-    if (e.key === "h" || e.key === "H") flyHome();
-    return;
-  }
-  if (mode !== "view" || e.target.closest?.(".iso-stage")) return;
-  const dir = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
-  if (!dir) return;
-  const d = D[current];
-  if (d.type === "galaxy") { const n = GALAXIES[d.gi].projects.length; selectProject(d.gi, (state.sel.galaxy[d.gi] + dir + n) % n); }
-  else if (d.type === "log") selectRole((state.sel.log + dir + EXPERIENCE.length) % EXPERIENCE.length);
-  else if (d.type === "mission") figHandles.mission?.go(figHandles.mission.station + dir);
-  else if (d.type === "skills") selectGroup(((state.sel.skills < 0 ? (dir > 0 ? -1 : 0) : state.sel.skills) + dir + SKILLS.length) % SKILLS.length);
-  else return;
-  e.preventDefault();
+  if (!exploring() || e.target.closest?.("input,textarea,[role=dialog]")) return;
+  if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key) && (e.target === document.body || e.target === cv)) { keysDown.add(e.key); e.preventDefault(); }
+  if (e.key === "+" || e.key === "=") zoomAt(W / 2, H / 2, 1.2);
+  if (e.key === "-" || e.key === "_") zoomAt(W / 2, H / 2, 1 / 1.2);
 });
 addEventListener("keyup", (e) => keysDown.delete(e.key));
 addEventListener("blur", () => keysDown.clear());
-$("#home").addEventListener("click", () => (mode === "intro" ? enter() : flyHome()));
-$("#back").addEventListener("click", () => go("#/"));
-$$("[data-nav]").forEach((a) => a.addEventListener("click", (e) => { e.preventDefault(); go(a.getAttribute("href")); }));
-
-// menu
-let menuOpen = false;
-const menu = $("#menu");
-$("#menuList").innerHTML = `
-  <h2>Galaxies · Projects</h2>${DESTS.filter((d) => d.type === "galaxy").map((d) => `<button type="button" data-dest="${d.id}" style="--c:${d.color}"><i></i>${esc(d.name)}</button>`).join("")}
-  <h2>Destinations</h2>${["mission", "log", "skills", "comms", "crew"].map((id) => `<button type="button" data-dest="${id}" style="--c:${D[id].color}"><i></i>${esc(id === "crew" ? "About me" : D[id].name)} <span style="color:var(--dim);font:400 11px var(--mono);margin-left:auto">${esc(id === "crew" ? "Crew module" : D[id].kicker)}</span></button>`).join("")}
-  <h2>Elsewhere</h2><button type="button" data-dest="hub" style="--c:#e9edf7"><i></i>Home station</button><button type="button" id="replay" style="--c:#e9edf7"><i></i>Replay the intro</button>
-  <a href="classic.html" style="--c:#e9edf7"><i></i>Classic view (one page)</a><a href="assets/Priyansh_Jain_Resume.pdf" target="_blank" rel="noopener" style="--c:#e9edf7"><i></i>Resume (PDF) ↗</a>`;
-function toggleMenu(open) {
-  menuOpen = open; menu.classList.toggle("open", open); $("#menuScrim").classList.toggle("open", open); menu.inert = !open;
-  $("#menuBtn").setAttribute("aria-expanded", String(open));
-  if (open) setTimeout(() => $("#menuList button")?.focus({ preventScroll: true }), 60); else $("#menuBtn").focus({ preventScroll: true });
-}
-$("#menuBtn").addEventListener("click", () => toggleMenu(!menuOpen));
-$("#menuClose").addEventListener("click", () => toggleMenu(false));
-$("#menuScrim").addEventListener("click", () => toggleMenu(false));
-$$("#menuList [data-dest]").forEach((b) => b.addEventListener("click", () => {
-  toggleMenu(false);
-  if (mode === "intro") { $("#intro").classList.add("gone"); finishWarp(); }
-  const id = b.dataset.dest;
-  if (id === "hub") flyHome(); else go(routeOf(id));
-}));
-$("#replay").addEventListener("click", () => { toggleMenu(false); closeViews(); current = null; flight = null; mode = "intro"; hubAlpha = 0; document.body.classList.remove("in-hub"); history.replaceState(null, "", "#/"); $("#intro").classList.remove("gone"); goal = homeFraming(); });
-$("#tickerRun").innerHTML = [...TICKER, ...TICKER].map((t) => `<span>${esc(t)}</span>`).join("");
 
 /* ============================ layout ============================ */
 function layout() {
+  if (!innerWidth || !innerHeight) return;
   W = innerWidth; H = innerHeight;
   DPR = Math.min(devicePixelRatio || 1, W * H > 1600000 ? 1.5 : 1.75);
   cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR); ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   const wasTall = tall; tall = W < 760 || W / H < 0.8;
-  exploreS = tall ? Math.min((W * 0.94) / STATION_W, (H * 0.5) / STATION_H) : Math.min((W * 0.6) / STATION_W, (H - 140 - 230) / STATION_H);
+  exploreS = boxFraming(homeBox).s;
   if (wasTall !== tall || !introGalaxy) buildGalaxies();
   buildSky();
-  if (mode === "view" && current) goal = viewFraming(D[current]);
-  else if (mode === "explore") goal = { ...goal, s: clamp(goal.s, exploreS * 0.42, exploreS * 2.2) };
-  else goal = homeFraming();
-  if (mode !== "travel") { Object.assign(cam, goal); camV.x = camV.y = camV.l = 0; }
-  if (!flight) [rocket.x, rocket.y] = parkPos(rocket.park.id, rocket.park.a);
 }
-let resizeT = 0;
-addEventListener("resize", () => { clearTimeout(resizeT); resizeT = setTimeout(layout, 160); });
 
 /* ============================ loop ============================ */
-let clock = 0, last = 0;
-const homeEl = $("#homeov");
+let clock = 0, last = 0, warpWt = 0;
 function frame(now) {
   const dt = (last ? Math.min((now - last) / 1000, 1 / 30) : 1 / 60) * (globalThis.__spaceSpeed || 1); last = now; clock += dt;
   const t = RM ? 0 : clock;
   pointer.sx = follow(pointer.sx, pointer.tx, dt, 0.8); pointer.sy = follow(pointer.sy, pointer.ty, dt, 0.8);
-
-  // explore: momentum, keyboard flight, soft edge of the world
-  if (mode === "explore") {
+  if (exploring()) {
     if (!drag && !RM && Math.abs(vel.x) + Math.abs(vel.y) > 2) { goal = { ...goal, x: goal.x + vel.x * dt, y: goal.y + vel.y * dt }; const f = Math.exp(-dt / 0.35); vel.x *= f; vel.y *= f; camTau = 0.1; }
     let kx = 0, ky = 0;
-    if (keysDown.has("ArrowLeft") || keysDown.has("a")) kx -= 1; if (keysDown.has("ArrowRight") || keysDown.has("d")) kx += 1;
-    if (keysDown.has("ArrowUp") || keysDown.has("w")) ky -= 1; if (keysDown.has("ArrowDown") || keysDown.has("s")) ky += 1;
+    if (keysDown.has("ArrowLeft")) kx -= 1; if (keysDown.has("ArrowRight")) kx += 1; if (keysDown.has("ArrowUp")) ky -= 1; if (keysDown.has("ArrowDown")) ky += 1;
     if (kx || ky) { goal = { ...goal, x: goal.x + (kx * 760 * dt) / cam.s, y: goal.y + (ky * 760 * dt) / cam.s }; camTau = 0.18; }
     const r0 = Math.hypot(goal.x, goal.y); if (r0 > WORLD) { const m = WORLD / r0; goal = { ...goal, x: goal.x * m, y: goal.y * m }; vel.x *= 0.5; vel.y *= 0.5; }
   }
-  // rocket
-  if (flight) {
+  // rocket: docked at home, travelling, or parked by a destination
+  if (flight && flight.t < 1) {
     flight.t = Math.min(1, flight.t + dt / flight.dur);
     const e = easeInOut(flight.t), u = 1 - e;
     const px = u * u * flight.from[0] + 2 * u * e * flight.ctrl[0] + e * e * flight.to[0];
@@ -903,57 +658,57 @@ function frame(now) {
     if (Math.hypot(dx, dy) > 0.01) { const want = Math.atan2(dy, dx); const da = ((want - rocket.ang + Math.PI) % TAU + TAU) % TAU - Math.PI; rocket.ang += da * (1 - Math.exp(-dt / 0.08)); }
     rocket.x = px; rocket.y = py; rocket.thrust = Math.sin(Math.PI * Math.min(1, flight.t * 1.15));
     if (flight.id) {
-      const d = D[flight.id], vf = viewFraming(d);
-      const span = Math.hypot(d.x - px, d.y - py) + d.r * 1.3;
-      const fit = (Math.min(W, H) * 0.5) / span;
-      const s = Math.min(vf.s, Math.max(exploreS * 0.4, Math.min(fit, lerp(flight.startS, vf.s, e * e))));
-      goal = { x: lerp(px, vf.x, 0.2 + 0.8 * e * e), y: lerp(py, vf.y, 0.2 + 0.8 * e * e), s };
-      if (flight.t >= 1) arrive(flight.id);
-    } else if (flight.t >= 1) flight = null;
+      const d = D[flight.id], vf = destFraming(d, flight.box);
+      const span = Math.hypot(d.x - px, d.y - py) + d.r * 1.3, fit = (Math.min(W, H) * 0.5) / span;
+      goal = { x: lerp(px, vf.x, 0.2 + 0.8 * e * e), y: lerp(py, vf.y, 0.2 + 0.8 * e * e), s: Math.min(vf.s, Math.max(exploreS * 0.4, Math.min(fit, lerp(flight.startS, vf.s, e * e)))) };
+    }
+    if (flight.t >= 1) arrive();
+  } else if (rocket.park.id === "dock") {
+    const [dx0, dy0] = dockWorld(), size = 26 * SU;
+    const tx = dx0 + Math.cos(DOCK_DIR) * size * 0.42, ty = dy0 + Math.sin(DOCK_DIR) * size * 0.42;
+    rocket.x = follow(rocket.x, tx, dt, 0.25); rocket.y = follow(rocket.y, ty, dt, 0.25);
+    const da = ((DOCK_DIR - rocket.ang + Math.PI) % TAU + TAU) % TAU - Math.PI; rocket.ang += da * (1 - Math.exp(-dt / 0.3));
+    rocket.thrust = follow(rocket.thrust, 0, dt, 0.4);
   } else {
-    const p = rocket.park; p.a += dt * (p.id === "crew" ? 0.12 : 0.16);
+    const p = rocket.park; p.a += dt * 0.16;
     const [px, py] = parkPos(p.id, p.a);
     const want = Math.atan2(py - rocket.y, px - rocket.x);
     if (Math.hypot(px - rocket.x, py - rocket.y) > 0.001) { const da = ((want - rocket.ang + Math.PI) % TAU + TAU) % TAU - Math.PI; rocket.ang += da * (1 - Math.exp(-dt / 0.3)); }
     rocket.x = follow(rocket.x, px, dt, 0.25); rocket.y = follow(rocket.y, py, dt, 0.25);
     rocket.thrust = follow(rocket.thrust, 0.18, dt, 0.3);
   }
-  // warp clock
-  let wt = 0;
+  // warp
   if (warp) {
-    warp.t += dt; wt = warp.t;
-    $("#flash").style.opacity = (Math.max(0, Math.sin(clamp((wt - 1.45) / 0.55, 0, 1) * Math.PI)) * 0.85).toFixed(3);
-    if (wt > 1.75 && !warp.hubSet) { warp.hubSet = true; const h = homeFraming(); Object.assign(cam, { x: h.x, y: h.y, s: h.s * 2.8 }); camV.x = camV.y = camV.l = 0; goal = h; camTau = 0.6; }
-    if (wt >= WARP_T) { $("#flash").style.opacity = "0"; finishWarp(); }
+    warp.t += dt; warpWt = warp.t;
+    flashEl.style.opacity = (Math.max(0, Math.sin(clamp((warpWt - 1.45) / 0.55, 0, 1) * Math.PI)) * 0.85).toFixed(3);
+    if (warpWt > 1.75 && !warp.hubSet) { warp.hubSet = true; const h = boxFraming(homeBox); Object.assign(cam, { x: h.x, y: h.y, s: h.s * 2.8 }); camV.x = camV.y = camV.l = 0; goal = h; camTau = 0.6; }
+    if (warpWt >= WARP_T) finishWarp();
   }
   camStep(dt);
-
-  // envelopes
-  hubAlpha = follow(hubAlpha, mode === "intro" ? 0 : warp ? smooth(1.75, 2.7, wt) : 1, dt, 0.25);
-  viewVis = follow(viewVis, mode === "view" && clock - arrivedAt > 0.25 ? 1 : 0, dt, 0.3);
-  const exploring = mode === "explore" ? 1 : 0;
-  for (const d of DESTS) d.hover = follow(d.hover, hoverId === d.id && exploring ? 1 : 0, dt, 0.15);
+  hubAlpha = follow(hubAlpha, scene === "intro" ? 0 : warp ? smooth(1.75, 2.7, warpWt) : 1, dt, 0.25);
+  const ex = exploring() ? 1 : 0;
+  for (const d of DESTS) d.hover = follow(d.hover, hoverId === d.id && ex ? 1 : 0, dt, 0.15);
 
   // ---- canvas ----
   ctx.clearRect(0, 0, W, H);
   drawSky(t);
-  if (mode === "intro" || warp) {
+  if (scene === "intro" || warp) {
+    const wt = warp ? warpWt : 0;
     const k = Math.max(W, H) * (tall ? 0.62 : 0.48) * (1 + (warp ? Math.pow(smooth(0, 1.4, wt), 2) * 5 : 0));
     const a = warp ? 1 - smooth(0.4, 1.3, wt) : 1;
-    introGalaxy.draw(W / 2 + (mode === "intro" ? pointer.sx * 18 : 0), H * (tall ? 0.5 : 0.53) + pointer.sy * 12, k, a, t + 40, { psize: tall ? 1.05 : 1.1, haze: 0.55 });
+    introGalaxy.draw(W / 2 + (scene === "intro" ? pointer.sx * 18 : 0), H * (tall ? 0.5 : 0.53) + pointer.sy * 12, k, a, t + 40, { psize: tall ? 1.05 : 1.1, haze: 0.55 });
   }
   subs = [];
   if (hubAlpha > 0.003) {
     for (const d of DESTS) {
       if (d.type === "crew") continue;
-      const f = current === d.id ? viewVis : 0;
-      const figView = (d.type === "mission" || d.type === "comms") && current === d.id ? 1 - viewVis * 0.85 : 1;
-      const a = hubAlpha * (current && current !== d.id && mode === "view" ? 0.5 : 1) * figView;
-      const pins = exploring * hubAlpha * smooth(110, 190, d.r * cam.s) * (d.type === "galaxy" || d.type === "log" || d.type === "skills" ? 1 : 0);
-      if (d.type === "galaxy") drawGalaxyDest(d, t, a, f, pins);
+      const focus = panel && panel.dest === d.id;
+      const a = hubAlpha * (panel && !focus ? 0.45 : 1) * ((d.type === "mission" || d.type === "comms") && focus ? 0.4 : 1);
+      const pins = ex * hubAlpha * smooth(110, 190, d.r * cam.s) * (d.type === "galaxy" || d.type === "log" || d.type === "skills" ? 1 : 0);
+      if (d.type === "galaxy") drawGalaxyDest(d, t, a, 0, pins);
       else if (d.type === "mission") drawSatelliteDest(d, t, a);
-      else if (d.type === "log") drawLogDest(d, t, a, f, pins);
-      else if (d.type === "skills") drawSkillsDest(d, t, a, f, pins);
+      else if (d.type === "log") drawLogDest(d, t, a, 0, pins);
+      else if (d.type === "skills") drawSkillsDest(d, t, a, 0, pins);
       else if (d.type === "comms") drawCommsDest(d, t, a);
     }
     if (!RM && rocket.thrust > 0.3) for (let i = 0; i < 2; i++) exhaust.push({ x: rocket.x - (Math.cos(rocket.ang) * 14) / cam.s, y: rocket.y - (Math.sin(rocket.ang) * 14) / cam.s, vx: -Math.cos(rocket.ang) * 40 + (Math.random() - 0.5) * 20, vy: -Math.sin(rocket.ang) * 40 + (Math.random() - 0.5) * 20, life: 0 });
@@ -962,42 +717,33 @@ function frame(now) {
     for (const p of exhaust) { p.x += (p.vx * dt) / cam.s; p.y += (p.vy * dt) / cam.s; const [x, y] = toScreen(p.x, p.y); ctx.fillStyle = `rgba(127,227,255,${(1 - p.life / 0.7) * 0.5 * hubAlpha})`; ctx.fillRect(x - 1.2, y - 1.2, 2.4, 2.4); }
     ctx.globalCompositeOperation = "source-over";
     const [rx, ry] = toScreen(rocket.x, rocket.y);
-    const figOpen = current && (D[current].type === "mission" || D[current].type === "comms") ? viewVis : 0;
-    ctx.globalAlpha = hubAlpha * (1 - figOpen * 0.9) * (mode === "view" ? 1 - viewVis * 0.55 : 1);
-    drawRocket(rx, ry, clamp(30 * Math.sqrt(cam.s / exploreS), 22, 44), rocket.ang, rocket.thrust, clock);
+    const docked = rocket.park.id === "dock" && !flight;
+    ctx.globalAlpha = hubAlpha * (docked ? stationDim : panel ? 0.55 : 1);
+    drawRocket(rx, ry, docked ? 26 * SU * cam.s : clamp(30 * Math.sqrt(cam.s / exploreS), 22, 44), rocket.ang, rocket.thrust, clock);
     ctx.globalAlpha = 1;
   }
-  if (warp) drawWarp(dt, wt);
+  if (warp) drawWarp(dt, warpWt);
 
   // ---- station overlay: the anatomy figure, placed and scaled with the world ----
   const sc = cam.s * SU, [hx, hy] = toScreen(0, 0), sw = SV.w * sc, sh = SV.h * sc;
   const stVisible = hubAlpha > 0.01 && hx + sw / 2 > -40 && hx - sw / 2 < W + 40 && hy + sh / 2 > -40 && hy - sh / 2 < H + 40;
   stationEl.style.visibility = stVisible ? "visible" : "hidden";
+  const stAlpha = hubAlpha * stationDim;
   if (stVisible) {
     stationEl.style.transform = `translate3d(${(hx - sw / 2).toFixed(1)}px,${(hy - sh / 2).toFixed(1)}px,0) scale(${sc.toFixed(4)})`;
-    stationEl.style.opacity = (hubAlpha * (mode === "view" && current !== "crew" ? 0.35 : 1)).toFixed(3);
-    stationEl.style.pointerEvents = mode === "explore" ? "auto" : "none";
+    stationEl.style.opacity = stAlpha.toFixed(3);
+    stationEl.style.pointerEvents = scene === "home" && !panel ? "auto" : scene === "explore" && !panel ? "auto" : "none";
   }
-  if (stationHover && mode === "explore") {
-    const [ax, ay] = ANCHORS[stationHover];
-    modLabel.style.transform = `translate3d(${(hx - sw / 2 + ax * sc).toFixed(1)}px,${(hy - sh / 2 + ay * sc).toFixed(1)}px,0) translate(-50%,-130%)`;
-    if (modLabel._m !== stationHover) { modLabel._m = stationHover; modLabel.innerHTML = `<b>${MODULES[stationHover].says}</b><small>${MODULES[stationHover].name}</small>`; }
-    modLabel.style.opacity = "1";
-  } else modLabel.style.opacity = "0";
-  const homeVis = hubAlpha * exploring;
-  homeEl.style.transform = `translate3d(${hx.toFixed(1)}px,${(hy + sh * 0.4).toFixed(1)}px,0) translate(-50%,0)`;
-  homeEl.style.opacity = homeVis.toFixed(3);
-  homeEl.classList.toggle("live", homeVis > 0.6);
-  homeEl.style.visibility = homeVis > 0.01 ? "visible" : "hidden";
+  hooks.frame({ scene, panel, hubAlpha, station: { left: hx - sw / 2, top: hy - sh / 2, sc, visible: stVisible, alpha: stAlpha }, dock: toScreen(rocket.x, rocket.y) });
 
-  // ---- labels + edge beacons ----
-  const labelVis = hubAlpha * exploring;
-  const m = tall ? 40 : 64, top = 80, bottom = tall ? 58 : 66, placed = [];
+  // ---- labels, pins, beacons, radar (explore only) ----
+  const labelVis = hubAlpha * ex;
+  const m = 64, top = 84, bottom = 70, placed = [];
   for (const d of DESTS) {
     const [x, y] = toScreen(d.x, d.y);
     if (d.el) {
       const below = d.type === "galaxy" ? d.r * cam.s * 0.8 : d.type === "log" ? d.r * cam.s * 0.5 : d.type === "skills" ? d.r * cam.s * 0.92 : 48 * cam.s;
-      const onScreen = x > -100 && x < W + 100 && y > -100 && y < H + 100;
+      const onScreen = x > -100 && x < W + 100 && y + below > 84 && y < H + 100;
       d._lv = follow(d._lv, onScreen ? labelVis : 0, dt, 0.2);
       d.el.style.transform = `translate3d(${x.toFixed(1)}px,${(y + below + 4).toFixed(1)}px,0) translate(-50%,0)`;
       d.el.style.opacity = d._lv.toFixed(3);
@@ -1006,21 +752,20 @@ function frame(now) {
     }
     const kk = d.type === "crew" ? STATION_W * 0.35 * cam.s : d.r * cam.s * 0.55;
     const inside = x + kk > m && x - kk < W - m && y + kk > top && y - kk < H - bottom;
-    d._bv = follow(d._bv, !inside && labelVis > 0.5 ? 1 : 0, dt, 0.25);
+    d._bv = follow(d._bv, !tall && !inside && labelVis > 0.5 ? 1 : 0, dt, 0.25);
     const bc = d.beacon;
     bc.style.opacity = (d._bv * labelVis).toFixed(3);
-    bc.style.pointerEvents = d._bv > 0.5 ? "auto" : "none";
+    bc.style.pointerEvents = d._bv > 0.5 ? "auto" : "none"; bc.tabIndex = d._bv > 0.5 ? 0 : -1;
     if (d._bv > 0.01) {
       const cx = W / 2, cy = (top + H - bottom) / 2, vx = x - cx, vy = y - cy;
       const s2 = Math.min((W / 2 - 16) / Math.abs(vx || 1e-6), ((H - top - bottom) / 2 - 8) / Math.abs(vy || 1e-6), 1);
       bc.style.setProperty("--a", `${Math.atan2(vy, vx).toFixed(3)}rad`);
       const txt = `${(Math.hypot(d.x - cam.x, d.y - cam.y) / 100).toFixed(1)} ly`;
       if (bc.lastChild.textContent !== txt) { bc.lastChild.textContent = txt; bc._w = 0; }
-      const w = bc._w || (bc._w = bc.offsetWidth || 120), h = tall ? 28 : 30;
+      const w = bc._w || (bc._w = bc.offsetWidth || 120), h = 34;
       placed.push({ bc, w, h, x: clamp(cx + vx * s2, w / 2 + 10, W - w / 2 - 10), y: clamp(cy + vy * s2, top + h / 2, H - bottom - h / 2), dist: Math.hypot(vx, vy) });
     }
   }
-  // keep beacons from piling up: nearest first, the rest slide along their edge to the closest free spot
   placed.sort((a, b) => a.dist - b.dist);
   const rr = radar.getBoundingClientRect();
   const done = rr.width ? [{ x: rr.left + rr.width / 2, y: rr.top + rr.height / 2, w: rr.width + 6, h: rr.height + 6 }] : [];
@@ -1032,28 +777,71 @@ function frame(now) {
       const px = b.x, py = b.y;
       if (vertical) b.y = clamp(b.y + (b.y > hit.y || (b.y === hit.y && tries % 2) ? 1 : -1) * ((hit.h + b.h) / 2 + 5 - Math.abs(b.y - hit.y)), top + b.h / 2, H - bottom - b.h / 2);
       else b.x = clamp(b.x + (b.x > hit.x || (b.x === hit.x && tries % 2) ? 1 : -1) * ((hit.w + b.w) / 2 + 7 - Math.abs(b.x - hit.x)), b.w / 2 + 10, W - b.w / 2 - 10);
-      if (b.x === px && b.y === py) vertical = !vertical;   // pinned in a corner: slide along the other edge
+      if (b.x === px && b.y === py) vertical = !vertical;
     }
     done.push(b);
     b.bc._x = b.bc._x === undefined ? b.x : follow(b.bc._x, b.x, dt, 0.12);
     b.bc._y = b.bc._y === undefined ? b.y : follow(b.bc._y, b.y, dt, 0.12);
     b.bc.style.transform = `translate3d(${b.bc._x.toFixed(1)}px,${b.bc._y.toFixed(1)}px,0) translate(-50%,-50%)`;
   }
-  syncSubs(viewVis);
+  syncSubs(0);
   drawRadar(labelVis);
   requestAnimationFrame(frame);
 }
 
-/* ============================ start ============================ */
-layout();
-const start = parse(location.hash);
-if (!start.hub) {
-  $("#intro").classList.add("gone"); hubAlpha = 1;
-  const d = D[start.id];
-  if (d.type === "galaxy" && start.sub !== undefined) state.sel.galaxy[d.gi] = start.sub;
-  rocket.park = { id: start.id, a: 2.4 }; [rocket.x, rocket.y] = parkPos(start.id, 2.4);
-  arrive(start.id); Object.assign(cam, goal);
+/* ============================ intro + warp ============================ */
+const flashEl = $("#flash");
+function finishWarp() {
+  warp = null; flashEl.style.opacity = "0";
+  if (scene === "warp") scene = "home";
+  hubAlpha = Math.max(hubAlpha, 0.6);
+  hooks.warpDone();
 }
-requestAnimationFrame(frame);
+
+/* ============================ public API ============================ */
+export const Space = {
+  on(name, fn) { hooks[name] = fn; },
+  get W() { return W; }, get H() { return H; }, get tall() { return tall; }, get scene() { return scene; },
+  start({ intro }) {
+    layout();
+    rocket.park = { id: "dock", a: 0 }; [rocket.x, rocket.y] = dockWorld();
+    rocket.ang = DOCK_DIR;
+    if (intro) { scene = "intro"; hubAlpha = 0; }
+    else { scene = "home"; hubAlpha = 1; goal = boxFraming(homeBox); Object.assign(cam, goal); }
+    requestAnimationFrame(frame);
+  },
+  relayout() { layout(); if (scene === "home" && !panel) { goal = boxFraming(homeBox); Object.assign(cam, goal); camV.x = camV.y = camV.l = 0; } },
+  enter() { if (scene !== "intro") return; if (RM) { scene = "home"; goal = boxFraming(homeBox); Object.assign(cam, goal); finishWarp(); return; } scene = "warp"; warp = { t: 0 }; },
+  skipIntro() {
+    if (scene !== "intro" && scene !== "warp") return;
+    scene = "home"; warp = null; goal = boxFraming(homeBox); Object.assign(cam, goal); camV.x = camV.y = camV.l = 0; finishWarp(); hubAlpha = 1;
+  },
+  // put the station in a screen box (home), optionally dimmed behind a panel
+  home(box, { dim = 1, instant = false } = {}) {
+    homeBox = homeBox || box;
+    scene = scene === "intro" || scene === "warp" ? scene : "home"; stationDim = dim; vel.x = vel.y = 0;
+    goal = boxFraming(box); camTau = 0.6;
+    if (instant || RM) { Object.assign(cam, goal); camV.x = camV.y = camV.l = 0; }
+    if (rocket.park.id !== "dock" && !flight) startFlight(dockWorld(), null, null), (rocket.park = { id: "dock", a: 0 });
+  },
+  setHomeBox(box) { homeBox = box; exploreS = boxFraming(homeBox).s; },
+  explore() { scene = "explore"; stationDim = 1; camTau = 0.75; goal = { x: cam.x, y: cam.y, s: exploreS }; if (rocket.park.id === "dock") rocket.park = { id: "crew", a: Math.atan2(rocket.y / 0.4, rocket.x) }; },
+  // fly the rocket to a destination and frame it inside `box` (the space left beside a panel)
+  travelTo(id, box) {
+    return new Promise((resolve) => {
+      const d = D[id]; travelDone = resolve; vel.x = vel.y = 0;
+      const from = [rocket.x, rocket.y], a = Math.atan2((from[1] - d.y) / 0.55, from[0] - d.x);
+      rocket.park = { id, a }; scene = "explore";
+      startFlight(parkPos(id, a), id, box);
+    });
+  },
+  frameDest(id, box, instant) { goal = destFraming(D[id], box); camTau = 0.62; if (instant || RM) { Object.assign(cam, goal); camV.x = camV.y = camV.l = 0; } },
+  setPanel(p) { panel = p; if (!p) stationDim = 1; },
+  dimStation(v) { stationDim = v; },
+  highlight(mod) { station.set(mod); },
+  park(id) { const a = 2.4; rocket.park = { id, a }; [rocket.x, rocket.y] = parkPos(id, a); },
+  get dests() { return DESTS; },
+};
+addEventListener("resize", () => { clearTimeout(Space._rt); Space._rt = setTimeout(() => hooks.resize?.(), 160); });
 document.addEventListener("visibilitychange", () => { last = 0; });
-window.__space = { go, D, flyHome, get mode() { return mode; }, cam, get goal() { return goal; }, get clock() { return clock; } };
+window.__space = Space;

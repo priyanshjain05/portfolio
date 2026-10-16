@@ -3,350 +3,907 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Priyansh Jain · Product & Space</title>
-<meta name="description" content="Priyansh Jain builds products for what comes next. An explorable universe of product, hardware and space work from an NYU Stern student.">
-<meta property="og:title" content="Priyansh Jain · Product & Space">
-<meta property="og:description" content="I build products for what comes next.">
+<!-- gen:head -->
+<title>Priyansh Jain · Product &amp; Space Portfolio</title>
+<meta name="description" content="Priyansh Jain studies Business, Technology &amp; Entrepreneurship at NYU Stern and builds products for what comes next. Looking for PM internships and full-time roles, especially at space companies.">
+<link rel="canonical" href="https://priyanshjain.info/">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://priyanshjain.info/">
+<meta property="og:title" content="Priyansh Jain · Product &amp; Space Portfolio">
+<meta property="og:description" content="Priyansh Jain studies Business, Technology &amp; Entrepreneurship at NYU Stern and builds products for what comes next. Looking for PM internships and full-time roles, especially at space companies.">
+<meta property="og:image" content="https://priyanshjain.info/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Priyansh Jain: I build products for what comes next.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Priyansh Jain · Product &amp; Space Portfolio">
+<meta name="twitter:description" content="Priyansh Jain studies Business, Technology &amp; Entrepreneurship at NYU Stern and builds products for what comes next. Looking for PM internships and full-time roles, especially at space companies.">
+<meta name="twitter:image" content="https://priyanshjain.info/assets/og-image.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Priyansh Jain","url":"https://priyanshjain.info/","email":"mailto:priyansh.jain@stern.nyu.edu","description":"Priyansh Jain studies Business, Technology & Entrepreneurship at NYU Stern and builds products for what comes next. Looking for PM internships and full-time roles, especially at space companies.","sameAs":["https://www.linkedin.com/in/priyanshjain05/"],"affiliation":{"@type":"CollegeOrUniversity","name":"NYU Stern School of Business"}}</script>
+<!-- /gen:head -->
 <meta name="theme-color" content="#04050b">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='14' fill='%237fe3ff'/%3E%3Cellipse cx='32' cy='32' rx='28' ry='9' fill='none' stroke='%23b69cff' stroke-width='3' transform='rotate(-20 32 32)'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/kit/iso.css">
 <link rel="stylesheet" href="assets/fig/space-iso.css">
 <link rel="modulepreload" href="assets/space.js">
 <style>
 :root{
-  --bg:#04050b; --ink:#e9edf7; --ink-2:#c3c9d8; --muted:#8e97ad; --dim:#5d657c;
-  --line:rgba(255,255,255,.09); --line-2:rgba(255,255,255,.17);
+  --bg:#04050b; --ink:#e9edf7; --ink-2:#c9cfdc; --muted:#a3abbf; --dim:#8a93a8;
+  --line:rgba(255,255,255,.1); --line-2:rgba(255,255,255,.2);
   --cyan:#7fe3ff; --violet:#b69cff; --amber:#ffbf73; --mint:#7cf2b9;
+  --glass:rgba(7,9,20,.78);
   --display:'Space Grotesk',system-ui,sans-serif; --serif:'Instrument Serif',Georgia,serif; --body:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
   --ease:cubic-bezier(.22,.61,.36,1); --ease-out:cubic-bezier(.16,1,.3,1);
-  --gutter:clamp(16px,3vw,36px);
+  --gutter:clamp(16px,3vw,36px); --hud:72px;
   color-scheme:dark;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden;background:var(--bg)}
-body{color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;
+body{color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;
   background:radial-gradient(120% 90% at 50% 40%,#080a18 0%,#04050c 55%,#020208 100%)}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 a{color:inherit}
+ul,ol{list-style:none}
 ::selection{background:rgba(127,227,255,.3)}
-:focus-visible{outline:1.5px solid var(--cyan);outline-offset:3px;border-radius:6px}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:8px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:fixed;left:12px;top:-60px;z-index:200;padding:10px 16px;border-radius:10px;background:var(--ink);color:#05060d;font-weight:600;text-decoration:none;transition:top .2s}
+.skip:focus{top:12px}
 
-#space{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
-#station,#homeov{touch-action:none}
-#flash{position:fixed;inset:0;pointer-events:none;opacity:0;background:radial-gradient(circle at 50% 50%,rgba(220,245,255,.95),rgba(127,227,255,.35) 40%,transparent 75%);z-index:30}
+#space{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
+#flash{position:fixed;inset:0;pointer-events:none;opacity:0;background:radial-gradient(circle at 50% 50%,rgba(220,245,255,.95),rgba(127,227,255,.35) 40%,transparent 75%);z-index:36}
+.cine{position:fixed;inset:0;z-index:30;pointer-events:none;background:radial-gradient(130% 100% at 50% 50%,transparent 58%,rgba(0,0,4,.5) 100%)}
+.cine::after{content:"";position:absolute;inset:-50%;opacity:.06;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 1.2s steps(6) infinite}
 
-/* ---------- HUD ---------- */
-.hud{position:fixed;left:0;right:0;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;padding:18px var(--gutter);pointer-events:none;transition:opacity .8s var(--ease)}
-.hud > *{pointer-events:auto}
-.mark{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:500;letter-spacing:.01em;font-size:15px}
-.mark-ring{position:relative;width:30px;height:30px;border-radius:50%;border:1px solid var(--line-2);display:grid;place-items:center;font:500 10px var(--mono)}
-.mark-ring i{position:absolute;inset:-1px;border-radius:50%;animation:spin 8s linear infinite}
-.mark-ring i::before{content:"";position:absolute;top:-3px;left:50%;margin-left:-3px;width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
-.crumb{display:flex;align-items:center;gap:10px;font:500 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);opacity:0;transform:translateX(-6px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
-.crumb.on{opacity:1;transform:none}
-.crumb button{color:var(--muted);letter-spacing:inherit;text-transform:inherit;font:inherit;display:inline-flex;align-items:center;gap:8px;padding:6px 0}
-.crumb button:hover{color:var(--ink)}
-.crumb kbd{font:inherit;font-size:9.5px;border:1px solid var(--line-2);border-radius:4px;padding:1px 5px;color:var(--dim)}
-.crumb .here{color:var(--ink)}
-.hud-left{display:flex;align-items:center;gap:22px}
-.hud-right{display:flex;align-items:center;gap:10px}
-.pill{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 16px;border-radius:999px;border:1px solid var(--line-2);background:rgba(6,8,18,.5);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font-size:13.5px;font-weight:500;text-decoration:none;transition:border-color .3s,background .3s,transform .3s var(--ease)}
-.pill:hover{border-color:rgba(255,255,255,.4);transform:translateY(-1px)}
-.pill svg{width:13px;height:13px}
-.pill.icon{width:38px;padding:0;justify-content:center}
-
-/* ---------- destination labels on the star map ---------- */
-#labels{position:fixed;inset:0;z-index:20;pointer-events:none}
-.dlabel{position:absolute;left:0;top:0;transform:translate(-50%,0);display:flex;flex-direction:column;align-items:center;gap:1px;padding:6px 10px;text-align:center;white-space:nowrap;border-radius:10px;will-change:transform,opacity;transition:color .3s}
-.dlabel .k{font:500 9.5px var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--c,var(--cyan));opacity:.9}
-.dlabel .n{font:500 14.5px var(--display);color:var(--ink-2);transition:color .3s,text-shadow .3s}
-.dlabel:hover .n,.dlabel.hot .n{color:#fff;text-shadow:0 0 18px var(--c,var(--cyan))}
-.dlabel::after{content:"";height:1px;width:0;margin-top:3px;background:var(--c,var(--cyan));transition:width .4s var(--ease)}
-.dlabel:hover::after,.dlabel.hot::after{width:60%}
-.sublabel{position:absolute;left:0;top:0;transform:translate(-50%,0);display:flex;flex-direction:column;align-items:center;padding:4px 8px;white-space:nowrap;text-align:center;will-change:transform,opacity;transition:opacity .4s}
-.sublabel b{font:500 12.5px var(--display);color:var(--ink-2);transition:color .3s}
-.sublabel small{font:400 9.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--c,var(--muted))}
-.sublabel.side{transform-origin:left center;align-items:flex-start;text-align:left}
-.sublabel.sel b,.sublabel:hover b{color:#fff}
-.sublabel.sel b{text-shadow:0 0 14px var(--c,var(--cyan))}
-
-/* ---------- intro ---------- */
-#intro::before{content:"";position:absolute;left:50%;top:50%;width:min(900px,120vw);height:min(420px,70vh);transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(4,5,11,.62),rgba(4,5,11,0));z-index:-1;pointer-events:none}
-#intro{position:fixed;inset:0;z-index:35;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;transition:opacity .9s var(--ease),transform 1.2s var(--ease)}
-#intro.gone{opacity:0;transform:scale(1.08);pointer-events:none}
-.i-kicker{font:500 11px var(--mono);letter-spacing:.32em;text-transform:uppercase;color:var(--muted)}
-.i-name{font-family:var(--serif);font-weight:400;font-size:clamp(54px,10vw,136px);line-height:.95;letter-spacing:-.01em;margin:18px 0 18px;text-shadow:0 0 60px rgba(4,5,11,.9)}
-.i-tag{font-family:var(--display);font-size:clamp(19px,2.4vw,28px);color:var(--ink-2)}
-.i-tag em{font-style:normal;background:linear-gradient(90deg,var(--cyan),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
-.enter{margin-top:46px;position:relative;display:inline-flex;align-items:center;gap:14px;padding:14px 26px 14px 22px;border-radius:999px;font:500 14px var(--body);letter-spacing:.02em;color:var(--ink);border:1px solid rgba(127,227,255,.45);background:rgba(127,227,255,.06);box-shadow:0 0 40px -6px rgba(127,227,255,.45),inset 0 0 20px rgba(127,227,255,.08);transition:transform .4s var(--ease),box-shadow .4s,background .4s}
-.enter:hover{transform:translateY(-2px) scale(1.02);background:rgba(127,227,255,.12);box-shadow:0 0 60px -4px rgba(127,227,255,.65),inset 0 0 24px rgba(127,227,255,.12)}
-.enter .dot{width:9px;height:9px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan);animation:breathe 2.4s var(--ease) infinite}
-.enter kbd{font:500 10px var(--mono);border:1px solid var(--line-2);border-radius:4px;padding:2px 6px;color:var(--muted)}
-.i-foot{position:absolute;bottom:22px;left:0;right:0;font:400 11px var(--mono);letter-spacing:.12em;color:var(--dim)}
-.i-foot a{color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line-2)}
-.i-foot a:hover{color:var(--ink)}
-.fade-up{opacity:0;transform:translateY(14px);animation:fadeUp 1.3s var(--ease-out) forwards}
-
-/* ---------- hub hint + ticker ---------- */
-.hint{position:fixed;left:var(--gutter);bottom:58px;z-index:25;font:400 10.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dim);transition:opacity .6s}
-.ticker{position:fixed;left:0;right:0;bottom:0;z-index:25;height:40px;display:flex;align-items:center;gap:14px;padding:0 var(--gutter);border-top:1px solid var(--line);background:linear-gradient(0deg,rgba(4,5,11,.85),rgba(4,5,11,.2));overflow:hidden;transition:opacity .6s,transform .6s var(--ease)}
-.ticker .t-label{flex:none;display:flex;align-items:center;gap:8px;font:500 10px var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--cyan)}
-.ticker .t-label i{width:6px;height:6px;border-radius:50%;background:var(--mint);box-shadow:0 0 8px var(--mint);animation:breathe 2s var(--ease) infinite}
-.t-track{flex:1;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
-.t-run{display:inline-flex;gap:46px;white-space:nowrap;font:400 12px var(--mono);color:var(--ink-2);animation:marquee 46s linear infinite;padding-left:20px}
-.t-run span::before{content:"◆";color:var(--dim);margin-right:12px;font-size:8px;vertical-align:2px}
-body:not(.in-hub) .ticker,body:not(.in-hub) .hint{opacity:0;pointer-events:none}
-body:not(.in-hub) .ticker{transform:translateY(10px)}
-
-/* ---------- views ---------- */
-.view{position:fixed;z-index:22;top:0;bottom:0;right:0;width:min(470px,40vw);display:flex;flex-direction:column;justify-content:center;padding:86px var(--gutter) 40px 0;pointer-events:none;opacity:0;visibility:hidden;transition:opacity .7s var(--ease),visibility 0s .7s}
-.view.on{opacity:1;visibility:visible;pointer-events:auto;transition:opacity .9s var(--ease) .05s,visibility 0s}
-.view .scrim{position:fixed;inset:0 0 0 auto;width:min(760px,62vw);z-index:-1;background:linear-gradient(270deg,rgba(4,5,11,.92) 0%,rgba(4,5,11,.78) 45%,transparent 100%);pointer-events:none}
-.v-body{max-height:100%;overflow-y:auto;overscroll-behavior:contain;padding-right:6px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.15) transparent}
-.v-body > *{opacity:0;transform:translateY(12px);transition:opacity .8s var(--ease-out),transform .8s var(--ease-out)}
-.view.on .v-body > *{opacity:1;transform:none}
-.view.on .v-body > *:nth-child(2){transition-delay:.06s}.view.on .v-body > *:nth-child(3){transition-delay:.12s}.view.on .v-body > *:nth-child(4){transition-delay:.18s}.view.on .v-body > *:nth-child(5){transition-delay:.24s}.view.on .v-body > *:nth-child(6){transition-delay:.3s}
-.v-kicker{font:500 10.5px var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--c,var(--cyan));display:flex;align-items:center;gap:10px}
-.v-kicker::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--c,var(--cyan));box-shadow:0 0 10px var(--c,var(--cyan))}
-.v-title{font:400 clamp(34px,3.6vw,48px)/1.02 var(--serif);letter-spacing:-.005em;margin-top:12px;outline:none}
-.v-sub{color:var(--muted);margin-top:6px;font-size:15px}
-.v-meta{font:400 11.5px var(--mono);color:var(--muted);letter-spacing:.04em;margin-top:14px}
-.award{display:inline-flex;align-items:center;font:500 10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#05060d;background:var(--amber);border-radius:999px;padding:3px 9px;margin-left:10px;vertical-align:middle}
-.pdr{display:grid;gap:16px;margin-top:22px}
-.pdr .k{display:block;font:500 10px var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:3px}
-.pdr p{color:var(--ink-2);font-size:14.5px;line-height:1.6}
-.pdr .res{padding-left:14px;border-left:1.5px solid var(--c,var(--cyan))}
-.pdr .res p{color:var(--ink)}
-.tools{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:20px;font:400 11.5px var(--mono);color:var(--muted)}
-.tools span::before{content:"·";margin-right:8px;color:var(--dim)}
-.tools span:first-child::before{content:none}
-.stepper{display:flex;align-items:center;gap:14px;margin-top:26px;font:400 11px var(--mono);color:var(--dim);letter-spacing:.08em}
-.step{width:34px;height:34px;border-radius:50%;border:1px solid var(--line-2);display:grid;place-items:center;transition:border-color .3s,background .3s,transform .3s var(--ease)}
-.step:hover{border-color:var(--c,var(--cyan));background:rgba(255,255,255,.04);transform:scale(1.06)}
-.step svg{width:13px;height:13px}
-.worlds{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:18px}
-.worlds button{font:400 12px var(--mono);color:var(--muted);padding:3px 0;display:inline-flex;align-items:center;gap:8px;transition:color .3s}
-.worlds button i{width:6px;height:6px;border-radius:50%;border:1px solid var(--c,var(--cyan));transition:background .3s,box-shadow .3s}
-.worlds button[aria-current="true"]{color:var(--ink)}
-.worlds button[aria-current="true"] i{background:var(--c,var(--cyan));box-shadow:0 0 8px var(--c,var(--cyan))}
-.worlds button:hover{color:var(--ink)}
-.linkish{display:inline-flex;align-items:center;gap:8px;margin-top:18px;color:var(--cyan);font-size:14px;text-decoration:none;border-bottom:1px solid rgba(127,227,255,.3);padding-bottom:2px}
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:999px;border:1px solid var(--line-2);background:rgba(7,9,20,.6);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font:500 15px var(--body);text-decoration:none;color:var(--ink);white-space:nowrap;transition:border-color .3s,background .3s,transform .3s var(--ease)}
+.btn:hover{border-color:rgba(255,255,255,.45);transform:translateY(-1px)}
+.btn.primary{background:var(--ink);color:#05060d;border-color:var(--ink)}
+.btn.primary:hover{box-shadow:0 10px 36px -10px rgba(127,227,255,.6)}
+.linkish{color:var(--cyan);text-decoration:none;border-bottom:1px solid rgba(127,227,255,.35);padding-bottom:1px}
 .linkish:hover{border-color:var(--cyan)}
 
-/* flight log */
-.roles li{list-style:none;position:relative;padding-left:16px;color:var(--ink-2);font-size:14.5px;margin-top:10px}
-.roles li::before{content:"";position:absolute;left:0;top:.62em;width:5px;height:5px;border-radius:50%;background:var(--c,var(--cyan));opacity:.7}
+/* ---------- HUD ---------- */
+.hud{position:fixed;left:0;right:0;top:0;z-index:40;height:var(--hud);display:flex;align-items:center;justify-content:space-between;padding:0 var(--gutter);pointer-events:none;transition:opacity .6s var(--ease)}
+.hud > *{pointer-events:auto}
+.mark{display:flex;align-items:center;gap:12px;font:500 16px var(--display);text-decoration:none;min-height:44px}
+.mark-ring{position:relative;width:32px;height:32px;border-radius:50%;border:1px solid var(--line-2);display:grid;place-items:center;font:500 12px var(--mono)}
+.mark-ring i{position:absolute;inset:-1px;border-radius:50%;animation:spin 8s linear infinite}
+.mark-ring i::before{content:"";position:absolute;top:-3px;left:50%;margin-left:-3px;width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+.hud-right{display:flex;align-items:center;gap:10px}
+.hud .btn{min-height:40px;font-size:14px}
+body.intro .hud{opacity:0;pointer-events:none}
 
-/* crew badge */
-.badge{position:relative;width:min(100%,330px);aspect-ratio:.68;perspective:1200px;margin-top:4px}
-.badge-in{position:absolute;inset:0;transform-style:preserve-3d;transition:transform 1s var(--ease-out)}
-.badge.flipped .badge-in{transform:rotateY(180deg)}
-.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:18px;padding:22px;display:flex;flex-direction:column;
-  background:linear-gradient(160deg,rgba(26,34,66,.92),rgba(8,11,26,.95));border:1px solid rgba(127,227,255,.25);box-shadow:0 30px 80px -30px rgba(0,0,0,.8),0 0 50px -20px rgba(127,227,255,.35),inset 0 1px 0 rgba(255,255,255,.06);overflow:hidden}
-.face::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 60% at 100% 0%,rgba(182,156,255,.16),transparent 60%),repeating-linear-gradient(0deg,rgba(255,255,255,.02) 0 1px,transparent 1px 4px);pointer-events:none}
-.face.back{transform:rotateY(180deg)}
-.b-top{display:flex;justify-content:space-between;align-items:center;font:500 9.5px var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
-.b-top b{color:var(--cyan);font-weight:500}
-.b-photo{width:52%;aspect-ratio:1;border-radius:50%;margin:20px auto 14px;overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,.18),0 0 0 6px rgba(127,227,255,.06),0 12px 40px -10px rgba(127,227,255,.5)}
-.b-photo img{width:100%;height:100%;object-fit:cover;display:block}
-.b-patch{width:54%;margin:18px auto 12px;filter:drop-shadow(0 10px 30px rgba(127,227,255,.35))}
-.b-patch svg{display:block;width:100%;height:auto;animation:spin 60s linear infinite}
-.b-name{font:600 24px var(--display);text-align:center;letter-spacing:-.01em}
-.b-role{text-align:center;font:500 10.5px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--violet);margin-top:4px}
-.b-line{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;font:400 10px var(--mono);color:var(--dim);letter-spacing:.08em}
-.b-bars{display:flex;gap:2px;height:22px;align-items:flex-end}
-.b-bars i{display:block;width:2px;background:rgba(233,237,247,.55)}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:16px 14px;margin-top:16px}
-.stats div b{display:block;font:500 25px var(--display);letter-spacing:-.02em;color:var(--ink)}
-.stats div span{font:400 10.5px var(--mono);color:var(--muted);letter-spacing:.03em;line-height:1.4;display:block}
-.flip{margin-top:14px;font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);display:inline-flex;align-items:center;gap:8px}
-.facts{margin-top:18px;display:grid;gap:9px}
-.facts div{display:grid;grid-template-columns:96px 1fr;gap:12px;font-size:13.5px}
-.facts dt{font:500 9.5px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--dim);padding-top:3px}
-.facts dd{color:var(--ink-2)}
-.lead{font:400 18px/1.45 var(--display);color:var(--ink);margin-top:14px}
-.crew-wrap{display:grid;gap:22px}
+/* ---------- intro ---------- */
+#intro{position:fixed;inset:0;z-index:35;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;transition:opacity .9s var(--ease),transform 1.2s var(--ease)}
+#intro::before{content:"";position:absolute;left:50%;top:50%;width:min(900px,120vw);height:min(440px,70vh);transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(4,5,11,.66),rgba(4,5,11,0));z-index:-1;pointer-events:none}
+#intro.gone{opacity:0;transform:scale(1.06);pointer-events:none;visibility:hidden;transition:opacity .9s var(--ease),transform 1.2s var(--ease),visibility 0s 1.2s}
+.i-kicker{font:500 12px var(--mono);letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+.i-name{font:400 clamp(54px,10vw,136px)/.95 var(--serif);letter-spacing:-.01em;margin:18px 0;text-shadow:0 0 60px rgba(4,5,11,.9)}
+.i-tag{font:400 clamp(19px,2.4vw,28px) var(--display);color:var(--ink-2)}
+.i-tag em{font-style:normal;background:linear-gradient(90deg,var(--cyan),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+.enter{margin-top:42px;display:inline-flex;align-items:center;gap:14px;min-height:52px;padding:0 26px 0 22px;border-radius:999px;font:500 15px var(--body);color:var(--ink);border:1px solid rgba(127,227,255,.5);background:rgba(127,227,255,.07);box-shadow:0 0 40px -6px rgba(127,227,255,.45);transition:transform .4s var(--ease),box-shadow .4s,background .4s}
+.enter:hover{transform:translateY(-2px);background:rgba(127,227,255,.12);box-shadow:0 0 60px -4px rgba(127,227,255,.65)}
+.enter .dot{width:9px;height:9px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan);animation:breathe 2.4s var(--ease) infinite}
+.enter kbd{font:500 12px var(--mono);border:1px solid var(--line-2);border-radius:4px;padding:1px 6px;color:var(--muted)}
+.skip-intro{position:fixed;right:var(--gutter);top:18px;z-index:37;min-height:44px}
+body:not(.intro):not(.warping) .skip-intro{display:none}
+.fade-up{opacity:0;transform:translateY(14px);animation:fadeUp 1.2s var(--ease-out) forwards}
 
-/* skills */
-.groups{display:grid;gap:18px;margin-top:20px}
-.groups button{text-align:left;display:block;width:100%;padding:2px 0;transition:opacity .3s}
-.groups h3{font:500 16px var(--display);display:flex;align-items:center;gap:10px}
-.groups h3 i{width:7px;height:7px;border-radius:50%;background:var(--c);box-shadow:0 0 10px var(--c)}
-.groups p{font:400 12px/1.7 var(--mono);color:var(--muted);margin-top:4px}
-.groups.dim button:not(.on){opacity:.45}
+/* ---------- home: hero + station menu ---------- */
+.home{transition:opacity .6s var(--ease)}
+.hero{position:fixed;z-index:19;left:var(--gutter);top:50%;transform:translateY(-50%);width:min(440px,34vw);transition:opacity .6s var(--ease),transform .8s var(--ease-out)}
+.h-kicker{font:500 12px var(--mono);letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
+.h-name{font:400 clamp(48px,6.2vw,92px)/.95 var(--serif);letter-spacing:-.01em;margin-top:12px;text-shadow:0 0 40px rgba(4,5,11,.9)}
+.h-tag{font:400 clamp(18px,1.7vw,22px)/1.35 var(--display);color:var(--ink);margin-top:14px}
+.h-target{margin-top:10px;font-size:16px;color:var(--ink-2);max-width:36ch}
+.h-cta{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.h-nav{margin-top:26px}
+.h-nav-k{font:500 12px var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.h-nav ul{display:flex;flex-wrap:wrap;gap:2px 4px;margin-top:6px}
+.h-nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 10px;margin-left:-10px;margin-right:10px;border-radius:8px;font:600 14px var(--body);letter-spacing:.12em;text-transform:uppercase;text-decoration:none;color:var(--ink-2);transition:color .3s,background .3s}
+.h-nav a:hover,.h-nav a.hot-on{color:#fff;background:rgba(127,227,255,.08)}
+.h-explore{margin-top:14px;font-size:14px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline}
+.h-explore span{font-size:13px}
+#station-slot{position:fixed;left:calc(var(--gutter) + min(440px,34vw) + 24px);right:var(--gutter);top:calc(var(--hud) + 8px);bottom:28px;pointer-events:none}
 
-/* figures (mission, comms) */
-.figwrap{position:fixed;z-index:21;top:70px;bottom:40px;left:var(--gutter);right:calc(min(470px,40vw) + 10px);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transform:scale(.97);transition:opacity .9s var(--ease) .15s,transform 1.1s var(--ease-out) .15s,visibility 0s .9s}
-.figwrap.on{opacity:1;visibility:visible;transform:none;transition:opacity .9s var(--ease) .25s,transform 1.1s var(--ease-out) .25s,visibility 0s}
-.figwrap > div{width:min(100%,940px)}
-.figwrap .iso-figure{margin:0}
-.stations{display:grid;gap:2px;margin-top:18px}
-.stations button{display:flex;align-items:center;gap:10px;text-align:left;font:400 12px var(--mono);color:var(--muted);padding:4px 0;transition:color .3s}
-.stations button b{font-weight:500;color:var(--dim);width:22px}
-.stations button[aria-current="true"]{color:var(--ink)}
-.stations button[aria-current="true"] b{color:var(--cyan)}
-.channels{display:grid;gap:4px;margin-top:22px}
-.channels a,.channels button{display:grid;grid-template-columns:56px 1fr auto;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);text-decoration:none;text-align:left;transition:color .3s,padding .4s var(--ease)}
-.channels a:hover,.channels button:hover,.channels a:focus-visible,.channels button:focus-visible{padding-left:8px}
-.channels .ch{font:500 10px var(--mono);letter-spacing:.14em;color:var(--dim)}
-.channels .nm{font:500 17px var(--display)}
-.channels .nm small{display:block;font:400 11.5px var(--mono);color:var(--muted);margin-top:1px;word-break:break-all}
-.channels .go{color:var(--cyan);font-size:15px}
-
-/* ---------- menu ---------- */
-.menu{position:fixed;z-index:60;top:0;right:0;bottom:0;width:min(380px,100%);padding:84px 30px 30px;background:linear-gradient(180deg,rgba(10,13,30,.97),rgba(5,6,14,.98));border-left:1px solid var(--line);transform:translateX(102%);transition:transform .7s var(--ease-out);overflow-y:auto}
-.menu.open{transform:none}
-.menu-scrim{position:fixed;inset:0;z-index:55;background:rgba(2,3,8,.5);opacity:0;pointer-events:none;transition:opacity .5s}
-.menu-scrim.open{opacity:1;pointer-events:auto}
-.menu h2{font:500 10px var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin:22px 0 8px}
-.menu h2:first-child{margin-top:0}
-.menu button,.menu a{display:flex;align-items:center;gap:12px;width:100%;padding:9px 0;font:500 16px var(--display);text-decoration:none;color:var(--ink-2);transition:color .3s,padding .4s var(--ease)}
-.menu button:hover,.menu a:hover{color:#fff;padding-left:6px}
-.menu i{width:7px;height:7px;border-radius:50%;background:var(--c,var(--cyan));box-shadow:0 0 8px var(--c,var(--cyan));flex:none}
-.menu .close{position:absolute;top:18px;right:22px;width:38px;height:38px;padding:0;justify-content:center;border:1px solid var(--line-2);border-radius:50%;font-size:16px}
-.menu .close:hover{padding-left:0}
-
-/* ---------- explore: station, home title, pins, beacons, radar ---------- */
+/* station figure overlay (placed by the engine) */
 #station{position:fixed;left:0;top:0;width:900px;height:560px;transform-origin:0 0;z-index:15;will-change:transform,opacity;visibility:hidden}
 #station::before{content:"";position:absolute;inset:-30% -10%;background:radial-gradient(closest-side,rgba(110,130,255,.1),rgba(110,130,255,.03) 55%,transparent);z-index:-1;pointer-events:none}
-body.dragging,body.dragging *{cursor:grabbing!important}
-.modlabel{position:fixed;left:0;top:0;z-index:26;pointer-events:none;display:flex;flex-direction:column;align-items:center;padding:7px 14px;border-radius:999px;background:rgba(8,11,26,.72);border:1px solid rgba(127,227,255,.35);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);opacity:0;transition:opacity .35s var(--ease);white-space:nowrap;box-shadow:0 0 30px -8px rgba(127,227,255,.5)}
-.modlabel b{font:400 19px/1.1 var(--serif);color:#fff}
-.modlabel small{font:500 9px var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--cyan)}
-#homeov{position:fixed;left:0;top:0;z-index:19;text-align:center;width:min(720px,92vw);visibility:hidden;will-change:transform,opacity;user-select:none;-webkit-user-select:none;cursor:grab}
-#homeov .h-nav a{pointer-events:none}#homeov.live .h-nav a{pointer-events:auto}
-.h-name{font:400 clamp(52px,7.4vw,104px)/.95 var(--serif);letter-spacing:-.01em;text-shadow:0 0 50px rgba(4,5,11,.9)}
-.h-sub{margin-top:10px;font-size:15px;color:var(--ink-2)}
-.h-sub span{color:var(--dim);margin:0 10px}
-.h-tag{margin-top:6px;font:500 10.5px var(--mono);letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
-.h-nav{display:flex;justify-content:center;flex-wrap:wrap;gap:6px 30px;margin-top:22px}
-.h-nav a{font:600 12.5px var(--body);letter-spacing:.2em;text-transform:uppercase;text-decoration:none;color:var(--ink-2);padding:6px 0;position:relative;transition:color .3s}
-.h-nav a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--cyan);transform:scaleX(0);transition:transform .45s var(--ease)}
-.h-nav a:hover{color:#fff}.h-nav a:hover::after{transform:scaleX(1)}
-.h-hint{margin-top:16px;font:400 10.5px var(--mono);letter-spacing:.14em;color:var(--dim)}
-.h-hint .coarse{display:none}
-@media (pointer:coarse){.h-hint .fine{display:none}.h-hint .coarse{display:inline}}
-.dlabel.big .n{font:400 26px/1.05 var(--serif);letter-spacing:0}
-.dlabel.big .k{font-size:10px}
-.pin{position:absolute;left:0;top:0;display:inline-flex;align-items:center;gap:6px;padding:5px 12px 5px 10px;border-radius:999px;white-space:nowrap;background:rgba(8,11,26,.68);border:1px solid color-mix(in srgb,var(--c) 45%,transparent);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 0 22px -6px var(--c);will-change:transform,opacity;transition:opacity .4s,border-color .3s,background .3s}
-.pin b{font:400 15px/1.1 var(--serif);color:var(--ink)}
+
+/* hotspots: real links, positioned over the station parts */
+.station-menu{position:fixed;inset:0;z-index:18;pointer-events:none}
+#hot-lines{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+#hot-lines line{stroke:rgba(127,227,255,.5);stroke-width:1}
+#hot-lines line.on{stroke:rgba(127,227,255,.95)}
+.hot{position:fixed;left:0;top:0;width:0;height:0;text-decoration:none;pointer-events:none;outline:none}
+.hot-pin,.hot-label{position:absolute;left:0;top:0;pointer-events:auto;will-change:transform}
+.hot-pin{width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;display:grid;place-items:center}
+.hot-pin::before{content:"";width:14px;height:14px;border-radius:50%;border:2px solid var(--cyan);background:rgba(4,5,11,.6);box-shadow:0 0 12px rgba(127,227,255,.7);transition:transform .3s var(--ease),background .3s}
+.hot-pin::after{content:"";position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;border:1.5px solid var(--cyan);animation:ping 2.4s var(--ease) infinite}
+.hot-num{display:none}
+.hot-label{display:flex;flex-direction:column;padding:7px 14px;min-height:40px;justify-content:center;border-radius:12px;background:var(--glass);border:1px solid rgba(127,227,255,.32);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);white-space:nowrap;box-shadow:0 8px 30px -12px rgba(0,0,0,.8);transition:border-color .3s,background .3s,box-shadow .3s}
+.hot-label b{font:400 21px/1.1 var(--serif);color:#fff}
+.hot-label small{position:absolute;left:-1px;top:calc(100% + 6px);padding:6px 11px;border-radius:10px;background:rgba(8,12,28,.95);border:1px solid var(--line-2);font:400 13px/1.3 var(--body);color:var(--ink);opacity:0;transform:translateY(-4px);pointer-events:none;transition:opacity .3s,transform .3s var(--ease)}
+.hot.on .hot-label,.hot:focus-visible .hot-label{border-color:var(--cyan);background:rgba(10,16,34,.92);box-shadow:0 0 30px -6px rgba(127,227,255,.55)}
+.hot.on .hot-label small,.hot:focus-visible .hot-label small{opacity:1;transform:none}
+.hot.on .hot-pin::before,.hot:focus-visible .hot-pin::before{transform:scale(1.25);background:var(--cyan)}
+.hot:focus-visible .hot-label{outline:2px solid var(--cyan);outline-offset:3px}
+.station-menu.pins .hot-label{display:none}
+.station-menu.pins .hot-pin::before{width:28px;height:28px;background:rgba(6,9,22,.85)}
+.station-menu.pins .hot-num{display:block;position:absolute;font:600 13px var(--body);color:#fff}
+.station-menu.pins .hot-pin::after{width:28px;height:28px;margin:-14px 0 0 -14px}
+.station-menu.pins .hot:focus-visible .hot-pin{outline:2px solid var(--cyan);outline-offset:2px}
+.hint{position:fixed;z-index:19;left:0;top:0;padding:9px 16px;border-radius:999px;background:var(--glass);border:1px solid var(--line-2);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font:500 13px var(--body);color:var(--ink);white-space:nowrap;transition:opacity .8s var(--ease);pointer-events:none}
+.hint.gone{opacity:0}
+.hint .coarse{display:none}
+@media (pointer:coarse){.hint .fine{display:none}.hint .coarse{display:inline}}
+body.panel-open .home,body.explore .home,body.intro .home,body.warping .home{opacity:0;pointer-events:none}
+body.panel-open .hero,body.explore .hero,body.intro .hero,body.warping .hero{transform:translateY(-50%) translateX(-14px);visibility:hidden;transition:opacity .5s,transform .6s,visibility 0s .6s}
+
+/* ---------- explore extras ---------- */
+#labels{position:fixed;inset:0;z-index:20;pointer-events:none}
+.dlabel{position:absolute;left:0;top:0;display:flex;flex-direction:column;align-items:center;gap:1px;padding:6px 10px;text-align:center;white-space:nowrap;border-radius:10px;will-change:transform,opacity}
+.dlabel .k{font:500 12px var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--c,var(--cyan))}
+.dlabel .n{font:500 15px var(--display);color:var(--ink);text-shadow:0 0 12px rgba(4,5,11,.95)}
+.dlabel.big .n{font:400 26px/1.05 var(--serif)}
+.dlabel:hover .n,.dlabel.hot .n{color:#fff;text-shadow:0 0 18px var(--c,var(--cyan))}
+.pin{position:absolute;left:0;top:0;display:inline-flex;align-items:center;gap:6px;min-height:34px;padding:5px 12px 5px 10px;border-radius:999px;white-space:nowrap;background:var(--glass);border:1px solid color-mix(in srgb,var(--c) 45%,transparent);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);will-change:transform,opacity}
+.pin b{font:400 16px/1.1 var(--serif);color:var(--ink)}
 .pin small{display:none}
-.pin::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--c);box-shadow:0 0 8px var(--c)}
-.pin:hover{background:rgba(14,19,40,.9);border-color:var(--c)}
+.pin::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--c);box-shadow:0 0 8px var(--c)}
+.pin:hover{border-color:var(--c)}
+.sublabel{display:none}
 #beacons{position:fixed;inset:0;z-index:24;pointer-events:none}
-.beacon{position:absolute;left:0;top:0;display:flex;align-items:center;gap:7px;padding:6px 11px;border-radius:999px;white-space:nowrap;background:rgba(6,8,18,.6);border:1px solid var(--line-2);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font:500 11.5px var(--body);color:var(--ink-2);will-change:transform,opacity;transition:border-color .3s,color .3s}
-.beacon:hover{border-color:var(--c);color:#fff}
+.beacon{position:absolute;left:0;top:0;display:flex;align-items:center;gap:7px;min-height:34px;padding:6px 12px;border-radius:999px;white-space:nowrap;background:var(--glass);border:1px solid var(--line-2);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font:500 13px var(--body);color:var(--ink);will-change:transform,opacity}
+.beacon:hover{border-color:var(--c)}
 .beacon .arr{width:14px;height:14px;flex:none;transform:rotate(var(--a,0rad));background:var(--c);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2 8h10M8.5 4 12.5 8l-4 4' fill='none' stroke='%23000' stroke-width='1.8'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2 8h10M8.5 4 12.5 8l-4 4' fill='none' stroke='%23000' stroke-width='1.8'/%3E%3C/svg%3E") center/contain no-repeat}
-.beacon small{font:400 10px var(--mono);color:var(--dim)}
-.radar-wrap{position:fixed;right:var(--gutter);bottom:58px;z-index:26;display:flex;flex-direction:column;align-items:center;gap:6px;transition:opacity .5s}
-#radar{width:118px;height:118px;border-radius:50%;background:radial-gradient(circle,rgba(10,14,30,.75),rgba(5,6,14,.55));-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);cursor:pointer}
-.radar-wrap span{font:500 9px var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
-.cine{position:fixed;inset:0;z-index:50;pointer-events:none;background:radial-gradient(130% 100% at 50% 50%,transparent 55%,rgba(0,0,4,.55) 100%)}
-.cine::after{content:"";position:absolute;inset:-50%;opacity:.07;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 1.2s steps(6) infinite}
-@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-1%)}80%{transform:translate(3%,3%)}100%{transform:translate(0,0)}}
+.beacon small{font:400 12px var(--mono);color:var(--muted)}
+.radar-wrap{position:fixed;right:var(--gutter);bottom:24px;z-index:26;display:flex;flex-direction:column;align-items:center;gap:6px;transition:opacity .5s}
+#radar{width:112px;height:112px;border-radius:50%;background:radial-gradient(circle,rgba(10,14,30,.8),rgba(5,6,14,.6));cursor:pointer}
+.radar-wrap span{font:500 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.explore-hint{position:fixed;left:var(--gutter);bottom:24px;z-index:25;padding:8px 14px;border-radius:999px;background:var(--glass);border:1px solid var(--line);font:500 13px var(--body);color:var(--ink-2);transition:opacity .5s}
+body:not(.explore) .explore-hint,body:not(.explore) .radar-wrap,body.panel-open .explore-hint,body.panel-open .radar-wrap{opacity:0!important;pointer-events:none!important}
+body.dragging,body.dragging *{cursor:grabbing!important}
+body.explore #space{cursor:grab}
+
+/* ---------- panels ---------- */
+.panel-wrap{position:fixed;inset:0;z-index:45;pointer-events:none}
+.panel-wrap[hidden]{display:block!important;visibility:hidden}
+.p-scrim{position:fixed;inset:0;background:linear-gradient(270deg,rgba(4,5,11,.7) 0%,rgba(4,5,11,.25) 60%,rgba(4,5,11,.1) 100%);opacity:0;transition:opacity .5s var(--ease)}
+.panel{position:fixed;top:calc(var(--hud) + 4px);bottom:20px;right:var(--gutter);width:min(740px,58vw);display:flex;flex-direction:column;border-radius:20px;background:linear-gradient(180deg,rgba(12,16,34,.94),rgba(6,8,18,.96));border:1px solid var(--line-2);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 40px 100px -30px rgba(0,0,0,.9),0 0 60px -30px rgba(127,227,255,.35);transform:translateX(24px);opacity:0;transition:transform .6s var(--ease-out),opacity .5s var(--ease);overflow:hidden}
+.panel-wrap.open{pointer-events:auto;visibility:visible}
+.panel-wrap.open .p-scrim{opacity:1}
+.panel-wrap.open .panel{transform:none;opacity:1}
+.p-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:18px 22px 6px}
+.p-kicker{font:500 12px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--c,var(--cyan))}
+.p-title{font:400 clamp(30px,2.6vw,40px)/1.05 var(--serif);margin-top:4px;outline:none}
+.p-close{flex:none;min-height:44px;padding:0 16px}
+.p-close kbd{font:500 12px var(--mono);border:1px solid var(--line-2);border-radius:4px;padding:0 5px;color:var(--muted)}
+.p-tabs{padding:4px 18px 0;border-bottom:1px solid var(--line)}
+.p-tabs ul{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.p-tabs ul::-webkit-scrollbar{display:none}
+.p-tabs a{display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:0 12px;font:500 14px var(--body);color:var(--muted);text-decoration:none;border-bottom:2px solid transparent;white-space:nowrap;transition:color .3s,border-color .3s}
+.p-tabs a:hover{color:var(--ink)}
+.p-tabs a[aria-current="page"]{color:var(--ink);border-color:var(--cyan)}
+.tb-num{display:inline-grid;place-items:center;min-width:20px;height:20px;border-radius:50%;border:1px solid var(--line-2);font:500 12px var(--mono);color:var(--muted)}
+.p-body{flex:1;min-height:0;position:relative;overflow:hidden}
+.sec{position:absolute;inset:0;padding:16px 22px 12px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.18) transparent}
+.sec[hidden]{display:none}
+.p-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 18px 10px;border-top:1px solid var(--line)}
+.p-foot a{display:inline-flex;align-items:center;min-height:44px;padding:0 6px;font:500 14px var(--body);color:var(--ink-2);text-decoration:none;border-radius:8px}
+.p-foot a:hover{color:#fff}
+.p-foot span{font:400 12px var(--mono);color:var(--dim)}
+.fadein{animation:fadeUp .45s var(--ease-out)}
+
+/* status + tags */
+.status{display:inline-flex;align-items:center;gap:6px;font:500 12px var(--mono);letter-spacing:.04em;padding:2px 9px;border-radius:999px;border:1px solid;white-space:nowrap}
+.status::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.s-shipped{color:var(--mint);border-color:rgba(124,242,185,.4);background:rgba(124,242,185,.08)}
+.s-progress{color:var(--amber);border-color:rgba(255,191,115,.4);background:rgba(255,191,115,.08)}
+.s-concept{color:#cbbcff;border-color:rgba(182,156,255,.45);background:rgba(182,156,255,.1)}
+.award{display:inline-flex;align-items:center;font:600 12px var(--mono);letter-spacing:.06em;color:#05060d;background:var(--amber);border-radius:999px;padding:2px 9px}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tags li{font:400 13px var(--body);color:var(--ink-2);border:1px solid var(--line-2);border-radius:999px;padding:3px 11px}
+
+/* work list */
+.chips{display:flex;flex-wrap:wrap;gap:6px;padding-bottom:12px}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;min-height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--line-2);font:500 14px var(--body);color:var(--ink-2);white-space:nowrap;transition:background .3s,color .3s,border-color .3s}
+.chip span{font:500 12px var(--mono);color:var(--muted);margin-left:4px}
+.chip[aria-selected="true"]{background:var(--ink);color:#05060d;border-color:var(--ink)}
+.chip[aria-selected="true"] span{color:#3a4152}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cards li{min-width:0}
+.cards li[hidden]{display:none}
+.card{display:flex;gap:12px;align-items:stretch;min-width:0;padding:10px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.02);text-decoration:none;min-height:106px;transition:border-color .3s,background .3s,transform .3s var(--ease)}
+.card:hover{border-color:color-mix(in srgb,var(--c) 55%,transparent);background:rgba(255,255,255,.04);transform:translateY(-1px)}
+.thumb{flex:none;width:84px;border-radius:10px;overflow:hidden;background:radial-gradient(120% 120% at 30% 20%,color-mix(in srgb,var(--c) 26%,#0b1126),#070a18);display:grid;place-items:center;border:1px solid var(--line)}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.glyph{font:400 30px var(--serif);color:color-mix(in srgb,var(--c) 70%,#fff)}
+.c-body{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
+.c-top{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.c-cat{font:400 12px var(--mono);color:var(--muted)}
+.c-name{font:500 17px/1.2 var(--display);color:var(--ink);margin-top:2px}
+.c-one{font-size:13.5px;color:var(--muted);line-height:1.35}
+.c-out{font-size:13.5px;color:var(--ink);line-height:1.35}
+.c-out::before{content:"→ ";color:var(--c)}
+
+/* case + role detail */
+.back{display:inline-flex;align-items:center;min-height:32px;font:500 14px var(--body);color:var(--cyan);text-decoration:none}
+.case-head{margin-top:4px}
+.case-kicker{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:400 12px var(--mono);color:var(--muted)}
+.case-title{font:400 clamp(28px,2.4vw,36px)/1.05 var(--serif);margin-top:6px}
+.case-one{font-size:15px;color:var(--ink-2);margin-top:2px}
+.case-meta{font:400 12.5px var(--mono);color:var(--muted);margin-top:4px}
+.case-grid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:12px 20px;margin-top:12px;align-items:start}
+.case-text:not(.stepped){display:contents}
+.case-media{grid-column:1;grid-row:1 / span 2}
+.case-text:not(.stepped) .part{grid-column:2}
+.case-text:not(.stepped) .part[data-part="details"]{grid-column:1;grid-row:3 / span 3}
+.case-text.stepped{grid-column:2;grid-row:1 / span 3}
+.case-media{border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#070a18;aspect-ratio:4/3;display:grid}
+.case-media img{width:100%;height:100%;object-fit:cover}
+.img-coming{display:grid;place-items:center;background:repeating-linear-gradient(135deg,rgba(255,255,255,.025) 0 10px,transparent 10px 20px);color:var(--muted);font:500 13px var(--mono);letter-spacing:.08em}
+.fig-mount{position:relative;display:grid;place-items:center;overflow:hidden}
+.fig-mount .iso-figure{margin:0;width:100%}
+.fig-mount .iso-plate{padding:10px 4px 30px!important}
+.fig-mount .iso-plate-corner{font-size:12px!important;color:var(--ink-2)!important}
+.fig-mount .iso-plate-corner[data-corner="fig"],.fig-mount .iso-plate-corner[data-corner="title"],.fig-mount .iso-plate-corner[data-corner="hint"]{display:none}
+.fig-mount .iso-plate-corner[data-corner="readout"]{left:0;right:0;text-align:center;white-space:normal}
+.fig-fallback{font-size:13px;color:var(--muted);padding:16px;text-align:center}
+.case-text{display:grid;gap:12px}
+.part h4{font:500 12px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.part p{font-size:15px;line-height:1.5;color:var(--ink-2)}
+.part[data-part="result"]{padding-left:12px;border-left:2px solid var(--c,var(--cyan))}
+.part[data-part="result"] p{color:var(--ink)}
+.links{margin-top:10px;display:grid;gap:4px}
+.links a{color:var(--cyan)}
+.steps{display:none;gap:4px;flex-wrap:wrap}
+.step{min-height:40px;padding:0 12px;border-radius:999px;border:1px solid var(--line-2);font:500 13.5px var(--body);color:var(--ink-2)}
+.step[aria-selected="true"]{background:var(--ink);color:#05060d;border-color:var(--ink)}
+.case-text.stepped .steps{display:flex}
+.case-text.stepped .part{display:none}
+.case-text.stepped .part.on{display:block}
+.case-text.stepped .part h4{display:none}
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:10px;padding-top:6px;border-top:1px solid var(--line)}
+.pager a{display:inline-flex;align-items:center;min-height:44px;font:500 14px var(--body);color:var(--ink-2);text-decoration:none}
+.pager a:hover{color:#fff}
+
+/* experience */
+.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.stats li{padding:8px 10px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.02)}
+.stats b{display:block;font:500 22px/1.1 var(--display)}
+.stats span{display:block;font-size:12px;line-height:1.3;color:var(--muted);margin-top:2px}
+.timeline{display:grid;gap:8px}
+.timeline li{min-width:0}
+.role{display:grid;grid-template-columns:118px minmax(0,1fr) auto;gap:3px 16px;align-items:center;padding:10px 14px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.02);text-decoration:none;border-left:3px solid var(--c);transition:background .3s,border-color .3s}
+.role:hover{background:rgba(255,255,255,.045)}
+.r-when{font:400 12.5px var(--mono);color:var(--muted)}
+.r-main{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px}
+.r-main b{font:500 17px var(--display)}
+.r-role{font-size:13.5px;color:var(--muted)}
+.r-metric{grid-column:2 / 3;font-size:14.5px;color:var(--ink)}
+.r-more{grid-column:3;grid-row:1 / 3;font:500 13px var(--body);color:var(--cyan);white-space:nowrap}
+.bullets{display:grid;gap:9px;margin-top:14px}
+.bullets li{position:relative;padding-left:18px;font-size:15px;color:var(--ink-2);line-height:1.55}
+.bullets li::before{content:"";position:absolute;left:2px;top:.62em;width:6px;height:6px;border-radius:50%;background:var(--c,var(--cyan))}
+
+/* skills, about, contact */
+.skill-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.skill{padding:14px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.02)}
+.skill h4{display:flex;align-items:center;gap:10px;font:500 17px var(--display);margin-bottom:10px}
+.skill h4 i{width:8px;height:8px;border-radius:50%;background:var(--c);box-shadow:0 0 10px var(--c)}
+.about{display:grid;grid-template-columns:200px minmax(0,1fr);gap:22px;align-items:start}
+.about-photo{width:100%;height:auto;aspect-ratio:1;object-fit:cover;border-radius:50%;border:1px solid var(--line-2);box-shadow:0 12px 40px -12px rgba(127,227,255,.45)}
+.about-h{font:400 26px/1.1 var(--serif);color:var(--ink)}
+.lead{font:400 17px/1.5 var(--display);color:var(--ink);margin-top:8px}
+.facts{display:grid;gap:8px;margin-top:16px}
+.facts div{display:grid;grid-template-columns:110px minmax(0,1fr);gap:12px;font-size:15px}
+.facts dt{font:500 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+.facts dd{color:var(--ink-2)}
+.facts a{color:var(--cyan)}
+.contact{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.9fr);gap:18px;align-items:center}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.copied{min-height:20px;margin-top:8px;font-size:14px;color:var(--mint)}
+.contact-fig{aspect-ratio:640/470}
+
+/* mobile tab bar (text menu backup) */
+.tabbar{display:none}
+
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes breathe{0%,100%{opacity:.55;transform:scale(.85)}50%{opacity:1;transform:scale(1.1)}}
-@keyframes fadeUp{to{opacity:1;transform:none}}
-@keyframes marquee{to{transform:translateX(-50%)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes ping{0%{transform:scale(1);opacity:.85}80%,100%{transform:scale(2.6);opacity:0}}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-1%)}80%{transform:translate(3%,3%)}100%{transform:translate(0,0)}}
 
-/* ---------- phones ---------- */
+/* ---------- short laptops ---------- */
+@media (max-height:820px) and (min-width:761px){
+  .h-name{font-size:clamp(44px,5.4vw,72px)}
+  .h-nav{margin-top:16px}
+  .h-cta{margin-top:16px}
+  .panel{top:12px;bottom:12px}
+  .p-head{padding:12px 20px 0}
+  .p-title{font-size:28px;margin-top:2px}
+  .p-tabs a,.p-foot a{min-height:40px}
+  .p-foot{padding:2px 16px 4px}
+  .sec{padding:12px 20px 8px}
+  .card{min-height:0}
+  .thumb{width:64px}
+  .c-one,.c-out{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .stats li{padding:6px 10px}
+  .stats b{font-size:19px}
+  .role{padding:8px 12px}
+  .about{grid-template-columns:160px minmax(0,1fr)}
+}
+/* ---------- tablets and phones ---------- */
+@media (max-width:900px) and (min-width:761px) and (min-aspect-ratio:4/5){
+  .hero{width:min(360px,40vw)}
+  #station-slot{left:calc(var(--gutter) + min(360px,40vw) + 16px)}
+}
 @media (max-width:760px), (max-aspect-ratio:4/5){
-  .hud{padding:14px 16px}
-  .mark span.nm{display:none}
-  .crumb{font-size:10px}
-  .crumb .here{display:none}
-  .pill.res span{display:none}
-  .pill.res{width:38px;padding:0;justify-content:center}
-  .view{top:auto;left:0;right:0;width:auto;height:54%;padding:26px 18px 22px;justify-content:flex-start}
-  .view .scrim{inset:auto 0 0 0;width:auto;height:72%;background:linear-gradient(0deg,rgba(4,5,11,.97) 0%,rgba(4,5,11,.9) 60%,transparent 100%)}
-  .v-title{font-size:26px}
-  .figwrap{top:58px;bottom:auto;height:42%;left:6px;right:6px}
-  .hint{display:none}
-  .radar-wrap{bottom:48px;right:12px}
-  #radar{width:84px;height:84px}
+  :root{--hud:60px}
+  .hud .res{display:none}
+  .hud .btn{padding:0 14px}
+  .mark .nm{display:none}
+  .hero{position:fixed;left:16px;right:16px;top:calc(var(--hud) + 2px);transform:none;width:auto;text-align:left}
+  body.panel-open .hero,body.explore .hero,body.intro .hero,body.warping .hero{transform:none}
+  .h-kicker{display:none}
+  .h-name{font-size:clamp(38px,11vw,56px);margin-top:0}
+  .h-tag{font-size:17px;margin-top:6px}
+  .h-target{font-size:15px;margin-top:4px}
+  .h-cta{margin-top:12px;gap:6px}
+  .h-cta .btn{padding:0 14px;font-size:14px}
+  .h-nav{display:none}
+  .h-explore{display:none}
+  #station-slot{left:8px;right:8px;top:var(--slot-top,300px);bottom:calc(var(--tabbar,64px) + 6px)}
+  .tabbar{display:block;position:fixed;left:0;right:0;bottom:0;z-index:42;padding:6px 6px calc(6px + env(safe-area-inset-bottom));background:rgba(5,6,14,.92);border-top:1px solid var(--line);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+  .tabbar ul{display:grid;grid-template-columns:repeat(6,1fr);gap:2px}
+  .tabbar a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:52px;border-radius:10px;font:500 12px var(--body);color:var(--ink-2);text-decoration:none}
+  .tabbar a.hot-on,.tabbar a:hover{background:rgba(127,227,255,.1);color:#fff}
+  body.intro .tabbar,body.warping .tabbar{display:none}
+  .panel-wrap{z-index:60}
+  .panel{inset:0;width:auto;top:0;bottom:0;right:0;border-radius:0;border:0;transform:translateY(16px)}
+  .p-head{padding:14px 16px 4px;padding-top:calc(14px + env(safe-area-inset-top))}
+  .p-title{font-size:30px}
+  .p-tabs{padding:0 8px}
+  .sec{padding:12px 16px 10px}
+  .p-foot{padding:4px 10px calc(6px + env(safe-area-inset-bottom))}
+  .p-foot span{display:none}
+  .chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+  .p-kicker{display:none}
+  .p-title{font-size:26px}
+  .p-head{align-items:center;padding-bottom:2px}
+  .p-foot{display:none}
+  .chips{padding-bottom:8px}
+  .chip{min-height:36px;padding:0 12px;font-size:13.5px}
+  .cards{grid-template-columns:1fr;gap:6px}
+  .card{min-height:0;padding:7px 8px;gap:10px;align-items:center}
+  .thumb{width:44px;height:44px}
+  .glyph{font-size:18px}
+  .c-body{gap:1px}
+  .c-top{order:2;flex-wrap:nowrap;overflow:hidden}
+  .c-cat,.award{display:none}
+  .c-name{font-size:15.5px;margin-top:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .c-one{display:none}
+  .c-out{order:3;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .status{font-size:12px;padding:1px 7px}
+  .case-meta{display:none}
+  .case-title{font-size:26px;margin-top:2px}
+  .case-media{aspect-ratio:21/9}
+  .back{min-height:28px}
+  .part p{font-size:14.5px}
+  .r-when{order:2}
+  .role{padding:8px 12px;display:flex;flex-direction:column;align-items:flex-start;gap:1px}
+  .r-main b{font-size:16px}
+  .r-role{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+  .r-metric{font-size:13.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .r-more{display:none}
+  .stats{margin-bottom:6px}
+  .timeline{gap:6px}
+  .stats li{padding:6px 9px}
+  .stats b{font-size:18px}
+  .bullets{gap:6px;margin-top:10px}
+  .bullets li{font-size:14px;line-height:1.45}
+  .skill h4{font-size:15.5px;margin-bottom:4px}
+  .skill .tags{display:block;font-size:13.5px;line-height:1.5;color:var(--ink-2)}
+  .skill .tags li{display:inline;border:0;padding:0;font-size:13.5px}
+  .skill .tags li+li::before{content:" · ";color:var(--muted)}
+  .about-h{font-size:22px}
+  .lead{font-size:15.5px}
+  .facts{gap:5px;margin-top:10px}
+  .facts div{font-size:14px}
+  .case-grid{grid-template-columns:1fr;gap:10px}
+  .case-media,.case-text.stepped,.case-text:not(.stepped) .part,.case-text:not(.stepped) .part[data-part="details"]{grid-column:1;grid-row:auto}
+  .case-media{aspect-ratio:16/9}
+  .stats{grid-template-columns:repeat(5,minmax(110px,1fr));overflow-x:auto;scrollbar-width:none}
+  .role{grid-template-columns:minmax(0,1fr);gap:2px}
+  .r-metric,.r-more{grid-column:1;grid-row:auto}
+  .skill-grid{grid-template-columns:1fr;gap:8px}
+  .skill{padding:10px 12px}
+  .about{grid-template-columns:88px minmax(0,1fr);gap:14px}
+  .about-text{grid-column:1 / -1}
+  .about-photo{grid-row:1}
+  .contact{grid-template-columns:1fr}
+  .contact-fig{display:none}
+  .facts div{grid-template-columns:90px minmax(0,1fr)}
+  .radar-wrap{right:10px;top:calc(var(--hud) + 4px);bottom:auto}
+  #radar{width:76px;height:76px}
   .radar-wrap span{display:none}
-  .h-nav{gap:4px 18px}
-  .h-tag{letter-spacing:.12em;font-size:9.5px;padding:0 34px}
-  .h-hint{padding:0 34px}
-  .h-nav a{font-size:11px;letter-spacing:.14em}
-  .beacon{padding:7px;gap:0}
-  .beacon span,.beacon small{display:none}
-  .beacon .arr{width:13px;height:13px}
-  .dlabel.big .n{font-size:21px}
-  .ticker{height:36px}
-  .t-run{font-size:11px}
-  .badge{width:min(100%,260px)}
-  .dlabel .n{font-size:12.5px}
-  .dlabel .k{font-size:8.5px}
-  .crew-wrap{grid-template-columns:1fr}
+  .explore-hint{bottom:calc(var(--tabbar,64px) + 8px);left:12px;right:12px;text-align:center}
 }
 @media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  *,*::before,*::after{animation:none!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
   .fade-up{opacity:1;transform:none}
+  .hot-pin::after{display:none}
 }
 </style>
 </head>
 <body class="iso space">
+<a class="skip" href="#content">Skip to content</a>
 <canvas id="space" aria-hidden="true"></canvas>
 <div id="flash" aria-hidden="true"></div>
 
-<header class="hud" id="hud">
-  <div class="hud-left">
-    <button class="mark" id="home" aria-label="Priyansh Jain, back to the star map"><span class="mark-ring">PJ<i></i></span><span class="nm">Priyansh Jain</span></button>
-    <nav class="crumb" id="crumb" aria-label="Breadcrumb"><button id="back" type="button"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 8H3M7.5 3.5 3 8l4.5 4.5"/></svg>Universe <kbd>Esc</kbd></button><span class="here" id="here"></span></nav>
-  </div>
+<header class="hud">
+  <a class="mark" href="#/" aria-label="Priyansh Jain: back to the station"><span class="mark-ring" aria-hidden="true">PJ<i></i></span><span class="nm">Priyansh Jain</span></a>
   <div class="hud-right">
-    <a class="pill res" href="assets/Priyansh_Jain_Resume.pdf" target="_blank" rel="noopener" aria-label="Resume (PDF)"><span>Resume</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 11 11 5M6 5h5v5"/></svg></a>
-    <button class="pill icon" id="menuBtn" aria-label="Open the destination menu" aria-expanded="false" aria-controls="menu"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 5h11M2.5 11h11"/></svg></button>
+    <a class="btn" id="exploreBtn" href="#/explore">Explore the universe</a>
+    <a class="btn res" href="assets/Priyansh_Jain_Resume.pdf" target="_blank" rel="noopener">Resume (PDF)</a>
   </div>
 </header>
 
-<section id="intro" aria-label="Welcome">
+<section id="intro" class="gone" aria-label="Intro">
   <p class="i-kicker fade-up" style="animation-delay:.2s">Product · Space · NYU Stern</p>
-  <h1 class="i-name fade-up" style="animation-delay:.45s">Priyansh Jain</h1>
+  <p class="i-name fade-up" style="animation-delay:.45s" aria-hidden="true">Priyansh Jain</p>
   <p class="i-tag fade-up" style="animation-delay:.7s">I build products for <em>what comes next.</em></p>
-  <button class="enter fade-up" id="enter" style="animation-delay:1.05s"><span class="dot"></span>Enter the universe <kbd>↵</kbd></button>
-  <p class="i-foot fade-up" style="animation-delay:1.6s">Prefer a quick read? <a href="classic.html">Classic view</a></p>
+  <button class="enter fade-up" id="enter" type="button" style="animation-delay:1.05s"><span class="dot" aria-hidden="true"></span>Enter the station <kbd aria-hidden="true">↵</kbd></button>
 </section>
+<button class="btn skip-intro" id="skipIntro" type="button">Skip intro</button>
 
-<div id="station" aria-label="Home station"></div>
-<div class="modlabel" id="modlabel" aria-hidden="true"></div>
-<div id="homeov">
-  <h2 class="h-name">Priyansh Jain</h2>
-  <p class="h-sub">NYU Stern<span>|</span>Product · Space</p>
-  <p class="h-tag">I build products for what comes next</p>
-  <nav class="h-nav" aria-label="Sections"><a href="#/galaxy/ai" data-nav>Work</a><a href="#/log" data-nav>Experience</a><a href="#/skills" data-nav>Skills</a><a href="#/about" data-nav>About</a><a href="#/comms" data-nav>Contact</a></nav>
-  <p class="h-hint"><span class="fine">Drag to explore the universe · scroll to zoom · hover the station</span><span class="coarse">Drag to explore · pinch to zoom · tap the station</span></p>
-</div>
-<div id="labels" aria-hidden="false"></div>
-<div id="beacons"></div>
-<div class="radar-wrap" style="opacity:0"><canvas id="radar" aria-label="Sector map: click a dot to fly there"></canvas><span>Sector map</span></div>
-<p class="hint" id="hint">Drag to pan · Scroll to zoom · H for home</p>
-<footer class="ticker" aria-label="Latest transmissions"><span class="t-label"><i></i>Transmissions</span><div class="t-track"><div class="t-run" id="tickerRun"></div></div></footer>
-
-<!-- views: each one sits beside its object in space -->
-<section class="view" data-view="galaxy" aria-labelledby="g-title"><div class="scrim"></div><div class="v-body" id="v-galaxy"></div></section>
-<section class="view" data-view="mission" aria-labelledby="m-title"><div class="scrim"></div><div class="v-body" id="v-mission"></div></section>
-<section class="view" data-view="log" aria-labelledby="l-title"><div class="scrim"></div><div class="v-body" id="v-log"></div></section>
-<section class="view" data-view="crew" aria-labelledby="c-title"><div class="scrim"></div><div class="v-body" id="v-crew"></div></section>
-<section class="view" data-view="skills" aria-labelledby="s-title"><div class="scrim"></div><div class="v-body" id="v-skills"></div></section>
-<section class="view" data-view="comms" aria-labelledby="x-title"><div class="scrim"></div><div class="v-body" id="v-comms"></div></section>
-<div class="figwrap" id="fig-mission"><div></div></div>
-<div class="figwrap" id="fig-comms"><div></div></div>
-
-<div class="menu-scrim" id="menuScrim"></div>
-<nav class="menu" id="menu" aria-label="Destinations" inert>
-  <button class="close" id="menuClose" aria-label="Close menu">✕</button>
-  <div id="menuList"></div>
+<main id="content" tabindex="-1">
+  <section class="home" aria-labelledby="hero-name">
+    <div class="hero"><!-- gen:hero -->
+<p class="h-kicker">Product · Space · NYU Stern</p>
+<h1 class="h-name" id="hero-name">Priyansh Jain</h1>
+<p class="h-tag">I build products for what comes next.</p>
+<p class="h-target">Looking for PM internships and full-time roles, especially at space companies.</p>
+<ul class="h-cta" aria-label="Get in touch">
+  <li><a class="btn primary" href="assets/Priyansh_Jain_Resume.pdf" target="_blank" rel="noopener">Resume (PDF)</a></li>
+  <li><a class="btn" href="mailto:priyansh.jain@stern.nyu.edu">Email</a></li>
+  <li><a class="btn" href="https://www.linkedin.com/in/priyanshjain05/" target="_blank" rel="noopener">LinkedIn</a></li>
+</ul>
+<nav class="h-nav" aria-label="Sections">
+  <p class="h-nav-k" id="hnav-k">Open a section</p>
+  <ul aria-labelledby="hnav-k">
+    <li><a href="#/work" data-sec-link="work">Work</a></li>
+    <li><a href="#/experience" data-sec-link="experience">Experience</a></li>
+    <li><a href="#/skills" data-sec-link="skills">Skills</a></li>
+    <li><a href="#/about" data-sec-link="about">About</a></li>
+    <li><a href="#/contact" data-sec-link="contact">Contact</a></li>
+    <li><a href="assets/Priyansh_Jain_Resume.pdf" target="_blank" rel="noopener">Resume (PDF)</a></li>
+  </ul>
 </nav>
-<div class="sr" aria-live="polite" id="live"></div>
+<p class="h-explore"><a class="linkish" href="#/explore">Explore the universe →</a> <span>An optional map of the same work</span></p>
+<!-- /gen:hero --></div>
+    <nav class="station-menu" id="stationMenu" aria-label="Station menu: each part of the station opens a section">
+      <svg id="hot-lines" aria-hidden="true"></svg>
+<!-- gen:hotspots --><a class="hot" href="#/work" data-part="work" aria-label="Work: Lab module. 11 projects · strategy, AI, media, hardware"><span class="hot-pin" aria-hidden="true"><span class="hot-num">1</span></span><span class="hot-label"><b>Work</b><small>11 projects · strategy, AI, media, hardware</small></span></a>
+<a class="hot" href="#/experience" data-part="experience" aria-label="Experience: Solar arrays. 4 roles · Livegage, CoreWeave, BTE Leadership, EY"><span class="hot-pin" aria-hidden="true"><span class="hot-num">2</span></span><span class="hot-label"><b>Experience</b><small>4 roles · Livegage, CoreWeave, BTE Leadership, EY</small></span></a>
+<a class="hot" href="#/skills" data-part="skills" aria-label="Skills: Observatory. 4 groups · Product, Technical, Hardware &amp; Making, Business &amp; Creative"><span class="hot-pin" aria-hidden="true"><span class="hot-num">3</span></span><span class="hot-label"><b>Skills</b><small>4 groups · Product, Technical, Hardware &amp; Making, Business &amp; Creative</small></span></a>
+<a class="hot" href="#/about" data-part="about" aria-label="About: Crew quarters. NYU Stern · graduating Dec 2027"><span class="hot-pin" aria-hidden="true"><span class="hot-num">4</span></span><span class="hot-label"><b>About</b><small>NYU Stern · graduating Dec 2027</small></span></a>
+<a class="hot" href="#/contact" data-part="contact" aria-label="Contact: Comms dish. Email, LinkedIn and resume"><span class="hot-pin" aria-hidden="true"><span class="hot-num">5</span></span><span class="hot-label"><b>Contact</b><small>Email, LinkedIn and resume</small></span></a>
+<a class="hot" href="assets/Priyansh_Jain_Resume.pdf" target="_blank" rel="noopener" data-part="resume" aria-label="Resume: Docked ship. Opens the PDF"><span class="hot-pin" aria-hidden="true"><span class="hot-num">6</span></span><span class="hot-label"><b>Resume</b><small>Opens the PDF</small></span></a><!-- /gen:hotspots -->
+    </nav>
+    <p class="hint" id="hint" aria-hidden="true"><span class="fine">Click any part of the station to open it</span><span class="coarse">Tap any part of the station</span></p>
+  </section>
 
+  <div class="panel-wrap" id="panelWrap" hidden>
+    <div class="p-scrim" id="pScrim"></div>
+    <section class="panel" id="panel" role="dialog" aria-modal="true" aria-labelledby="p-title">
+      <header class="p-head">
+        <div><p class="p-kicker" id="p-kicker">Station menu</p><h2 class="p-title" id="p-title" tabindex="-1">Work</h2></div>
+        <a class="btn p-close" id="pClose" href="#/">Close <kbd aria-hidden="true">Esc</kbd></a>
+      </header>
+      <nav class="p-tabs" aria-label="Sections"><ul><!-- gen:tabs --><li><a href="#/work" data-tab="work"><span class="tb-num" aria-hidden="true">1</span>Work</a></li><li><a href="#/experience" data-tab="experience"><span class="tb-num" aria-hidden="true">2</span>Experience</a></li><li><a href="#/skills" data-tab="skills"><span class="tb-num" aria-hidden="true">3</span>Skills</a></li><li><a href="#/about" data-tab="about"><span class="tb-num" aria-hidden="true">4</span>About</a></li><li><a href="#/contact" data-tab="contact"><span class="tb-num" aria-hidden="true">5</span>Contact</a></li><!-- /gen:tabs --></ul></nav>
+      <div class="p-body" id="pBody">
+<!-- gen:panels --><section class="sec" id="sec-work" data-sec="work" aria-labelledby="sec-work-h" hidden>
+  <h3 class="sr" id="sec-work-h">Work</h3>
+  <div class="work-list" data-list>
+    <div class="chips" role="tablist" aria-label="Filter projects"><button type="button" role="tab" class="chip" data-filter="featured" aria-selected="true">Featured <span>6</span></button><button type="button" role="tab" class="chip" data-filter="ps" aria-selected="false">Product &amp; Strategy <span>3</span></button><button type="button" role="tab" class="chip" data-filter="ai" aria-selected="false">AI &amp; Startups <span>3</span></button><button type="button" role="tab" class="chip" data-filter="im" aria-selected="false">Interactive Media <span>3</span></button><button type="button" role="tab" class="chip" data-filter="hw" aria-selected="false">Hardware <span>2</span></button></div>
+    <ul class="cards">
+<li data-cats="featured ps"><a class="card" href="#/work/uber-av-strategy" style="--c:#7cf2b9">
+  <span class="thumb"><span class="glyph" aria-hidden="true">Ub</span></span>
+  <span class="c-body"><span class="c-top"><span class="status s-shipped">Shipped</span><span class="award">1st place</span><span class="c-cat">Product &amp; Strategy</span></span>
+  <b class="c-name">Uber AV Strategy</b>
+  <span class="c-one">Uber Case Competition · Beta Alpha Psi</span>
+  <span class="c-out">1st place of 9 teams · $45M EBITDA projected</span></span>
+</a></li>
+<li data-cats="featured ps"><a class="card" href="#/work/ai-infrastructure-marketplace" style="--c:#7cf2b9">
+  <span class="thumb"><span class="glyph" aria-hidden="true">AI</span></span>
+  <span class="c-body"><span class="c-top"><span class="status s-shipped">Shipped</span><span class="c-cat">Product &amp; Strategy</span></span>
+  <b class="c-name">AI Infrastructure Marketplace</b>
+  <span class="c-one">CoreWeave · Product Management Intern</span>
+  <span class="c-out">PR/FAQ mapping 30 partners to 10 enterprise use cases</span></span>
+</a></li>
+<li data-cats="featured im"><a class="card" href="#/work/dreamweaver" style="--c:#b69cff">
+  <span class="thumb"><span class="glyph" aria-hidden="true">Dr</span></span>
+  <span class="c-body"><span class="c-top"><span class="status s-shipped">Shipped</span><span class="c-cat">Interactive Media</span></span>
+  <b class="c-name">Dreamweaver</b>
+  <span class="c-one">Hand-tracking interactive experience</span>
+  <span class="c-out">Played live by 25 people at a public showcase</span></span>
+</a></li>
+<li data-cats="featured ps"><a class="card" href="#/work/meroo-design-sprint" style="--c:#7cf2b9">
+  <span class="thumb"><span class="glyph" aria-hidden="true">Me</span></span>
+  <span class="c-body"><span class="c-top"><span class="status s-concept">Concept</span><span class="c-cat">Product &amp; Strategy</span></span>
+  <b class="c-name">Meroo Design Sprint</b>
+  <span class="c-one">Gamified career discovery · BTE design sprint</span>
+  <span class="c-out">Founder implemented some of our ideas</span></span>
+</a></li>
+<li data-cats="featured ai"><a class="card" href="#/work/unblur" style="--c:#7fe3ff">
+  <span class="thumb"><span class="glyph" aria-hidden="true">Un</span></span>
+  <span class="c-body"><span class="c-top"><span class="status s-progress">In progress</span><span class="c-cat">AI &amp; Startups</span></span>
+  <b class="c-name">Unblur</b>
+  <span class="c-one">AI onboarding assistant</span>
+  <span class="c-out">Direction grounded in 20 user interviews</span></span>
+</a></li>
+<li data-cats="featured ai"><a class="card" href="#/work/mission-001" style="--c:#7fe3ff">
+  <span class="thumb"><span class="glyph" aria-hidden="true">Mi</span></span>
+  <span class="c-body"><span class="c-top"><span class="status s-progress">In progress</span><span class="c-cat">AI &amp; Startups</span></span>
+  <b class="c-name">Mission 001</b>
+  <span class="c-one">Autonomous spacecraft inspection</span></span>
+</a></li>
+<li data-cats="ai"><a class="card" href="#/work/astryn" style="--c:#7fe3ff">
+  <span class="thumb"><span class="glyph" aria-hidden="true">As</span></span>
+  <span class="c-body"><span class="c-top"><span class="status s-concept">Concept</span><span class="c-cat">AI &amp; Startups</span></span>
+  <b class="c-name">Astryn</b>
+  <span class="c-one">Dream-logging experience</span></span>
+</a></li>
+<li data-cats="im"><a class="card" href="#/work/velostat-heart" style="--c:#b69cff">
+  <span class="thumb"><span class="glyph" aria-hidden="true">Ve</span></span>
+  <span class="c-body"><span class="c-top"><span class="status s-shipped">Shipped</span><span class="c-cat">Interactive Media</span></span>
+  <b class="c-name">Velostat Heart</b>
+  <span class="c-one">Touch-responsive physical interface</span></span>
+</a></li>
+<li data-cats="im"><a class="card" href="#/work/after-effects-animation" style="--c:#b69cff">
+  <span class="thumb"><span class="glyph" aria-hidden="true">Af</span></span>
+  <span class="c-body"><span class="c-top"><span class="status s-shipped">Shipped</span><span class="c-cat">Interactive Media</span></span>
+  <b class="c-name">After Effects Animation</b>
+  <span class="c-one">Two people falling in love · motion design</span></span>
+</a></li>
+<li data-cats="hw"><a class="card" href="#/work/cnc-space-p" style="--c:#ffbf73">
+  <span class="thumb"><span class="glyph" aria-hidden="true">CN</span></span>
+  <span class="c-body"><span class="c-top"><span class="status s-shipped">Shipped</span><span class="c-cat">Hardware</span></span>
+  <b class="c-name">CNC Space &quot;P&quot;</b>
+  <span class="c-one">Fusion 360 × ShopBot</span>
+  <span class="c-out">A finished, machined piece</span></span>
+</a></li>
+<li data-cats="hw"><a class="card" href="#/work/rube-goldberg-machine" style="--c:#ffbf73">
+  <span class="thumb"><span class="glyph" aria-hidden="true">Ru</span></span>
+  <span class="c-body"><span class="c-top"><span class="status s-shipped">Shipped</span><span class="c-cat">Hardware</span></span>
+  <b class="c-name">Rube Goldberg Machine</b>
+  <span class="c-one">Arduino Nano 33 IoT chain reaction</span></span>
+</a></li>
+    </ul>
+  </div>
+<article class="case" id="work-uber-av-strategy" data-case="uber-av-strategy" aria-labelledby="h-uber-av-strategy" style="--c:#7cf2b9" hidden>
+  <a class="back" href="#/work">← All work</a>
+  <header class="case-head">
+    <p class="case-kicker"><span class="status s-shipped">Shipped</span><span class="award">1st place</span><span>Product, Design &amp; Strategy</span></p>
+    <h3 class="case-title" id="h-uber-av-strategy">Uber AV Strategy</h3>
+    <p class="case-one">Uber Case Competition · Beta Alpha Psi</p>
+    <p class="case-meta">Competition · Team of 4 · Spring 2026</p>
+  </header>
+  <div class="case-grid">
+    <figure class="case-media"><div class="img-coming" role="img" aria-label="Image coming"><span>Image coming</span></div></figure>
+    <div class="case-text" data-fit>
+      <div class="steps" role="tablist" aria-label="Uber AV Strategy sections"><button type="button" role="tab" class="step" data-step="problem" aria-selected="true">Problem</button><button type="button" role="tab" class="step" data-step="did" aria-selected="false">What I did</button><button type="button" role="tab" class="step" data-step="result" aria-selected="false">Result</button><button type="button" role="tab" class="step" data-step="details" aria-selected="false">Tools</button></div>
+      <section class="part" data-part="problem"><h4>Problem</h4><p>Where and how should Uber expand its autonomous-vehicle business following its Rivian partnership?</p></section>
+      <section class="part" data-part="did"><h4>What I did</h4><p>Analyzed demand, infrastructure, the competitive landscape, and the EV ecosystem to find high-utilization corridors. Built the model comparing fleet structures, recommended a phased Atlanta launch on Rivian's R2 fleet, and presented to Uber Finance leadership.</p></section>
+      <section class="part" data-part="result"><h4>Result</h4><p>1st place of 9 teams. Projected $45M EBITDA from a 400-vehicle Rivian fleet and 80% higher revenue per trip.</p></section>
+      <section class="part" data-part="details"><h4>Tools</h4><ul class="tags"><li>Financial modeling</li><li>Market strategy</li><li>Fleet economics</li><li>Excel</li></ul></section>
+    </div>
+  </div>
+  <nav class="pager" aria-label="More projects"><a href="#/work/rube-goldberg-machine">← Rube Goldberg Machine</a><a href="#/work/ai-infrastructure-marketplace">AI Infrastructure Marketplace →</a></nav>
+</article>
+<article class="case" id="work-ai-infrastructure-marketplace" data-case="ai-infrastructure-marketplace" aria-labelledby="h-ai-infrastructure-marketplace" style="--c:#7cf2b9" hidden>
+  <a class="back" href="#/work">← All work</a>
+  <header class="case-head">
+    <p class="case-kicker"><span class="status s-shipped">Shipped</span><span>Product, Design &amp; Strategy</span></p>
+    <h3 class="case-title" id="h-ai-infrastructure-marketplace">AI Infrastructure Marketplace</h3>
+    <p class="case-one">CoreWeave · Product Management Intern</p>
+    <p class="case-meta">Experience · Jan – May 2026 · via NYU Stern</p>
+  </header>
+  <div class="case-grid">
+    <figure class="case-media"><div class="img-coming" role="img" aria-label="Image coming"><span>Image coming</span></div></figure>
+    <div class="case-text" data-fit>
+      <div class="steps" role="tablist" aria-label="AI Infrastructure Marketplace sections"><button type="button" role="tab" class="step" data-step="problem" aria-selected="true">Problem</button><button type="button" role="tab" class="step" data-step="did" aria-selected="false">What I did</button><button type="button" role="tab" class="step" data-step="result" aria-selected="false">Result</button><button type="button" role="tab" class="step" data-step="details" aria-selected="false">Tools</button></div>
+      <section class="part" data-part="problem"><h4>Problem</h4><p>CoreWeave was exploring an AI-native enterprise marketplace connecting infrastructure, software, tools, and enterprise customers, and needed to know who to serve first and with which partners.</p></section>
+      <section class="part" data-part="did"><h4>What I did</h4><p>Conducted 20 customer interviews across 4 AI-native verticals and defined ICP segments. Partnered with Solution Architects and Product Marketing to design 5 workflows integrating ML tooling into CoreWeave's Kubernetes ecosystem, and authored the PR/FAQ.</p></section>
+      <section class="part" data-part="result"><h4>Result</h4><p>A PR/FAQ for a two-sided marketplace mapping 30 partners to 10 enterprise use cases, plus ICP segmentation and partner strategy to prioritize go-to-market.</p></section>
+      <section class="part" data-part="details"><h4>Tools</h4><ul class="tags"><li>Customer discovery</li><li>ICP definition</li><li>PR/FAQ</li><li>GTM strategy</li></ul></section>
+    </div>
+  </div>
+  <nav class="pager" aria-label="More projects"><a href="#/work/uber-av-strategy">← Uber AV Strategy</a><a href="#/work/dreamweaver">Dreamweaver →</a></nav>
+</article>
+<article class="case" id="work-dreamweaver" data-case="dreamweaver" aria-labelledby="h-dreamweaver" style="--c:#b69cff" hidden>
+  <a class="back" href="#/work">← All work</a>
+  <header class="case-head">
+    <p class="case-kicker"><span class="status s-shipped">Shipped</span><span>Interactive Media &amp; Creative Tech</span></p>
+    <h3 class="case-title" id="h-dreamweaver">Dreamweaver</h3>
+    <p class="case-one">Hand-tracking interactive experience</p>
+    <p class="case-meta">Class project · Public showcase</p>
+  </header>
+  <div class="case-grid">
+    <figure class="case-media"><div class="img-coming" role="img" aria-label="Image coming"><span>Image coming</span></div></figure>
+    <div class="case-text" data-fit>
+      <div class="steps" role="tablist" aria-label="Dreamweaver sections"><button type="button" role="tab" class="step" data-step="problem" aria-selected="true">Problem</button><button type="button" role="tab" class="step" data-step="did" aria-selected="false">What I did</button><button type="button" role="tab" class="step" data-step="result" aria-selected="false">Result</button><button type="button" role="tab" class="step" data-step="details" aria-selected="false">Tools</button></div>
+      <section class="part" data-part="problem"><h4>Problem</h4><p>Could you move through a dreamlike story using only your hands, with no mouse or keyboard?</p></section>
+      <section class="part" data-part="did"><h4>What I did</h4><p>Designed and programmed the full interaction system in p5.js and ml5.js: hand tracking, gesture recognition, particle effects, scene transitions, and a typewriter sequence.</p></section>
+      <section class="part" data-part="result"><h4>Result</h4><p>Five scenes, played live by 25 people at a public showcase.</p></section>
+      <section class="part" data-part="details"><h4>Tools</h4><ul class="tags"><li>p5.js</li><li>ml5.js</li><li>JavaScript</li><li>Gesture recognition</li></ul></section>
+    </div>
+  </div>
+  <nav class="pager" aria-label="More projects"><a href="#/work/ai-infrastructure-marketplace">← AI Infrastructure Marketplace</a><a href="#/work/meroo-design-sprint">Meroo Design Sprint →</a></nav>
+</article>
+<article class="case" id="work-meroo-design-sprint" data-case="meroo-design-sprint" aria-labelledby="h-meroo-design-sprint" style="--c:#7cf2b9" hidden>
+  <a class="back" href="#/work">← All work</a>
+  <header class="case-head">
+    <p class="case-kicker"><span class="status s-concept">Concept</span><span>Product, Design &amp; Strategy</span></p>
+    <h3 class="case-title" id="h-meroo-design-sprint">Meroo Design Sprint</h3>
+    <p class="case-one">Gamified career discovery · BTE design sprint</p>
+    <p class="case-meta">BTE Design Sprint · Product Manager · Team of 4 · Nov 2024</p>
+  </header>
+  <div class="case-grid">
+    <figure class="case-media"><div class="img-coming" role="img" aria-label="Image coming"><span>Image coming</span></div></figure>
+    <div class="case-text" data-fit>
+      <div class="steps" role="tablist" aria-label="Meroo Design Sprint sections"><button type="button" role="tab" class="step" data-step="problem" aria-selected="true">Problem</button><button type="button" role="tab" class="step" data-step="did" aria-selected="false">What I did</button><button type="button" role="tab" class="step" data-step="result" aria-selected="false">Result</button><button type="button" role="tab" class="step" data-step="details" aria-selected="false">Tools</button></div>
+      <section class="part" data-part="problem"><h4>Problem</h4><p>Meroo, a gamified career-discovery app, wanted to reach users beyond its original audience.</p></section>
+      <section class="part" data-part="did"><h4>What I did</h4><p>Led a 4-person team as PM through a one-week sprint with founder David Restrepo, from problem definition and user interviews to ideation and a prototype concept adapted for users at three career stages.</p></section>
+      <section class="part" data-part="result"><h4>Result</h4><p>Pitched against two competing teams. The founder implemented some of our ideas, and our user interviews confirmed the positioning.</p></section>
+      <section class="part" data-part="details"><h4>Tools</h4><ul class="tags"><li>Design thinking</li><li>User research</li><li>Prototyping</li><li>Project management</li></ul></section>
+    </div>
+  </div>
+  <nav class="pager" aria-label="More projects"><a href="#/work/dreamweaver">← Dreamweaver</a><a href="#/work/unblur">Unblur →</a></nav>
+</article>
+<article class="case" id="work-unblur" data-case="unblur" aria-labelledby="h-unblur" style="--c:#7fe3ff" hidden>
+  <a class="back" href="#/work">← All work</a>
+  <header class="case-head">
+    <p class="case-kicker"><span class="status s-progress">In progress</span><span>AI, Software &amp; Startups</span></p>
+    <h3 class="case-title" id="h-unblur">Unblur</h3>
+    <p class="case-one">AI onboarding assistant</p>
+    <p class="case-meta">Project · Solo</p>
+  </header>
+  <div class="case-grid">
+    <figure class="case-media"><div class="img-coming" role="img" aria-label="Image coming"><span>Image coming</span></div></figure>
+    <div class="case-text" data-fit>
+      <div class="steps" role="tablist" aria-label="Unblur sections"><button type="button" role="tab" class="step" data-step="problem" aria-selected="true">Problem</button><button type="button" role="tab" class="step" data-step="did" aria-selected="false">What I did</button><button type="button" role="tab" class="step" data-step="result" aria-selected="false">Result</button><button type="button" role="tab" class="step" data-step="details" aria-selected="false">Tools</button></div>
+      <section class="part" data-part="problem"><h4>Problem</h4><p>Interns and early-career employees lose momentum when their supervisors aren't around to explain company-specific context.</p></section>
+      <section class="part" data-part="did"><h4>What I did</h4><p>Generated 10 startup concepts, narrowed them down, and chose Unblur as the strongest. Ran 20 user interviews and shaped the product direction around closing onboarding knowledge gaps.</p></section>
+      <section class="part" data-part="result"><h4>Result</h4><p>Product direction grounded in 20 user interviews; mockup in progress.</p></section>
+      <section class="part" data-part="details"><h4>Tools</h4><ul class="tags"><li>Customer discovery</li><li>User interviews</li><li>Product strategy</li><li>AI</li></ul></section>
+    </div>
+  </div>
+  <nav class="pager" aria-label="More projects"><a href="#/work/meroo-design-sprint">← Meroo Design Sprint</a><a href="#/work/mission-001">Mission 001 →</a></nav>
+</article>
+<article class="case" id="work-mission-001" data-case="mission-001" aria-labelledby="h-mission-001" style="--c:#7fe3ff" hidden>
+  <a class="back" href="#/work">← All work</a>
+  <header class="case-head">
+    <p class="case-kicker"><span class="status s-progress">In progress</span><span>AI, Software &amp; Startups</span></p>
+    <h3 class="case-title" id="h-mission-001">Mission 001</h3>
+    <p class="case-one">Autonomous spacecraft inspection</p>
+    <p class="case-meta">Project · Solo · Python · MuJoCo</p>
+  </header>
+  <div class="case-grid">
+    <figure class="case-media"><div class="fig-mount" data-figure="mission001"><p class="fig-fallback">Interactive illustration of the concept. Turn on JavaScript to see it.</p></div></figure>
+    <div class="case-text" data-fit>
+      <div class="steps" role="tablist" aria-label="Mission 001 sections"><button type="button" role="tab" class="step" data-step="problem" aria-selected="true">Problem</button><button type="button" role="tab" class="step" data-step="did" aria-selected="false">What I did</button><button type="button" role="tab" class="step" data-step="result" aria-selected="false">Result</button><button type="button" role="tab" class="step" data-step="details" aria-selected="false">Tools</button></div>
+      <section class="part" data-part="problem"><h4>Problem</h4><p>Inspecting a spacecraft in orbit calls for a robot that can work around the vehicle on its own: seeing it, spotting anomalies, planning its moves, and recovering when something goes wrong.</p></section>
+      <section class="part" data-part="did"><h4>What I did</h4><p>Building the simulation and full technical stack myself in Python and MuJoCo, centered on a free-flying 6-DOF robot operating around a spacecraft. The architecture covers perception, anomaly detection, planning, failure recovery, and mission evaluation.</p></section>
+      <section class="part" data-part="result"><h4>Result</h4><p>In active development, with a working prototype coming soon.</p></section>
+      <section class="part" data-part="details"><h4>Tools</h4><ul class="tags"><li>Python</li><li>MuJoCo</li><li>Physics simulation</li><li>Robotics</li></ul></section>
+    </div>
+  </div>
+  <nav class="pager" aria-label="More projects"><a href="#/work/unblur">← Unblur</a><a href="#/work/astryn">Astryn →</a></nav>
+</article>
+<article class="case" id="work-astryn" data-case="astryn" aria-labelledby="h-astryn" style="--c:#7fe3ff" hidden>
+  <a class="back" href="#/work">← All work</a>
+  <header class="case-head">
+    <p class="case-kicker"><span class="status s-concept">Concept</span><span>AI, Software &amp; Startups</span></p>
+    <h3 class="case-title" id="h-astryn">Astryn</h3>
+    <p class="case-one">Dream-logging experience</p>
+    <p class="case-meta">Project · Solo</p>
+  </header>
+  <div class="case-grid">
+    <figure class="case-media"><div class="img-coming" role="img" aria-label="Image coming"><span>Image coming</span></div></figure>
+    <div class="case-text" data-fit>
+      <div class="steps" role="tablist" aria-label="Astryn sections"><button type="button" role="tab" class="step" data-step="problem" aria-selected="true">Problem</button><button type="button" role="tab" class="step" data-step="did" aria-selected="false">What I did</button><button type="button" role="tab" class="step" data-step="details" aria-selected="false">Tools</button></div>
+      <section class="part" data-part="problem"><h4>Problem</h4><p>Most dream apps pitch themselves as lucid-dreaming tools. I wanted reflecting on your dreams to feel immersive instead.</p></section>
+      <section class="part" data-part="did"><h4>What I did</h4><p>Developed the product concept and interaction direction: you explore your &quot;inner galaxy&quot; through journaling, emotional visualization, and streak-based engagement.</p></section>
+      <section class="part" data-part="details"><h4>Tools</h4><ul class="tags"><li>Product design</li><li>Interaction design</li><li>Engagement loops</li></ul></section>
+    </div>
+  </div>
+  <nav class="pager" aria-label="More projects"><a href="#/work/mission-001">← Mission 001</a><a href="#/work/velostat-heart">Velostat Heart →</a></nav>
+</article>
+<article class="case" id="work-velostat-heart" data-case="velostat-heart" aria-labelledby="h-velostat-heart" style="--c:#b69cff" hidden>
+  <a class="back" href="#/work">← All work</a>
+  <header class="case-head">
+    <p class="case-kicker"><span class="status s-shipped">Shipped</span><span>Interactive Media &amp; Creative Tech</span></p>
+    <h3 class="case-title" id="h-velostat-heart">Velostat Heart</h3>
+    <p class="case-one">Touch-responsive physical interface</p>
+    <p class="case-meta">Project</p>
+  </header>
+  <div class="case-grid">
+    <figure class="case-media"><div class="img-coming" role="img" aria-label="Image coming"><span>Image coming</span></div></figure>
+    <div class="case-text" data-fit>
+      <div class="steps" role="tablist" aria-label="Velostat Heart sections"><button type="button" role="tab" class="step" data-step="problem" aria-selected="true">Problem</button><button type="button" role="tab" class="step" data-step="did" aria-selected="false">What I did</button><button type="button" role="tab" class="step" data-step="details" aria-selected="false">Tools</button></div>
+      <section class="part" data-part="problem"><h4>Problem</h4><p>Can a few simple conductive materials turn touch into something that feels alive?</p></section>
+      <section class="part" data-part="did"><h4>What I did</h4><p>Built a heart-shaped interface from pressure-sensitive Velostat, with sensing and LEDs that turn touch into an ambient visual response.</p></section>
+      <section class="part" data-part="details"><h4>Tools</h4><ul class="tags"><li>Velostat</li><li>Sensors</li><li>LEDs</li><li>Physical computing</li></ul></section>
+    </div>
+  </div>
+  <nav class="pager" aria-label="More projects"><a href="#/work/astryn">← Astryn</a><a href="#/work/after-effects-animation">After Effects Animation →</a></nav>
+</article>
+<article class="case" id="work-after-effects-animation" data-case="after-effects-animation" aria-labelledby="h-after-effects-animation" style="--c:#b69cff" hidden>
+  <a class="back" href="#/work">← All work</a>
+  <header class="case-head">
+    <p class="case-kicker"><span class="status s-shipped">Shipped</span><span>Interactive Media &amp; Creative Tech</span></p>
+    <h3 class="case-title" id="h-after-effects-animation">After Effects Animation</h3>
+    <p class="case-one">Two people falling in love · motion design</p>
+    <p class="case-meta">Motion design</p>
+  </header>
+  <div class="case-grid">
+    <figure class="case-media"><div class="img-coming" role="img" aria-label="Image coming"><span>Image coming</span></div></figure>
+    <div class="case-text" data-fit>
+      <div class="steps" role="tablist" aria-label="After Effects Animation sections"><button type="button" role="tab" class="step" data-step="problem" aria-selected="true">Challenge</button><button type="button" role="tab" class="step" data-step="did" aria-selected="false">What I did</button><button type="button" role="tab" class="step" data-step="details" aria-selected="false">Tools</button></div>
+      <section class="part" data-part="problem"><h4>Challenge</h4><p>Telling a love story through motion alone, without much prior drawing experience.</p></section>
+      <section class="part" data-part="did"><h4>What I did</h4><p>Developed the visual concept and animated it in After Effects, experimenting with motion, composition, and transitions.</p></section>
+      <section class="part" data-part="details"><h4>Tools</h4><ul class="tags"><li>After Effects</li><li>Motion design</li><li>Visual storytelling</li></ul></section>
+    </div>
+  </div>
+  <nav class="pager" aria-label="More projects"><a href="#/work/velostat-heart">← Velostat Heart</a><a href="#/work/cnc-space-p">CNC Space &quot;P&quot; →</a></nav>
+</article>
+<article class="case" id="work-cnc-space-p" data-case="cnc-space-p" aria-labelledby="h-cnc-space-p" style="--c:#ffbf73" hidden>
+  <a class="back" href="#/work">← All work</a>
+  <header class="case-head">
+    <p class="case-kicker"><span class="status s-shipped">Shipped</span><span>Hardware &amp; Fabrication</span></p>
+    <h3 class="case-title" id="h-cnc-space-p">CNC Space &quot;P&quot;</h3>
+    <p class="case-one">Fusion 360 × ShopBot</p>
+    <p class="case-meta">Project</p>
+  </header>
+  <div class="case-grid">
+    <figure class="case-media"><div class="img-coming" role="img" aria-label="Image coming"><span>Image coming</span></div></figure>
+    <div class="case-text" data-fit>
+      <div class="steps" role="tablist" aria-label="CNC Space &quot;P&quot; sections"><button type="button" role="tab" class="step" data-step="problem" aria-selected="true">Challenge</button><button type="button" role="tab" class="step" data-step="did" aria-selected="false">What I did</button><button type="button" role="tab" class="step" data-step="result" aria-selected="false">Result</button><button type="button" role="tab" class="step" data-step="details" aria-selected="false">Tools</button></div>
+      <section class="part" data-part="problem"><h4>Challenge</h4><p>Turn a single letter into a small piece of the solar system.</p></section>
+      <section class="part" data-part="did"><h4>What I did</h4><p>Designed a plywood &quot;P&quot; with planets, orbital elements, contours, pockets, and engraving in Fusion 360, generated the CNC toolpaths, and machined it on a ShopBot.</p></section>
+      <section class="part" data-part="result"><h4>Result</h4><p>A finished, machined piece.</p></section>
+      <section class="part" data-part="details"><h4>Tools</h4><ul class="tags"><li>Fusion 360</li><li>CAM toolpaths</li><li>ShopBot CNC</li></ul></section>
+    </div>
+  </div>
+  <nav class="pager" aria-label="More projects"><a href="#/work/after-effects-animation">← After Effects Animation</a><a href="#/work/rube-goldberg-machine">Rube Goldberg Machine →</a></nav>
+</article>
+<article class="case" id="work-rube-goldberg-machine" data-case="rube-goldberg-machine" aria-labelledby="h-rube-goldberg-machine" style="--c:#ffbf73" hidden>
+  <a class="back" href="#/work">← All work</a>
+  <header class="case-head">
+    <p class="case-kicker"><span class="status s-shipped">Shipped</span><span>Hardware &amp; Fabrication</span></p>
+    <h3 class="case-title" id="h-rube-goldberg-machine">Rube Goldberg Machine</h3>
+    <p class="case-one">Arduino Nano 33 IoT chain reaction</p>
+    <p class="case-meta">Project</p>
+  </header>
+  <div class="case-grid">
+    <figure class="case-media"><div class="img-coming" role="img" aria-label="Image coming"><span>Image coming</span></div></figure>
+    <div class="case-text" data-fit>
+      <div class="steps" role="tablist" aria-label="Rube Goldberg Machine sections"><button type="button" role="tab" class="step" data-step="problem" aria-selected="true">Challenge</button><button type="button" role="tab" class="step" data-step="did" aria-selected="false">What I did</button><button type="button" role="tab" class="step" data-step="details" aria-selected="false">Tools</button></div>
+      <section class="part" data-part="problem"><h4>Challenge</h4><p>Make every physical event reliably trigger the next, using sensors and actuators that don't always cooperate.</p></section>
+      <section class="part" data-part="did"><h4>What I did</h4><p>Designed and programmed a chain reaction on an Arduino Nano 33 IoT using a VL53L0X distance sensor, servo motor, force-sensitive resistor, and speaker, with each stage triggering the next. Troubleshot sensor readings and built conductive materials into the physical design.</p></section>
+      <section class="part" data-part="details"><h4>Tools</h4><ul class="tags"><li>Arduino</li><li>C++</li><li>VL53L0X</li><li>Servo</li><li>FSR</li></ul></section>
+    </div>
+  </div>
+  <nav class="pager" aria-label="More projects"><a href="#/work/cnc-space-p">← CNC Space &quot;P&quot;</a><a href="#/work/uber-av-strategy">Uber AV Strategy →</a></nav>
+</article>
+</section>
+<section class="sec" id="sec-experience" data-sec="experience" aria-labelledby="sec-experience-h" hidden>
+  <h3 class="sr" id="sec-experience-h">Experience</h3>
+  <div class="exp-list" data-list>
+    <ul class="stats" aria-label="Highlights"><li><b>1st</b><span>of 9 teams, Uber case</span></li><li><b>$45M</b><span>EBITDA modeled, AV fleet</span></li><li><b>70%</b><span>research time cut at EY</span></li><li><b>20</b><span>customer interviews (CoreWeave)</span></li><li><b>50</b><span>real deals calibrated</span></li></ul>
+    <ol class="timeline">
+      <li><a class="role" href="#/experience/livegage" style="--c:#7fe3ff"><span class="r-when">Jun – Aug 2026</span><span class="r-main"><b>Livegage</b><span class="r-role">Business Analyst Intern</span></span><span class="r-metric">Credit-enhancement model calibrated against 50 real deals, shipped as a service</span><span class="r-more">All details →</span></a></li>
+      <li><a class="role" href="#/experience/coreweave" style="--c:#7cf2b9"><span class="r-when">Jan – May 2026</span><span class="r-main"><b>CoreWeave</b><span class="r-role">Product Management Intern</span></span><span class="r-metric">20 customer interviews · PR/FAQ mapping 30 partners to 10 use cases</span><span class="r-more">All details →</span></a></li>
+      <li><a class="role" href="#/experience/bte" style="--c:#b69cff"><span class="r-when">May 2025 – May 2026</span><span class="r-main"><b>BTE Leadership, NYU Stern</b><span class="r-role">President</span></span><span class="r-metric">20 events run · 17 speakers sourced from 150+ outreach</span><span class="r-more">All details →</span></a></li>
+      <li><a class="role" href="#/experience/ey" style="--c:#ffbf73"><span class="r-when">Jun – Jul 2025</span><span class="r-main"><b>EY</b><span class="r-role">Summer Intern, Operational &amp; Financial Restructuring</span></span><span class="r-metric">Cut manual research time by 70% with a Python/Playwright tool</span><span class="r-more">All details →</span></a></li>
+    </ol>
+  </div>
+<article class="role-detail" id="exp-livegage" data-role="livegage" aria-labelledby="h-exp-livegage" style="--c:#7fe3ff" hidden>
+  <a class="back" href="#/experience">← All roles</a>
+  <header class="case-head"><p class="case-kicker"><span>Jun – Aug 2026</span><span>New York, NY</span></p><h3 class="case-title" id="h-exp-livegage">Livegage</h3><p class="case-one">Business Analyst Intern</p></header>
+  <ul class="bullets"><li>Engineered a loan-level mortgage cash-flow engine modeling paydown, prepayment, defaults, valuation, and waterfalls across hundreds of scenarios.</li><li>Scoped, built, and shipped a credit-enhancement model, calibrated against 50 real deals and deployed as a service.</li><li>Integrated both tools into Livegage's INSAITS platform, connecting the analytics to the interface for a complete user workflow.</li><li>Built pricing, customer-acquisition, revenue, cost, margin, and two-year ARR forecasts for INSAITS with the Capital Markets Products team.</li></ul>
+  
+  <nav class="pager" aria-label="More roles"><a href="#/experience/ey">← EY</a><a href="#/experience/coreweave">CoreWeave →</a></nav>
+</article>
+<article class="role-detail" id="exp-coreweave" data-role="coreweave" aria-labelledby="h-exp-coreweave" style="--c:#7cf2b9" hidden>
+  <a class="back" href="#/experience">← All roles</a>
+  <header class="case-head"><p class="case-kicker"><span>Jan – May 2026</span><span>New York, NY · via NYU Stern</span></p><h3 class="case-title" id="h-exp-coreweave">CoreWeave</h3><p class="case-one">Product Management Intern</p></header>
+  <ul class="bullets"><li>Conducted 20 customer interviews across 4 AI-native verticals to define ICPs and prioritize go-to-market opportunities.</li><li>Partnered with Solution Architects and Product Marketing to design 5 workflows integrating ML tooling into CoreWeave's Kubernetes ecosystem.</li><li>Authored the PR/FAQ for a two-sided AI infrastructure marketplace, mapping 30 partners to 10 enterprise use cases.</li></ul>
+  <p><a class="linkish" href="#/work/ai-infrastructure-marketplace">See the project: AI Infrastructure Marketplace →</a></p>
+  <nav class="pager" aria-label="More roles"><a href="#/experience/livegage">← Livegage</a><a href="#/experience/bte">BTE Leadership →</a></nav>
+</article>
+<article class="role-detail" id="exp-bte" data-role="bte" aria-labelledby="h-exp-bte" style="--c:#b69cff" hidden>
+  <a class="back" href="#/experience">← All roles</a>
+  <header class="case-head"><p class="case-kicker"><span>May 2025 – May 2026</span><span>New York, NY</span></p><h3 class="case-title" id="h-exp-bte">BTE Leadership, NYU Stern</h3><p class="case-one">President</p></header>
+  <ul class="bullets"><li>Led a 9-member executive board across strategy, budgeting, and outreach.</li><li>Ran 20 social and professional events with 20+ attendees each, three of them drawing 60+.</li><li>Sourced 17 speakers from outreach to 150+ professionals across VC, PE, and consumer, including Mike Pell, inventor of the PDF.</li></ul>
+  
+  <nav class="pager" aria-label="More roles"><a href="#/experience/coreweave">← CoreWeave</a><a href="#/experience/ey">EY →</a></nav>
+</article>
+<article class="role-detail" id="exp-ey" data-role="ey" aria-labelledby="h-exp-ey" style="--c:#ffbf73" hidden>
+  <a class="back" href="#/experience">← All roles</a>
+  <header class="case-head"><p class="case-kicker"><span>Jun – Jul 2025</span><span>Mumbai, India</span></p><h3 class="case-title" id="h-exp-ey">EY</h3><p class="case-one">Summer Intern, Operational &amp; Financial Restructuring</p></header>
+  <ul class="bullets"><li>Spotted a bottleneck in company research and built a Python/Playwright tool that pulls financial data from PrivateCircle based on Excel inputs, cutting manual research time by 70%.</li><li>Supported insolvency resolution processes: condensed resolution plans, ran compliance checks, and prepared 3 presentations for the Committee of Creditors.</li><li>Analyzed a hospital restructuring, including fair and liquidation values, financial projections, and buyer proposals, and flagged financial and operational red flags for the team.</li></ul>
+  
+  <nav class="pager" aria-label="More roles"><a href="#/experience/bte">← BTE Leadership</a><a href="#/experience/livegage">Livegage →</a></nav>
+</article>
+</section>
+<section class="sec" id="sec-skills" data-sec="skills" aria-labelledby="sec-skills-h" hidden>
+  <h3 class="sr" id="sec-skills-h">Skills</h3>
+  <div class="skill-grid">
+    <section class="skill" style="--c:#7cf2b9" aria-label="Product"><h4><i aria-hidden="true"></i>Product</h4><ul class="tags"><li>User research</li><li>Customer discovery</li><li>PR/FAQs</li><li>ICP definition</li><li>Go-to-market strategy</li><li>Design thinking</li><li>Prioritization</li><li>Storytelling &amp; pitching</li></ul></section>
+    <section class="skill" style="--c:#7fe3ff" aria-label="Technical"><h4><i aria-hidden="true"></i>Technical</h4><ul class="tags"><li>Python</li><li>SQL</li><li>HTML &amp; CSS</li><li>Playwright</li><li>MuJoCo</li><li>p5.js &amp; ml5.js</li><li>Claude Code</li></ul></section>
+    <section class="skill" style="--c:#ffbf73" aria-label="Hardware &amp; Making"><h4><i aria-hidden="true"></i>Hardware &amp; Making</h4><ul class="tags"><li>Arduino &amp; C++</li><li>Sensors &amp; physical computing</li><li>Fusion 360 (CAD/CAM)</li><li>ShopBot CNC</li><li>Fabrication</li></ul></section>
+    <section class="skill" style="--c:#b69cff" aria-label="Business &amp; Creative"><h4><i aria-hidden="true"></i>Business &amp; Creative</h4><ul class="tags"><li>Financial modeling</li><li>Excel</li><li>QuickBooks</li><li>After Effects</li><li>Adobe Creative Cloud</li><li>Visual storytelling</li></ul></section>
+  </div>
+</section>
+<section class="sec" id="sec-about" data-sec="about" aria-labelledby="sec-about-h" hidden>
+  <h3 class="sr" id="sec-about-h">About</h3>
+  <div class="about">
+    <img class="about-photo" src="assets/priyansh.jpg" alt="Portrait of Priyansh Jain" width="560" height="560" loading="lazy">
+    <div class="about-text">
+      <p class="about-h">More questions than answers.</p>
+      <p class="lead">I study Business, Technology &amp; Entrepreneurship at NYU Stern. What I love most are answers that open up new questions, and I bring that same curiosity to building products.</p>
+      <dl class="facts"><div><dt>Studying</dt><dd>B.S. Business, Technology &amp; Entrepreneurship, NYU Stern</dd></div><div><dt>Minors</dt><dd>Math &amp; Computer Science · Interactive Media Arts</dd></div><div><dt>Graduating</dt><dd>Dec 2027 · GPA 3.8 · Dean's List</dd></div><div><dt>Based in</dt><dd>New York, open to relocating</dd></div><div><dt>Seeking</dt><dd>PM internships &amp; full-time roles, with space as the north star</dd></div></dl>
+    </div>
+  </div>
+</section>
+<section class="sec" id="sec-contact" data-sec="contact" aria-labelledby="sec-contact-h" hidden>
+  <h3 class="sr" id="sec-contact-h">Contact</h3>
+  <div class="contact">
+    <div class="contact-text">
+      <p class="about-h">Let's build what comes next.</p>
+      <p class="lead">Looking for PM internships and full-time roles, especially at space companies.</p>
+      <dl class="facts"><div><dt>Email</dt><dd><a href="mailto:priyansh.jain@stern.nyu.edu">priyansh.jain@stern.nyu.edu</a></dd></div><div><dt>LinkedIn</dt><dd><a href="https://www.linkedin.com/in/priyanshjain05/" target="_blank" rel="noopener">in/priyanshjain05</a></dd></div><div><dt>Based in</dt><dd>New York, open to relocating</dd></div></dl>
+      <ul class="actions">
+        <li><button type="button" class="btn primary" data-copy="priyansh.jain@stern.nyu.edu">Copy email</button></li>
+        <li><a class="btn" href="mailto:priyansh.jain@stern.nyu.edu">Email</a></li>
+        <li><a class="btn" href="https://www.linkedin.com/in/priyanshjain05/" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a class="btn" href="assets/Priyansh_Jain_Resume.pdf" target="_blank" rel="noopener">Resume (PDF)</a></li>
+      </ul>
+      <p class="copied" role="status" aria-live="polite"></p>
+    </div>
+    <div class="fig-mount contact-fig" data-figure="comms" aria-hidden="true"></div>
+  </div>
+</section><!-- /gen:panels -->
+      </div>
+      <footer class="p-foot"><a id="pPrev" href="#/contact">← Contact</a><span>← → to move between sections</span><a id="pNext" href="#/experience">Experience →</a></footer>
+    </section>
+  </div>
+</main>
+
+<div id="station" aria-hidden="true"></div>
+<div id="labels"></div>
+<div id="beacons"></div>
+<div class="radar-wrap"><canvas id="radar" role="img" aria-label="Sector map. Click a dot to fly there."></canvas><span>Sector map</span></div>
+<p class="explore-hint" id="exploreHint">Drag to explore · scroll to zoom · click a galaxy to open its work</p>
+<nav class="tabbar" aria-label="Sections"><ul>
+<!-- gen:tabbar --><li><a href="#/work" data-sec-link="work"><span class="tb-num" aria-hidden="true">1</span>Work</a></li>
+<li><a href="#/experience" data-sec-link="experience"><span class="tb-num" aria-hidden="true">2</span>Experience</a></li>
+<li><a href="#/skills" data-sec-link="skills"><span class="tb-num" aria-hidden="true">3</span>Skills</a></li>
+<li><a href="#/about" data-sec-link="about"><span class="tb-num" aria-hidden="true">4</span>About</a></li>
+<li><a href="#/contact" data-sec-link="contact"><span class="tb-num" aria-hidden="true">5</span>Contact</a></li>
+<li><a href="assets/Priyansh_Jain_Resume.pdf" target="_blank" rel="noopener" data-sec-link="resume"><span class="tb-num" aria-hidden="true">6</span>Resume</a></li><!-- /gen:tabbar -->
+</ul></nav>
+<div class="sr" aria-live="polite" id="live"></div>
 <div class="cine" aria-hidden="true"></div>
-<script type="module" src="assets/space.js"></script>
+<script type="module" src="assets/ui.js"></script>
 </body>
 </html>

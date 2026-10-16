@@ -1,6 +1,7 @@
-// Home station — anatomy figure. An orbital station whose modules are the site's sections:
-// crew module (About), observatory cupola (Skills), log module (Experience), comms dish (Contact).
-// mount(root, { onHover, onSelect }) draws it; modules light up as the one accent when pointed at.
+// Home station — anatomy figure, and the site's main menu. Each part is a section:
+// main lab module (Work), solar arrays (Experience), observatory cupola (Skills),
+// crew quarters below the node (About), comms dish (Contact); the docked ship is the resume.
+// mount(root, { onHover, onSelect }) draws it; a part lights up as the one accent when pointed at.
 import * as k from "../kit/iso-kit.mjs";
 import * as G from "../kit/lathe.mjs";
 
@@ -39,16 +40,16 @@ function build() {
   // ---- crew module (+x) with windows, handrail and docking adapter ----
   const CM = FX([0, 0, 0]);
   const seams = L(G.arcOf(CM, 28, R_MOD, P) + G.arcOf(CM, 48, R_MOD, P), { tone: "faint" });
-  put([40, 0, 0], S(G.disc(13, 66, R_MOD, CM, P), { tone: "hi", inner: seams }), "crew");
+  put([40, 0, 0], S(G.disc(13, 66, R_MOD, CM, P), { tone: "hi", inner: seams }), "work");
   const face = G.angleToward(CM, V);
   [22, 34, 56].forEach((s) => {
     const p = G.pointOf(CM, s, R_MOD, face + 0.35), F = G.frameAlong(p, G.radialOf(CM, face + 0.35));
-    put(G.add3(p, [0, 0, 0.1]), S(G.disc(-0.2, 0.7, 2, F, P), { tone: "mid" }) + `<path class="st-window" d="${G.circleOf(F, 0.7, 1.3, P, 24)}"/>`, "crew", 2);
+    put(G.add3(p, [0, 0, 0.1]), S(G.disc(-0.2, 0.7, 2, F, P), { tone: "mid" }) + `<path class="st-window" d="${G.circleOf(F, 0.7, 1.3, P, 24)}"/>`, "work", 2);
   });
   const rail = [16, 30, 44, 60].map((s) => G.pointOf(CM, s, R_MOD + 1.4, face - 0.55));
-  put([40, 0, 2], L(k.pathOf(rail.map(at)), { tone: "mid" }) + Dt([16, 30, 44, 60].map((s) => at(G.pointOf(CM, s, R_MOD + 0.2, face - 0.55))), { size: 0.45 }), "crew", 3);
-  put([72, 0, 0], S(G.solidOf([[66, R_MOD], [70, 7.4], [77, 7.4], [77, 5.4], [80, 5.4]], CM, P), { tone: "mid", inner: L(G.arcOf(CM, 73.5, 7.4, P), { tone: "faint" }) }), "crew");
-  put([80, 0, 0], S(G.ringBand(79.4, 80.8, 5.4, 6.8, CM, P), { tone: "hi" }) + Dt(G.dotsOf(CM, 80.8, 6.1, 8, P, { fade: [0.04, 0.42] }), { size: 0.4 }), "crew", 0.5);
+  put([40, 0, 2], L(k.pathOf(rail.map(at)), { tone: "mid" }) + Dt([16, 30, 44, 60].map((s) => at(G.pointOf(CM, s, R_MOD + 0.2, face - 0.55))), { size: 0.45 }), "work", 3);
+  put([72, 0, 0], S(G.solidOf([[66, R_MOD], [70, 7.4], [77, 7.4], [77, 5.4], [80, 5.4]], CM, P), { tone: "mid", inner: L(G.arcOf(CM, 73.5, 7.4, P), { tone: "faint" }) }), "work");
+  put([80, 0, 0], S(G.ringBand(79.4, 80.8, 5.4, 6.8, CM, P), { tone: "hi" }) + Dt(G.dotsOf(CM, 80.8, 6.1, 8, P, { fade: [0.04, 0.42] }), { size: 0.4 }), "work", 0.5);
 
   // ---- observatory cupola + telescope (on top of the crew module) ----
   const CX = 42, top = R_MOD;
@@ -63,19 +64,19 @@ function build() {
 
   // ---- log module hanging below the node, domed end, hatch ----
   const LM = G.frameOf([0, 0, 0], [0, 0, -1], [1, 0, 0], [0, 1, 0]);
-  put([0, 0, -36], S(G.disc(13, 58, R_MOD, LM, P), { tone: "hi", inner: L(G.arcOf(LM, 26, R_MOD, P) + G.arcOf(LM, 42, R_MOD, P), { tone: "faint" }) }), "log", -2);
+  put([0, 0, -36], S(G.disc(13, 58, R_MOD, LM, P), { tone: "hi", inner: L(G.arcOf(LM, 26, R_MOD, P) + G.arcOf(LM, 42, R_MOD, P), { tone: "faint" }) }), "about", -2);
   const endDome = []; for (let i = 0; i <= 10; i++) { const t = i / 10; endDome.push([58 + 6.4 * Math.sin((t * Math.PI) / 2), Math.max(0.3, R_MOD * Math.cos((t * Math.PI) / 2)), 1]); }
-  put([0, 0, -62], S(G.solidOf(endDome, LM, P, { smooth: true }), { tone: "hi" }), "log", -1);
+  put([0, 0, -62], S(G.solidOf(endDome, LM, P, { smooth: true }), { tone: "hi" }), "about", -1);
   const fa = G.angleToward(LM, V);
   const hatch = G.pointOf(LM, 34, R_MOD, fa), HF = G.frameAlong(hatch, G.radialOf(LM, fa));
-  put(G.add3(hatch, [3, 3, 0]), S(G.disc(-0.2, 0.8, 3.6, HF, P), { tone: "mid" }) + L(G.circleOf(HF, 0.8, 2.6, P, 24), { tone: "lo" }), "log", 2);
-  [20, 48].forEach((s2) => { const p2 = G.pointOf(LM, s2, R_MOD, fa + 0.6), F2 = G.frameAlong(p2, G.radialOf(LM, fa + 0.6)); put(G.add3(p2, [3, 3, 0]), S(G.disc(-0.2, 0.6, 1.6, F2, P), { tone: "mid" }) + `<path class="st-window" d="${G.circleOf(F2, 0.6, 1, P, 20)}"/>`, "log", 2.2); });
+  put(G.add3(hatch, [3, 3, 0]), S(G.disc(-0.2, 0.8, 3.6, HF, P), { tone: "mid" }) + L(G.circleOf(HF, 0.8, 2.6, P, 24), { tone: "lo" }), "about", 2);
+  [20, 48].forEach((s2) => { const p2 = G.pointOf(LM, s2, R_MOD, fa + 0.6), F2 = G.frameAlong(p2, G.radialOf(LM, fa + 0.6)); put(G.add3(p2, [3, 3, 0]), S(G.disc(-0.2, 0.6, 1.6, F2, P), { tone: "mid" }) + `<path class="st-window" d="${G.circleOf(F2, 0.6, 1, P, 20)}"/>`, "about", 2.2); });
   // service stub on the far side (carries the comms mast)
   const SM = FXN([0, 0, 0]);
-  put([-24, 0, 0], S(G.solidOf([[12, 7.6], [34, 7.6], [36, 6], [37, 3]], SM, P), { tone: "mid", inner: L(G.arcOf(SM, 24, 7.6, P), { tone: "faint" }) }), "comms", -1);
+  put([-24, 0, 0], S(G.solidOf([[12, 7.6], [34, 7.6], [36, 6], [37, 3]], SM, P), { tone: "mid", inner: L(G.arcOf(SM, 24, 7.6, P), { tone: "faint" }) }), "contact", -1);
   // ---- comms boom and dish (on the log module) ----
-  put([-28, 0, 18], S(k.cylinder(-28, 0, 2, 6.8, 30 - 6.8, P, 20), { tone: "mid", crease: "none", inner: L(k.sideArc(-28, 0, 2, 18, P, 12), { tone: "faint" }) }), "comms", 1);
-  put([-28, 0, 31], S(k.slabOf({ x: -31.5, y: -3.5, w: 7, d: 7, r: 1.2 }, 30, 4, P, 3, 0.4), { tone: "mid" }), "comms", 1.2);
+  put([-28, 0, 18], S(k.cylinder(-28, 0, 2, 6.8, 30 - 6.8, P, 20), { tone: "mid", crease: "none", inner: L(k.sideArc(-28, 0, 2, 18, P, 12), { tone: "faint" }) }), "contact", 1);
+  put([-28, 0, 31], S(k.slabOf({ x: -31.5, y: -3.5, w: 7, d: 7, r: 1.2 }, 30, 4, P, 3, 0.4), { tone: "mid" }), "contact", 1.2);
   const DF = G.frameAlong(DISH_O, DISH_A);
   let dish = S(G.disc(-3, 0.3, 2.2, DF, P), { tone: "mid" });
   dish += S(G.ringBand(DISH_D - 0.6, DISH_D + 0.4, DISH_R - 0.2, DISH_R + 0.9, DF, P), { tone: "hi" });
@@ -86,7 +87,7 @@ function build() {
   const FOC = F4 / 4;
   dish += L([0, 1, 2].map((i) => k.segment(G.pointOf(DF, DISH_D - 0.2, DISH_R - 0.2, i * 2.094 + 0.5), G.pointOf(DF, FOC - 0.5, 1.2, i * 2.094 + 0.5), P)).join(""), { tone: "mid" });
   dish += S(G.solidOf([[-1, 1.8], [0.6, 1.8], [0.6, 1], [2, 0.7]], G.frameAlong(G.pointOf(DF, FOC + 1.2, 0, 0), G.mul3(DISH_A, -1)), P), { tone: "hi" });
-  put(DISH_O, dish, "comms", 2);
+  put(DISH_O, dish, "contact", 2);
 
   // ---- truss: segments with X-bracing, then rotary joints, masts and solar wings ----
   for (let y = -72; y < 72; y += 18) {
@@ -97,17 +98,17 @@ function build() {
   }
   for (const sign of [-1, 1]) {
     const J = FY([0, sign * 72, TRUSS_Z + TRUSS_H / 2], sign);
-    put(G.pointOf(J, 3, 0, 0), S(G.disc(0, 6, 6.4, J, P), { tone: "mid", inner: L(G.arcOf(J, 3, 6.4, P), { tone: "faint" }) }), "", 0.3);
+    put(G.pointOf(J, 3, 0, 0), S(G.disc(0, 6, 6.4, J, P), { tone: "mid", inner: L(G.arcOf(J, 3, 6.4, P), { tone: "faint" }) }), "experience", 0.3);
     const M = FY([0, sign * 78, WING_Z + 0.6], sign);
-    put(G.pointOf(M, 52, 0, 0), S(G.disc(0, 104, 1.1, M, P), { tone: "mid", crease: "none" }), "", -0.4);
+    put(G.pointOf(M, 52, 0, 0), S(G.disc(0, 104, 1.1, M, P), { tone: "mid", crease: "none" }), "experience", -0.4);
     for (const side of [-1, 1]) {
       const plan = { x: side > 0 ? 2.5 : -28.5, y: sign > 0 ? 82 : -178, w: 26, d: 96, r: 0.6 };
       const grid = [];
       for (let i = 1; i < 12; i++) grid.push(k.lineOnTop([plan.x, plan.y + (plan.d * i) / 12], [plan.x + plan.w, plan.y + (plan.d * i) / 12], WING_Z + 1.2, P));
       for (let i = 1; i < 4; i++) grid.push(k.lineOnTop([plan.x + (plan.w * i) / 4, plan.y], [plan.x + (plan.w * i) / 4, plan.y + plan.d], WING_Z + 1.2, P));
-      put([plan.x + 13, plan.y + 48, WING_Z], S(k.slabOf(plan, WING_Z, 1.2, P, 2, 0.3), { tone: "mid", crease: "lo" }) + `<path class="st-cells" d="${k.slabOf(k.insetPlan(plan, 1.2), WING_Z, 1.2, P, 2).top}"/>` + L(grid.join(""), { tone: "faint" }) + L(k.planOutline(k.insetPlan(plan, 1.2), WING_Z + 1.2, P, 2), { tone: "lo" }), "", 0);
+      put([plan.x + 13, plan.y + 48, WING_Z], S(k.slabOf(plan, WING_Z, 1.2, P, 2, 0.3), { tone: "mid", crease: "lo" }) + `<path class="st-cells" d="${k.slabOf(k.insetPlan(plan, 1.2), WING_Z, 1.2, P, 2).top}"/>` + L(grid.join(""), { tone: "faint" }) + L(k.planOutline(k.insetPlan(plan, 1.2), WING_Z + 1.2, P, 2), { tone: "lo" }), "experience", 0);
     }
-    for (const yy of [80, 179]) put([0, sign * yy, WING_Z + 1], S(k.slabOf({ x: -30, y: sign > 0 ? yy - 1 : -yy - 1, w: 60, d: 2, r: 0.5 }, WING_Z + 1.2, 1.2, P, 2), { tone: "mid" }), "", 0.6);
+    for (const yy of [80, 179]) put([0, sign * yy, WING_Z + 1], S(k.slabOf({ x: -30, y: sign > 0 ? yy - 1 : -yy - 1, w: 60, d: 2, r: 0.5 }, WING_Z + 1.2, 1.2, P, 2), { tone: "mid" }), "experience", 0.6);
     // radiator panel off the truss, fins edge to edge
     const rp = { x: -34, y: sign * 60 - 6, w: 30, d: 12, r: 0.6 };
     const fins = []; for (let x = rp.x + 2.5; x < rp.x + rp.w; x += 2.5) fins.push(k.lineOnTop([x, rp.y], [x, rp.y + rp.d], WING_Z + 0.8, P));
@@ -115,20 +116,31 @@ function build() {
     // navigation light at the wing tip
     put([0, sign * 181, WING_Z + 2], `<circle class="st-nav ${sign > 0 ? "st-green" : "st-red"}" cx="${at([0, sign * 181, WING_Z + 2])[0].toFixed(1)}" cy="${at([0, sign * 181, WING_Z + 2])[1].toFixed(1)}" r="1.6"/>`, "", 5);
   }
-  put([81, 0, 0], `<circle class="st-nav st-white" cx="${at([81.4, 0, 0])[0].toFixed(1)}" cy="${at([81.4, 0, 0])[1].toFixed(1)}" r="1.4"/>`, "crew", 6);
+  put([81, 0, 0], `<circle class="st-nav st-white" cx="${at([81.4, 0, 0])[0].toFixed(1)}" cy="${at([81.4, 0, 0])[1].toFixed(1)}" r="1.4"/>`, "work", 6);
   items.sort((a, b) => a.k - b.k);
   return items.map((it) => `<g class="st-it"${it.mod ? ` data-mod="${it.mod}"` : ""}>${it.svg}</g>`).join("");
 }
 const clamp01 = (x) => Math.max(0, Math.min(1, x));
 
 export const MODULES = {
-  crew: { name: "Crew module", says: "About me" },
+  work: { name: "Lab module", says: "Work" },
+  experience: { name: "Solar arrays", says: "Experience" },
   skills: { name: "Observatory", says: "Skills" },
-  log: { name: "Log module", says: "Experience" },
-  comms: { name: "Comms array", says: "Contact" },
+  about: { name: "Crew quarters", says: "About" },
+  contact: { name: "Comms dish", says: "Contact" },
 };
-// screen anchor (in viewBox units) for each module's label
-export const ANCHORS = { crew: at([66, 0, 14]), skills: at([46, -6, 34]), log: at([12, 0, -60]), comms: at([-28, 0, 52]) };
+// anchor points (viewBox units) where each part's hotspot sits; the wing on the right of the screen carries Experience
+const wingSign = at([0, 130, 26])[0] > at([0, -130, 26])[0] ? 1 : -1;
+export const ANCHORS = {
+  work: at([28, 6, -8]),
+  experience: at([0, wingSign * 132, 26.6]),
+  skills: at([47, -9, 36]),
+  about: at([0, 0, -48]),
+  contact: at(G.add3(DISH_O, G.mul3(DISH_A, 3))),
+  dock: at([81, 0, 0]),
+};
+// the direction the docking port points on screen (the ship sits nose-out along it)
+export const DOCK_DIR = (() => { const a = at([81, 0, 0]), b = at([95, 0, 0]); return Math.atan2(b[1] - a[1], b[0] - a[0]); })();
 
 const CSS = `
 .st{position:relative}
@@ -137,7 +149,7 @@ const CSS = `
 .st [data-mod] .iso-edge,.st [data-mod] .iso-top,.st [data-mod] .iso-shade,.st [data-mod] .iso-fill{transition:fill .5s,stroke .5s}
 .st [data-mod][data-on] .iso-top{fill:var(--anatomy-lit-top)}
 .st [data-mod][data-on] .iso-shade{fill:var(--anatomy-lit-shade)}
-.st [data-mod][data-on] .iso-edge{stroke:var(--anatomy-lit)}
+.st [data-mod][data-on] .iso-edge{stroke:var(--anatomy-lit);stroke-width:1.1px}
 .st [data-mod][data-on] .iso-solid[data-seamless]>.iso-shade{stroke:var(--anatomy-lit-shade)}
 .st[data-focus] .st-it:not([data-on]) .iso-edge[data-tone="hi"]{stroke:var(--anatomy-mid)}
 .st .st-window{fill:#ffcf8a;opacity:.85;filter:drop-shadow(0 0 2px #ffbf73)}
@@ -154,7 +166,7 @@ const CSS = `
 export function mount(root, { onHover, onSelect } = {}) {
   const style = document.createElement("style"); style.textContent = CSS;
   root.classList.add("st", "iso", "space");
-  const label = "An orbital station: a central node with a crew module and docking adapter, an observatory cupola with a telescope, a log module with a domed end, a comms dish, and a truss carrying two solar wings and radiators. Each module is a section of the site.";
+  const label = "An orbital station that works as the site menu: a lab module with a docking port (Work), two solar arrays (Experience), an observatory cupola with a telescope (Skills), crew quarters below the central node (About), and a comms dish (Contact).";
   root.innerHTML = k.figureSvg({ width: VIEW.w, height: VIEW.h, label, body: build() });
   root.prepend(style);
   let on = null;
