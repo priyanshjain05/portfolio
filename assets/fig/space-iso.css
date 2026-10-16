@@ -1,0 +1,11 @@
+/* Space palette for anatomy figures: navy paper, blue-grey lines, cyan lit accent */
+.iso.space{
+  --anatomy-page:#05060d;--anatomy-card:transparent;--anatomy-text:#a9b3c9;--anatomy-strong:#e9edf7;--anatomy-muted:#6f7a94;
+  --anatomy-paper:#0b1126;--anatomy-face:#141d38;--anatomy-top:#18223f;
+  --anatomy-shade-0:#0a0f22;--anatomy-shade-1:#0d1329;--anatomy-shade-2:#111831;--anatomy-shade-3:#151d39;
+  --anatomy-lit-top:#1c2a4f;--anatomy-lit-shade:#152242;
+  --anatomy-hi:#e6edfb;--anatomy-mid:#8494b6;--anatomy-lo:#526080;--anatomy-faint:#323e5e;--anatomy-lit:#7fe3ff;
+  --anatomy-halo:#000;--anatomy-halo-opacity:.8;--anatomy-dot:#dfe8ff;
+  --anatomy-red:#ff6b7a;--anatomy-green:#7cf2b9;--anatomy-blue:#7fb2ff;
+}
+.iso.space .iso-plate{--anatomy-paper:#0b1126}
