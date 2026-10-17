@@ -630,7 +630,6 @@ const startHash = parse(location.hash);
 const showIntro = startHash.home && !RM && !session.get("pj-intro");
 measure();
 if (showIntro) { body.classList.add("intro"); $("#intro").classList.remove("gone"); }
-document.documentElement.classList.remove("pre-intro");   // the early guess in <head> hands over to the real decision
 Space.start({ intro: showIntro });
 if (!showIntro) { Space.home(homeBox, { instant: true }); route(); }
 booted = !showIntro;

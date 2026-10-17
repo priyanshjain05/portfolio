@@ -3,7 +3,8 @@
 // It rewrites only the regions of index.html between <!-- gen:NAME --> and <!-- /gen:NAME -->,
 // and writes sitemap.xml and robots.txt. Everything a text-only fetch, a search engine or a screen
 // reader needs (name, tagline, target line, projects, experience, skills, links) ends up in the page source.
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync, readdirSync, statSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { SITE, CATEGORIES, PROJECTS, EXPERIENCE, STATS, SKILLS, ABOUT } from "../assets/content.js";
@@ -333,6 +334,15 @@ put("hotspots", hotspots());
 put("tabbar", tabbar());
 put("tabs", sectionTabs());
 put("panels", panels());
+// every script gets a content fingerprint through an import map, so after a deploy a browser never mixes
+// a fresh file with a stale cached one (GitHub Pages lets browsers cache files for ten minutes)
+const scripts = [];
+const walk = (dir) => { for (const f of readdirSync(join(ROOT, dir))) { const rel = `${dir}/${f}`; if (statSync(join(ROOT, rel)).isDirectory()) walk(rel); else if (/\.m?js$/.test(f)) scripts.push(rel); } };
+walk("assets");
+const stamp = (rel) => createHash("sha1").update(readFileSync(join(ROOT, rel))).digest("hex").slice(0, 10);
+const imports = Object.fromEntries(scripts.sort().map((rel) => [`./${rel}`, `./${rel}?v=${stamp(rel)}`]));
+put("importmap", `<script type="importmap">${JSON.stringify({ imports })}</script>${["assets/ui.js", "assets/space.js", "assets/fig/station.mjs"].map((rel) => `<link rel="modulepreload" href="${rel}?v=${stamp(rel)}">`).join("")}`);
+put("entry", `<script type="module" src="assets/ui.js?v=${stamp("assets/ui.js")}"></script>`);
 // the figure styles, inlined so they don't block the first paint as separate requests
 put("isocss", "\n" + readFileSync(join(ROOT, "assets/kit/iso.css"), "utf8") + readFileSync(join(ROOT, "assets/fig/space-iso.css"), "utf8"));
 // the station drawing, rendered here so the page doesn't spend a second building it on a phone

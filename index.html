@@ -28,7 +28,7 @@
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
-<script>/* decide before the first paint whether the intro plays, so the station never flashes first */try{if(!location.hash.replace(/^#\/?/,"")&&!matchMedia("(prefers-reduced-motion: reduce)").matches&&!sessionStorage.getItem("pj-intro"))document.documentElement.classList.add("pre-intro")}catch(e){}</script>
+<!-- gen:importmap --><script type="importmap">{"imports":{"./assets/content.js":"./assets/content.js?v=6c12268861","./assets/fig/cabin.mjs":"./assets/fig/cabin.mjs?v=8d2423ef7b","./assets/fig/comms.mjs":"./assets/fig/comms.mjs?v=f41a34821a","./assets/fig/cupola.mjs":"./assets/fig/cupola.mjs?v=9efcadfe44","./assets/fig/dish.mjs":"./assets/fig/dish.mjs?v=bbfd6af994","./assets/fig/hatch.mjs":"./assets/fig/hatch.mjs?v=3fabeb8b1d","./assets/fig/mission001.mjs":"./assets/fig/mission001.mjs?v=1d2d597f9d","./assets/fig/solar.mjs":"./assets/fig/solar.mjs?v=6298cb9a65","./assets/fig/station.mjs":"./assets/fig/station.mjs?v=6fb38ef629","./assets/kit/audit.mjs":"./assets/kit/audit.mjs?v=0edd59b8fa","./assets/kit/gl.mjs":"./assets/kit/gl.mjs?v=37e76fedb1","./assets/kit/iso-kit.mjs":"./assets/kit/iso-kit.mjs?v=46c0b262a4","./assets/kit/lathe.mjs":"./assets/kit/lathe.mjs?v=034310ce13","./assets/kit/tube.mjs":"./assets/kit/tube.mjs?v=1bafc8d37c","./assets/render.js":"./assets/render.js?v=a40a4958bb","./assets/space.js":"./assets/space.js?v=28867e3955","./assets/ui.js":"./assets/ui.js?v=b403ab8f62"}}</script><link rel="modulepreload" href="assets/ui.js?v=b403ab8f62"><link rel="modulepreload" href="assets/space.js?v=28867e3955"><link rel="modulepreload" href="assets/fig/station.mjs?v=6fb38ef629"><!-- /gen:importmap -->
 <style id="iso-css"><!-- gen:isocss -->
 .iso{
   --anatomy-page:#0b0b0b;--anatomy-card:#131313;--anatomy-text:#a3a3a3;--anatomy-strong:#e6e6e6;--anatomy-muted:#6e6e6e;
@@ -148,7 +148,6 @@
 }
 .iso.space .iso-plate{--anatomy-paper:#0b1126}
 <!-- /gen:isocss --></style>
-<link rel="modulepreload" href="assets/space.js">
 <style>
 :root{
   --bg:#04050b; --ink:#e9edf7; --ink-2:#c9cfdc; --muted:#a3abbf; --dim:#8a93a8;
@@ -202,9 +201,7 @@ body.intro .hud *,body.warping .hud *{pointer-events:none}
 #intro{position:fixed;inset:0;z-index:35;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;transition:opacity .9s var(--ease),transform 1.2s var(--ease)}
 #intro::before{content:"";position:absolute;left:50%;top:50%;width:min(900px,120vw);height:min(440px,70vh);transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(4,5,11,.66),rgba(4,5,11,0));z-index:-1;pointer-events:none}
 #intro.gone{opacity:0;transform:scale(1.06);pointer-events:none;visibility:hidden;transition:opacity .9s var(--ease),transform 1.2s var(--ease),visibility 0s 1.2s}
-html.pre-intro .home,html.pre-intro .hud,html.pre-intro .tabbar,html.pre-intro #station,html.pre-intro #hint{visibility:hidden}
-html.pre-intro #intro.gone{opacity:1;transform:none;visibility:visible;pointer-events:auto;transition:none}
-html.pre-intro .skip-intro{display:inline-flex!important}
+body.intro #intro.gone{opacity:1;transform:none;visibility:visible;pointer-events:auto;transition:none}
 .i-kicker{font:500 12px var(--mono);letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
 .i-name{font:600 clamp(48px,9vw,128px)/.95 var(--display);letter-spacing:-.035em;margin:18px 0;text-shadow:0 0 60px rgba(4,5,11,.9)}
 .i-tag{font:400 clamp(19px,2.4vw,28px) var(--display);color:var(--ink-2)}
@@ -810,6 +807,7 @@ body.diving .tabbar{opacity:0;pointer-events:none}
 </style>
 </head>
 <body class="iso space">
+<script>/* start in the intro before anything paints; any version of ui.js turns this off on Enter or Skip */try{if(!location.hash.replace(/^#\/?/,"")&&!matchMedia("(prefers-reduced-motion: reduce)").matches&&!sessionStorage.getItem("pj-intro"))document.body.classList.add("intro")}catch(e){}</script>
 <a class="skip" href="#content">Skip to content</a>
 <canvas id="space" aria-hidden="true"></canvas>
 <div id="flash" aria-hidden="true"></div>
@@ -1325,6 +1323,6 @@ body.diving .tabbar{opacity:0;pointer-events:none}
 </ul></nav>
 <div class="sr" aria-live="polite" id="live"></div>
 <div class="cine" aria-hidden="true"></div>
-<script type="module" src="assets/ui.js"></script>
+<!-- gen:entry --><script type="module" src="assets/ui.js?v=b403ab8f62"></script><!-- /gen:entry -->
 </body>
 </html>
