@@ -71,13 +71,15 @@ function hero() {
 <nav class="h-nav" aria-label="Sections">
   <p class="h-nav-k" id="hnav-k">Open a section</p>
   <ul aria-labelledby="hnav-k">
-${SECTIONS.map((s) => `    <li><a href="#/${s.id}" data-sec-link="${s.id}">${esc(s.label)}</a></li>`).join("\n")}
-    <li><a href="${esc(SITE.resume)}" target="_blank" rel="noopener">Resume (PDF)</a></li>
+${SECTIONS.filter((s) => HERO_LINKS.includes(s.id)).map((s) => `    <li><a href="#/${s.id}" data-sec-link="${s.id}">${esc(s.label)}</a></li>`).join("\n")}
   </ul>
 </nav>
 <p class="h-explore"><a class="linkish" href="#/explore">Explore the universe →</a> <span>An optional map of the same work</span></p>
 `;
 }
+
+// the three section links under the hero (Resume, Email and LinkedIn are the buttons above; every section is on the station)
+const HERO_LINKS = ["work", "experience", "skills"];
 
 function hotspots() {
   const all = [...SECTIONS, RESUME];
