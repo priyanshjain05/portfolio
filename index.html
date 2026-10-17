@@ -469,7 +469,68 @@ body.diving .tabbar{opacity:0;pointer-events:none}
 .facts dt{font:500 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding-top:3px}
 .facts dd{color:var(--ink-2)}
 .facts a{color:var(--cyan)}
-.contact{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.9fr);gap:18px;align-items:center}
+.contact{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:40px;align-items:center;min-height:100%}
+.ct-k{font:500 12px var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--cyan)}
+.ct-h{margin-top:10px;font:600 clamp(30px,3vw,44px)/1.04 var(--display);letter-spacing:-.03em;color:var(--ink)}
+.contact .lead{margin-top:14px;max-width:34ch;color:var(--ink-2)}
+.ct-links{display:flex;flex-wrap:wrap;align-items:center;gap:10px 26px;margin-top:22px}
+.ct-links li{display:flex;align-items:center;gap:10px}
+.ct-links a{display:inline-flex;align-items:center;gap:8px;min-height:44px;font:500 16px var(--body);color:var(--ink);text-decoration:none;border-bottom:1.5px solid rgba(233,237,247,.6);transition:border-color .3s,color .3s}
+.ct-links a:hover{color:#fff;border-color:var(--cyan)}
+.ct-links a span{transition:transform .3s var(--ease-out)}
+.ct-links a:hover span{transform:translateX(3px)}
+.ct-copy{min-height:32px;padding:0 10px;border-radius:999px;border:1px solid var(--line-2);font:500 12px var(--mono);letter-spacing:.06em;color:var(--muted)}
+.ct-copy:hover{color:var(--ink);border-color:var(--cyan)}
+/* the uplink form: mission paper header, then the fields */
+.uplink{--p:0;position:relative;border-radius:18px;overflow:hidden;border:1px solid rgba(127,227,255,.28);background:linear-gradient(180deg,rgba(9,14,34,.92),rgba(5,8,20,.95));box-shadow:0 30px 80px -30px rgba(0,0,0,.9),0 0 50px -24px rgba(127,227,255,.45)}
+.uplink::before{content:"";position:absolute;inset:8px;pointer-events:none;opacity:.7;--b:linear-gradient(var(--cyan),var(--cyan));background:var(--b) top left/12px 1.5px,var(--b) top left/1.5px 12px,var(--b) top right/12px 1.5px,var(--b) top right/1.5px 12px,var(--b) bottom left/12px 1.5px,var(--b) bottom left/1.5px 12px,var(--b) bottom right/12px 1.5px,var(--b) bottom right/1.5px 12px;background-repeat:no-repeat}
+.ul-head{position:relative;padding:20px 26px 0;background:linear-gradient(180deg,rgba(127,227,255,.1),rgba(127,227,255,.03)),repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px);border-bottom:1px solid rgba(127,227,255,.18)}
+.ul-k{display:flex;align-items:center;gap:8px;font:500 12px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.ul-k i{width:7px;height:7px;border-radius:50%;background:var(--mint);box-shadow:0 0 8px var(--mint);animation:breathe 2.4s var(--ease) infinite}
+.ul-title{margin-top:6px;font:600 32px/1.05 var(--display);letter-spacing:-.03em;color:#fff}
+.ul-route{margin-top:6px;font:500 15px var(--body);color:var(--ink)}
+.ul-route span{margin:0 4px 0 0;font-weight:400;color:var(--dim)}
+.ul-route span+span,.ul-route span:not(:first-child){margin-left:14px}
+.ul-steps{position:relative;display:grid;grid-template-columns:repeat(3,1fr);margin-top:14px}
+.ul-steps li{padding:10px 0 12px;font:500 14px var(--body);color:var(--dim);transition:color .3s}
+.ul-steps li[aria-current],.ul-steps li.done{color:var(--ink)}
+.ul-steps li.done::after{content:" ✓";color:var(--mint)}
+.ul-steps::after{content:"";position:absolute;left:0;bottom:-1px;height:2px;width:calc(100% / 3);background:var(--cyan);box-shadow:0 0 10px var(--cyan);transform:translateX(calc(var(--p) * 200%));transition:transform .5s var(--ease-out)}
+.uplink.is-sent .ul-steps::after{width:100%;transform:none}
+.ul-body{padding:20px 26px 22px}
+.ul-step{border:0;margin:0;padding:0;min-width:0;display:grid;gap:16px;animation:fadeUp .45s var(--ease-out)}
+.ul-step[hidden]{display:none}
+.ul-field{display:grid;gap:6px}
+.ul-field span{font:500 13px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.ul-field input,.ul-field textarea{width:100%;padding:8px 2px 10px;border:0;border-bottom:1.5px solid rgba(233,237,247,.35);background:transparent;color:var(--ink);font:400 17px var(--body);outline:none;resize:none;transition:border-color .3s,box-shadow .3s}
+.ul-field input:focus,.ul-field textarea:focus{border-color:var(--cyan);box-shadow:0 8px 14px -12px var(--cyan)}
+.ul-field [aria-invalid="true"]{border-color:var(--rose,#ff8a9a)}
+.ul-topics{display:flex;flex-wrap:wrap;gap:8px}
+.ul-topics label{position:relative}
+.ul-topics input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.ul-topics span{display:inline-flex;align-items:center;min-height:38px;padding:0 14px;border-radius:999px;border:1px solid var(--line-2);font:500 14px var(--body);color:var(--ink-2);transition:all .3s}
+.ul-topics input:checked+span{border-color:var(--cyan);color:#fff;background:rgba(127,227,255,.12);box-shadow:0 0 14px -4px var(--cyan)}
+.ul-topics input:focus-visible+span{outline:2px solid var(--cyan);outline-offset:2px}
+.ul-review{display:grid;gap:8px}
+.ul-review div{display:grid;grid-template-columns:96px minmax(0,1fr);gap:12px}
+.ul-review dt{font:500 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding-top:2px}
+.ul-review dd{font-size:15px;color:var(--ink);overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.ul-note{font-size:13.5px;color:var(--muted)}
+.ul-error{min-height:20px;margin-top:10px;font-size:14px;color:#ff9aa8}
+.ul-nav{display:flex;justify-content:flex-end;gap:10px}
+.ul-nav[hidden]{display:none}
+.ul-btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 22px;border-radius:999px;font:600 15px var(--display);letter-spacing:.02em;color:#04121c;background:linear-gradient(180deg,#a9f0ff,#5fd3f3);box-shadow:0 0 0 1px rgba(127,227,255,.6),0 10px 30px -10px rgba(127,227,255,.8);transition:transform .3s var(--ease),box-shadow .3s}
+.ul-btn:hover{transform:translateY(-1px);box-shadow:0 0 0 1px #bff4ff,0 12px 34px -8px rgba(127,227,255,.95)}
+.ul-btn.ghost{color:var(--ink);background:transparent;box-shadow:inset 0 0 0 1px var(--line-2)}
+.ul-btn.ghost:hover{box-shadow:inset 0 0 0 1px var(--cyan)}
+.ul-back{margin-right:auto}
+.ul-back[hidden]{display:none}
+.ul-sent .ul-nav{justify-content:flex-start;flex-wrap:wrap}
+.ul-sent{display:grid;gap:10px;justify-items:start;animation:fadeUp .45s var(--ease-out)}
+.ul-sent[hidden]{display:none}
+.ul-sent-h{font:600 22px var(--display);color:var(--mint)}
+.ul-sent p{font-size:15px;color:var(--ink-2)}
+.ul-sent a{color:var(--cyan)}
 .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
 .copied{min-height:20px;margin-top:8px;font-size:14px;color:var(--mint)}
 .contact-fig{aspect-ratio:640/470}
@@ -711,6 +772,30 @@ body.diving .tabbar{opacity:0;pointer-events:none}
   .wp-more{display:none}
   .starchart{display:none}
   .starlist{position:static;width:auto;height:auto;overflow:visible;clip:auto;white-space:normal;display:grid;gap:14px}
+}
+
+@media (max-width:760px), (max-aspect-ratio:4/5){
+  .contact{grid-template-columns:1fr;gap:14px;align-items:start;min-height:0}
+  .ct-k,.contact .lead{display:none}
+  .ct-h{margin-top:0;font-size:24px}
+  .ct-links{margin-top:6px;gap:4px 18px}
+  .ct-links a{font-size:15px;min-height:40px}
+  .copied{min-height:0;margin:0}
+  .ul-head{padding:14px 18px 0}
+  .ul-k{display:none}
+  .ul-title{font-size:24px;margin-top:0}
+  .ul-field textarea{height:64px}
+  .ul-review{gap:5px}
+  .ul-review dd{-webkit-line-clamp:2;font-size:14px}
+  .ul-note{font-size:13px}
+  .ul-route{font-size:14px}
+  .ul-steps{margin-top:8px}
+  .ul-steps li{padding:8px 0 10px;font-size:13px}
+  .ul-body{padding:14px 18px 16px}
+  .ul-step{gap:10px}
+  .ul-field input,.ul-field textarea{font-size:16px;padding:6px 2px 8px}
+  .ul-topics span{min-height:34px;padding:0 11px;font-size:13px}
+  .ul-error{min-height:0;margin-top:6px}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
@@ -1177,18 +1262,40 @@ body.diving .tabbar{opacity:0;pointer-events:none}
   <h3 class="sr" id="sec-contact-h">Contact</h3>
   <div class="contact">
     <div class="contact-text">
-      <p class="about-h">Let's build what comes next.</p>
+      <p class="ct-k">Open a channel</p>
+      <p class="ct-h">Let's build what comes next.</p>
       <p class="lead">Looking for PM internships and full-time roles, especially at space companies.</p>
-      <dl class="facts"><div><dt>Email</dt><dd><a href="mailto:priyansh.jain@stern.nyu.edu">priyansh.jain@stern.nyu.edu</a></dd></div><div><dt>LinkedIn</dt><dd><a href="https://www.linkedin.com/in/priyanshjain05/" target="_blank" rel="noopener">in/priyanshjain05</a></dd></div><div><dt>Based in</dt><dd>New York, open to relocating</dd></div></dl>
-      <ul class="actions">
-        <li><button type="button" class="btn primary" data-copy="priyansh.jain@stern.nyu.edu">Copy email</button></li>
-        <li><a class="btn" href="mailto:priyansh.jain@stern.nyu.edu">Email</a></li>
-        <li><a class="btn" href="https://www.linkedin.com/in/priyanshjain05/" target="_blank" rel="noopener">LinkedIn</a></li>
-        <li><a class="btn" href="assets/Priyansh_Jain_Resume.pdf" target="_blank" rel="noopener">Resume (PDF)</a></li>
+      <ul class="ct-links">
+        <li><a href="mailto:priyansh.jain@stern.nyu.edu">priyansh.jain@stern.nyu.edu <span aria-hidden="true">→</span></a><button type="button" class="ct-copy" data-copy="priyansh.jain@stern.nyu.edu">Copy</button></li>
+        <li><a href="https://www.linkedin.com/in/priyanshjain05/" target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">→</span></a></li>
       </ul>
       <p class="copied" role="status" aria-live="polite"></p>
     </div>
-    <div class="fig-mount contact-fig" data-figure="comms" aria-hidden="true"></div>
+    <form class="uplink" id="uplink" novalidate aria-labelledby="ul-title">
+      <header class="ul-head">
+        <p class="ul-k"><i aria-hidden="true"></i>Uplink · channel open</p>
+        <h4 class="ul-title" id="ul-title">Transmission</h4>
+        <p class="ul-route"><span>To</span> Priyansh Jain <span>From</span> your station</p>
+        <ol class="ul-steps" aria-label="Steps"><li aria-current="step">1. Call sign</li><li>2. Mission</li><li>3. Transmit</li></ol>
+      </header>
+      <div class="ul-body">
+        <fieldset class="ul-step" data-step="1"><legend class="sr">Step 1 of 3: call sign</legend>
+          <label class="ul-field"><span>Name</span><input name="name" autocomplete="name" required maxlength="80"></label>
+          <label class="ul-field"><span>Email</span><input name="email" type="email" autocomplete="email" required maxlength="120"></label>
+        </fieldset>
+        <fieldset class="ul-step" data-step="2" hidden><legend class="sr">Step 2 of 3: mission</legend>
+          <div class="ul-topics" role="radiogroup" aria-label="What it's about"><label><input type="radio" name="topic" value="PM internship" checked><span>PM internship</span></label><label><input type="radio" name="topic" value="Full-time role"><span>Full-time role</span></label><label><input type="radio" name="topic" value="Project or collaboration"><span>Project or collaboration</span></label><label><input type="radio" name="topic" value="Just saying hi"><span>Just saying hi</span></label></div>
+          <label class="ul-field"><span>Message</span><textarea name="message" rows="3" required maxlength="2000"></textarea></label>
+        </fieldset>
+        <fieldset class="ul-step" data-step="3" hidden><legend class="sr">Step 3 of 3: review and transmit</legend>
+          <dl class="ul-review"><div><dt>From</dt><dd data-r="name"></dd></div><div><dt>Reply to</dt><dd data-r="email"></dd></div><div><dt>About</dt><dd data-r="topic"></dd></div><div><dt>Message</dt><dd data-r="message"></dd></div></dl>
+          <p class="ul-note">Transmitting opens your email app with this message ready to send.</p>
+        </fieldset>
+        <div class="ul-sent" hidden><p class="ul-sent-h">Signal sent</p><p>Your email app should open with the message ready. If it didn't, copy it and send it to <a href="mailto:priyansh.jain@stern.nyu.edu">priyansh.jain@stern.nyu.edu</a>.</p><div class="ul-nav"><button type="button" class="ul-btn ghost" data-copy-msg>Copy message</button><button type="button" class="ul-btn ghost" data-reset>New transmission</button></div></div>
+        <p class="ul-error" role="alert"></p>
+        <div class="ul-nav"><button type="button" class="ul-btn ghost ul-back" hidden>← Back</button><button type="submit" class="ul-btn ul-next">Next →</button></div>
+      </div>
+    </form>
   </div>
 </section><!-- /gen:panels -->
       </div>

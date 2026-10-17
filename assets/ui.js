@@ -285,7 +285,6 @@ function render(sec, sub, animate = true) {
   } else {
     document.title = `${LABEL[sec]} · Priyansh Jain`;
     live(LABEL[sec]);
-    if (sec === "contact") mountFigure(el);
   }
   fit();
   if (animate) enterAnim();
@@ -325,7 +324,56 @@ async function copy(text) {
 $("#pScrim").addEventListener("click", () => go(origin === "explore" ? "#/explore" : "#/"));
 $("#pClose").addEventListener("click", (e) => { e.preventDefault(); go(origin === "explore" ? "#/explore" : "#/"); });
 
-// figures: the Mission 001 anatomy figure in its case view, the comms antenna in Contact (wide screens)
+// contact: a three-step uplink. There's no server; transmitting opens the visitor's email app with the message filled in.
+const form = $("#uplink");
+if (form) {
+  const EMAIL = $(".ct-links a[href^='mailto']", panel).getAttribute("href").slice(7);
+  const steps = $$(".ul-step", form), tabs = $$(".ul-steps li", form), err = $(".ul-error", form);
+  const back = $(".ul-back", form), next = $(".ul-next", form), sent = $(".ul-sent", form);
+  const nav = $(".ul-body > .ul-nav", form);
+  const val = (n) => (form.elements[n].value || "").trim();
+  let step = 1;
+  const message = () => `${val("message")}\n\n— ${val("name")} (${val("email")})`;
+  function show(n, focus = true) {
+    step = n; err.textContent = "";
+    steps.forEach((f) => (f.hidden = +f.dataset.step !== n));
+    tabs.forEach((t, i) => { if (i + 1 === n) t.setAttribute("aria-current", "step"); else t.removeAttribute("aria-current"); t.classList.toggle("done", i + 1 < n); });
+    form.style.setProperty("--p", (n - 1) / 2);
+    back.hidden = n === 1; next.textContent = n === 3 ? "Transmit ↗" : "Next →";
+    if (n === 3) for (const dd of $$("[data-r]", form)) dd.textContent = dd.dataset.r === "topic" ? form.elements.topic.value : val(dd.dataset.r);
+    if (focus) { const first = $(`.ul-step[data-step="${n}"] input:not([type=radio]), .ul-step[data-step="${n}"] textarea`, form) || next; first.focus({ preventScroll: true }); }
+    fit();
+  }
+  function check(n) {
+    if (n === 1) {
+      if (!val("name")) return ["name", "Add your name so I know who's calling."];
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val("email"))) return ["email", "That email doesn't look complete."];
+    }
+    if (n === 2 && val("message").length < 2) return ["message", "Write a line or two about what you have in mind."];
+    return null;
+  }
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const bad = check(step);
+    for (const el of $$("input, textarea", form)) el.removeAttribute("aria-invalid");
+    if (bad) { err.textContent = bad[1]; form.elements[bad[0]].setAttribute("aria-invalid", "true"); form.elements[bad[0]].focus(); return; }
+    if (step < 3) return show(step + 1);
+    const subject = `${form.elements.topic.value} · from ${val("name")}`;
+    location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message())}`;
+    steps.forEach((f) => (f.hidden = true)); $(".ul-body > .ul-nav", form).hidden = true; sent.hidden = false;
+    form.classList.add("is-sent"); tabs.forEach((t) => { t.classList.add("done"); t.removeAttribute("aria-current"); });
+    live("Transmission ready in your email app.");
+  });
+  back.addEventListener("click", () => show(Math.max(1, step - 1)));
+  $("[data-reset]", form).addEventListener("click", () => { form.reset(); sent.hidden = true; nav.hidden = false; form.classList.remove("is-sent"); show(1); });
+  $("[data-copy-msg]", form).addEventListener("click", async (e) => {
+    try { await navigator.clipboard.writeText(`To: ${EMAIL}\nSubject: ${form.elements.topic.value} · from ${val("name")}\n\n${message()}`); e.target.textContent = "Copied"; } catch { e.target.textContent = "Select and copy the text above"; }
+  });
+  // Enter in a single-line field moves on; in the message it makes a new line
+  form.addEventListener("keydown", (e) => { if (e.key === "Enter" && e.target.tagName === "INPUT" && e.target.type !== "radio") { e.preventDefault(); form.requestSubmit(); } });
+}
+
+// figures: the Mission 001 anatomy figure in its case view
 const figs = new Map();
 async function mountFigure(scope) {
   for (const m of $$("[data-figure]", scope)) {
@@ -485,7 +533,7 @@ function transit(from, to, sub) {
   }, 360 / speed());
 }
 // content arrives in a short stagger from depth
-const STAG = ".chips, .missions li, .telemetry li, .traj-list li, .sc-con, .sl-group, .about-photo, .about > div > *, .contact-text > *, .contact-fig, .back, .case-head, .case-media, .case-text > *, .case-grid > .part, .pager, .role-detail > *";
+const STAG = ".chips, .missions li, .telemetry li, .traj-list li, .sc-con, .sl-group, .about-photo, .about > div > *, .contact-text > *, .uplink, .back, .case-head, .case-media, .case-text > *, .case-grid > .part, .pager, .role-detail > *";
 function enterAnim() {
   const el = $(".sec:not([hidden])", panel); if (!el || RM) return;
   el.classList.remove("arrive");

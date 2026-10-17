@@ -269,22 +269,47 @@ ${newestFirst.map(roleDetail).join("\n")}
     </div>
   </div>
 </section>`;
+  // contact: the details on the left, a three-step uplink form on the right. It has no server: transmitting
+  // opens the visitor's email app with the message addressed and filled in.
+  const TOPICS = ["PM internship", "Full-time role", "Project or collaboration", "Just saying hi"];
   const contact = `<section class="sec" id="sec-contact" data-sec="contact" aria-labelledby="sec-contact-h" hidden>
   <h3 class="sr" id="sec-contact-h">Contact</h3>
   <div class="contact">
     <div class="contact-text">
-      <p class="about-h">Let's build what comes next.</p>
+      <p class="ct-k">Open a channel</p>
+      <p class="ct-h">Let's build what comes next.</p>
       <p class="lead">${esc(SITE.target)}</p>
-      <dl class="facts"><div><dt>Email</dt><dd><a href="mailto:${esc(SITE.email)}">${esc(SITE.email)}</a></dd></div><div><dt>LinkedIn</dt><dd><a href="${esc(SITE.linkedin)}" target="_blank" rel="noopener">${esc(SITE.linkedinLabel)}</a></dd></div><div><dt>Based in</dt><dd>New York, open to relocating</dd></div></dl>
-      <ul class="actions">
-        <li><button type="button" class="btn primary" data-copy="${esc(SITE.email)}">Copy email</button></li>
-        <li><a class="btn" href="mailto:${esc(SITE.email)}">Email</a></li>
-        <li><a class="btn" href="${esc(SITE.linkedin)}" target="_blank" rel="noopener">LinkedIn</a></li>
-        <li><a class="btn" href="${esc(SITE.resume)}" target="_blank" rel="noopener">Resume (PDF)</a></li>
+      <ul class="ct-links">
+        <li><a href="mailto:${esc(SITE.email)}">${esc(SITE.email)} <span aria-hidden="true">→</span></a><button type="button" class="ct-copy" data-copy="${esc(SITE.email)}">Copy</button></li>
+        <li><a href="${esc(SITE.linkedin)}" target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">→</span></a></li>
       </ul>
       <p class="copied" role="status" aria-live="polite"></p>
     </div>
-    <div class="fig-mount contact-fig" data-figure="comms" aria-hidden="true"></div>
+    <form class="uplink" id="uplink" novalidate aria-labelledby="ul-title">
+      <header class="ul-head">
+        <p class="ul-k"><i aria-hidden="true"></i>Uplink · channel open</p>
+        <h4 class="ul-title" id="ul-title">Transmission</h4>
+        <p class="ul-route"><span>To</span> ${esc(SITE.name)} <span>From</span> your station</p>
+        <ol class="ul-steps" aria-label="Steps"><li aria-current="step">1. Call sign</li><li>2. Mission</li><li>3. Transmit</li></ol>
+      </header>
+      <div class="ul-body">
+        <fieldset class="ul-step" data-step="1"><legend class="sr">Step 1 of 3: call sign</legend>
+          <label class="ul-field"><span>Name</span><input name="name" autocomplete="name" required maxlength="80"></label>
+          <label class="ul-field"><span>Email</span><input name="email" type="email" autocomplete="email" required maxlength="120"></label>
+        </fieldset>
+        <fieldset class="ul-step" data-step="2" hidden><legend class="sr">Step 2 of 3: mission</legend>
+          <div class="ul-topics" role="radiogroup" aria-label="What it's about">${TOPICS.map((t, i) => `<label><input type="radio" name="topic" value="${esc(t)}"${i === 0 ? " checked" : ""}><span>${esc(t)}</span></label>`).join("")}</div>
+          <label class="ul-field"><span>Message</span><textarea name="message" rows="3" required maxlength="2000"></textarea></label>
+        </fieldset>
+        <fieldset class="ul-step" data-step="3" hidden><legend class="sr">Step 3 of 3: review and transmit</legend>
+          <dl class="ul-review"><div><dt>From</dt><dd data-r="name"></dd></div><div><dt>Reply to</dt><dd data-r="email"></dd></div><div><dt>About</dt><dd data-r="topic"></dd></div><div><dt>Message</dt><dd data-r="message"></dd></div></dl>
+          <p class="ul-note">Transmitting opens your email app with this message ready to send.</p>
+        </fieldset>
+        <div class="ul-sent" hidden><p class="ul-sent-h">Signal sent</p><p>Your email app should open with the message ready. If it didn't, copy it and send it to <a href="mailto:${esc(SITE.email)}">${esc(SITE.email)}</a>.</p><div class="ul-nav"><button type="button" class="ul-btn ghost" data-copy-msg>Copy message</button><button type="button" class="ul-btn ghost" data-reset>New transmission</button></div></div>
+        <p class="ul-error" role="alert"></p>
+        <div class="ul-nav"><button type="button" class="ul-btn ghost ul-back" hidden>← Back</button><button type="submit" class="ul-btn ul-next">Next →</button></div>
+      </div>
+    </form>
   </div>
 </section>`;
   return [work, experience, skills, about, contact].join("\n");
