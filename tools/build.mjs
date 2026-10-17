@@ -289,7 +289,7 @@ ${newestFirst.map(roleDetail).join("\n")}
       <header class="ul-head">
         <p class="ul-k"><i aria-hidden="true"></i>Uplink · channel open</p>
         <h4 class="ul-title" id="ul-title">Transmission</h4>
-        <p class="ul-route"><span>To</span> ${esc(SITE.name)} <span>From</span> your station</p>
+        <p class="ul-route"><span>To</span> ${esc(SITE.name)} <span>From</span> Your Station</p>
         <ol class="ul-steps" aria-label="Steps"><li aria-current="step">1. Call sign</li><li>2. Mission</li><li>3. Transmit</li></ol>
       </header>
       <div class="ul-body">
