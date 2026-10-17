@@ -37,13 +37,13 @@ function base() {
   out.push(S(k.slabOf(box, z0, z1 - z0, P, 2, 0.8), { tone: "lo" }));
   const br = [k.segment([30, -30, z0], [30, 30, z1], P), k.segment([30, -30, z1], [30, 30, z0], P), k.segment([-30, 30, z0], [30, 30, z1], P), k.segment([-30, 30, z1], [30, 30, z0], P)];
   out.push(L(br.join(""), { tone: "faint" }));
-  out.push(D([[30, -30, z1], [30, 30, z1], [-30, 30, z1], [30, 30, z0]].map(at), { size: 0.55 }));
+  out.push(D([[30, -30, z1], [30, 30, z1], [-30, 30, z1], [30, 30, z0], [30, -30, z0], [-30, 30, z0]].map(at), { size: 0.55 }));
   // mast foot flange, mast with bands, a cable clamp pair
   const MF = G.frameOf([0, 0, z1], [0, 0, 1], [1, 0, 0], [0, 1, 0]);
   out.push(S(G.disc(0, 3, 12, MF, P, { bevel: 0.6 }), { tone: "mid" }));
   out.push(D(G.dotsOf(MF, 3, 9.6, 8, P, { fade: [0.04, 0.42] }), { size: 0.45 }));
-  const bands = [18, 52, 86, 106].map((s) => G.arcOf(MF, s, MAST_R, P)).join("");
-  out.push(S(G.disc(3, TURRET_Z - z1, MAST_R, MF, P), { tone: "mid", inner: L(bands, { tone: "faint" }) }));
+  out.push(S(G.disc(3, TURRET_Z - z1, MAST_R, MF, P), { tone: "mid" }));
+  for (const s0 of [22, 44]) out.push(S(G.ringBand(s0, s0 + 3, MAST_R, MAST_R + 1.3, MF, P), { tone: "hi" }));
   out.push(S(G.ringBand(64, 68, MAST_R, MAST_R + 1.6, MF, P), { tone: "hi" }));
   // bearing housing under the turret
   out.push(S(G.disc(TURRET_Z - z1 - 6, TURRET_Z - z1, 11, MF, P, { bevel: 0.5 }), { tone: "mid" }));
@@ -63,7 +63,7 @@ function head(az, el) {
   const parts = [];
   // turret and pointer
   let turret = S(k.cylinder(0, 0, TURRET_R, TURRET_Z, TURRET_H, P, 64, 0.6), { tone: "mid" });
-  turret += L(k.lineOnTop(local(TURRET_R - 7, 0, 0).slice(0, 2), local(TURRET_R + 0.2, 0, 0).slice(0, 2), TURRET_Z + TURRET_H, P), { tone: "lit" });
+  turret += L(k.lineOnTop(local(TURRET_R - 7, 0, 0).slice(0, 2), local(TURRET_R + 0.2, 0, 0).slice(0, 2), TURRET_Z + TURRET_H, P), { tone: "lit", free: "start" });
   turret += D([0, 1, 2, 3, 4, 5].map((i) => { const a = az + (i + 0.5) * Math.PI / 3; return at([18 * Math.cos(a), 18 * Math.sin(a), TURRET_Z + TURRET_H]); }), { size: 0.45 });
   const top = TURRET_Z + TURRET_H;
   // cross beam on the turret
@@ -79,7 +79,7 @@ function head(az, el) {
   });
   // elevation drum between the arms
   const drumF = G.frameAlong(local(0, -ARM_Y + ARM_T / 2, AXIS_Z), side);
-  const drum = S(G.disc(0, 2 * ARM_Y - ARM_T, DRUM_R, drumF, P), { tone: "mid", inner: L(G.arcOf(drumF, ARM_Y - ARM_T / 2, DRUM_R, P), { tone: "faint" }) });
+  const drum = S(G.disc(0, 2 * ARM_Y - ARM_T, DRUM_R, drumF, P), { tone: "mid" });
   // counterweight on a short arm behind the drum
   const back = G.frameAlong(O, G.mul3(A, -1));
   const cw = S(G.prismOf(back, [[-5, -9], [5, -9], [5, 9], [-5, 9]], DRUM_R - 0.5, DRUM_R + 9, P), { tone: "mid" })
@@ -90,12 +90,12 @@ function head(az, el) {
   dish += S(G.ringBand(VERTEX + DEPTH - 0.7, VERTEX + DEPTH + 0.5, RIM - 0.3, RIM + 1.2, F, P), { tone: "hi" });
   dish += `<path class="iso-shade" data-shade="1" d="${G.circleOf(F, VERTEX + DEPTH - 0.7, dishR(VERTEX + DEPTH - 0.7), P, 120)}"/>`;
   dish += L([2.5, 5, 7].map((d) => G.circleOf(F, VERTEX + d, dishR(VERTEX + d), P, 96)).join(""), { tone: "faint" });
-  dish += L(Array.from({ length: 16 }, (_, i) => k.pathOf(Array.from({ length: 10 }, (_, j) => { const ss = VERTEX + 0.9 + (j / 9) * (DEPTH - 1.6); return at(G.pointOf(F, ss, dishR(ss), (i / 16) * Math.PI * 2)); }))).join(""), { tone: "faint" });
+  dish += L(Array.from({ length: 16 }, (_, i) => k.pathOf(Array.from({ length: 10 }, (_, j) => { const s0 = VERTEX + (4.6 * 4.6) / F4, ss = s0 + (j / 9) * (VERTEX + DEPTH - 0.7 - s0); return at(G.pointOf(F, ss, dishR(ss), (i / 16) * Math.PI * 2)); }))).join(""), { tone: "faint" });
   dish += L(G.circleOf(F, VERTEX + DEPTH - 0.7, dishR(VERTEX + DEPTH - 0.7), P, 120), { tone: "mid" });
   dish += S(G.disc(VERTEX, VERTEX + 1.2, 4.6, F, P), { tone: "mid" });
   // quadripod to the feed at the focus
-  const legs = [0, 1, 2, 3].map((i) => k.segment(G.pointOf(F, VERTEX + DEPTH, RIM - 0.2, i * Math.PI / 2 + Math.PI / 4), G.pointOf(F, FOCUS - 2.4, 2.2, i * Math.PI / 2 + Math.PI / 4), P)).join("");
-  dish += L(legs, { tone: "mid" });
+  const legs = [0, 1, 2, 3].map((i) => k.segment(G.pointOf(F, VERTEX + DEPTH - 0.7, dishR(VERTEX + DEPTH - 0.7), i * Math.PI / 2 + Math.PI / 4), G.pointOf(F, FOCUS - 2.4, 2.2, i * Math.PI / 2 + Math.PI / 4), P)).join("");
+  dish += L(legs, { tone: "mid" }) + D([0, 1, 2, 3].map((i) => at(G.pointOf(F, FOCUS - 2.4, 2.2, i * Math.PI / 2 + Math.PI / 4))), { size: 0.5 });
   const feed = G.frameAlong(G.pointOf(F, FOCUS + 2, 0, 0), G.mul3(A, -1));
   const horn = G.solidOf([[0, 1.4], [1.2, 1.4], [1.2, 3.2], [5.4, 2.2]], feed, P);
   dish += S(horn, { tone: "hi" }) + `<g class="dz-feed">${S(horn, { tone: "hi", lit: true })}</g>`;

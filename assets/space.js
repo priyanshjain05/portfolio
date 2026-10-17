@@ -114,7 +114,11 @@ class Galaxy {
 }
 let introGalaxy = null, galSprites = [], sunTex = null, planetTex = [], nebTex = [], mw = null, MW_M = 420;
 const jobs = [];
-const pump = () => { const job = jobs.shift(); if (job) setTimeout(() => { job(); pump(); }, 40); };
+// background textures are made one at a time in idle moments, after the first paint, so loading stays responsive
+const idle = (f) => (window.requestIdleCallback ? requestIdleCallback(f, { timeout: 3000 }) : setTimeout(f, 120));
+const pump = () => { const job = jobs.shift(); if (job) idle(() => { job(); pump(); }); };
+let pumpStarted = false;
+const makeIntro = () => new Galaxy({ seed: 4242, n: tall ? 6000 : 12000, arms: 2, twist: 4.6, tilt: -0.28, flat: 0.44, spin: 0.018, color: "#9ec4ff", intro: true, spread: 1.9, disk: 0.42 });
 // each portfolio galaxy has a real morphology; colour stays natural (warm cores, blue arms, pink knots, dark dust)
 const GAL_MORPH = [
   { seed: 11, flat: 0.8, tilt: -0.5, arms: 2, twist: 2.3 },                 // face-on grand-design spiral
@@ -132,14 +136,14 @@ const NEB = [
 ];
 const DISTANT = (() => { const r = mulberry(901); return Array.from({ length: 80 }, () => ({ x: (r() * 2 - 1) * 3400, y: (r() * 2 - 1) * 3400, s: 1.4 + r() * 3.2, f: 0.25 + r() * 0.55, ang: r() * Math.PI, warm: r() })); })();
 function buildGalaxies() {
-  introGalaxy = new Galaxy({ seed: 4242, n: tall ? 6000 : 12000, arms: 2, twist: 4.6, tilt: -0.28, flat: 0.44, spin: 0.018, color: "#9ec4ff", intro: true, spread: 1.9, disk: 0.42 });
+  introGalaxy = null;                                   // built on demand, only if the intro plays
   galSprites = GALAXIES.map(() => null);
   const size = tall ? 860 : 1300, density = tall ? 0.6 : 1;
   jobs.length = 0;
   jobs.push(() => { sunTex = sunSprite(tall ? 384 : 560); planetTex = PLANET_KIND.map((k2, i) => planetTexture(k2, 160, 50 + i)); });
   GALAXIES.forEach((_, gi) => jobs.push(() => { galSprites[gi] = galaxySprite({ ...GAL_MORPH[gi], size, density }); }));
   NEB.forEach((n, i) => jobs.push(() => { nebTex[i] = nebulaSprite(tall ? 220 : 300, n.seed, n.rgb, n.a); }));
-  pump();
+  if (pumpStarted) pump(); else { pumpStarted = true; setTimeout(pump, 1500); }
 }
 
 /* ============================ the sky: Milky Way, nebulae, distant galaxies, stars ============================ */
@@ -631,13 +635,14 @@ function layout() {
   cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR); ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   const wasTall = tall; tall = W < 760 || W / H < 0.8;
   exploreS = boxFraming(homeBox).s;
-  if (wasTall !== tall || !introGalaxy) buildGalaxies();
+  if (wasTall !== tall || !galSprites.length) buildGalaxies();
   buildSky();
 }
 
 /* ============================ loop ============================ */
-let clock = 0, last = 0, warpWt = 0;
+let clock = 0, last = 0, warpWt = 0, held = false, running = false;
 function frame(now) {
+  running = true;
   const dt = (last ? Math.min((now - last) / 1000, 1 / 30) : 1 / 60) * (globalThis.__spaceSpeed || 1); last = now; clock += dt;
   const t = RM ? 0 : clock;
   pointer.sx = follow(pointer.sx, pointer.tx, dt, 0.8); pointer.sy = follow(pointer.sy, pointer.ty, dt, 0.8);
@@ -696,7 +701,7 @@ function frame(now) {
     const wt = warp ? warpWt : 0;
     const k = Math.max(W, H) * (tall ? 0.62 : 0.48) * (1 + (warp ? Math.pow(smooth(0, 1.4, wt), 2) * 5 : 0));
     const a = warp ? 1 - smooth(0.4, 1.3, wt) : 1;
-    introGalaxy.draw(W / 2 + (scene === "intro" ? pointer.sx * 18 : 0), H * (tall ? 0.5 : 0.53) + pointer.sy * 12, k, a, t + 40, { psize: tall ? 1.05 : 1.1, haze: 0.55 });
+    (introGalaxy = introGalaxy || makeIntro()).draw(W / 2 + (scene === "intro" ? pointer.sx * 18 : 0), H * (tall ? 0.5 : 0.53) + pointer.sy * 12, k, a, t + 40, { psize: tall ? 1.05 : 1.1, haze: 0.55 });
   }
   subs = [];
   if (hubAlpha > 0.003) {
@@ -786,6 +791,7 @@ function frame(now) {
   }
   syncSubs(0);
   drawRadar(labelVis);
+  if (held) { running = false; return; }
   requestAnimationFrame(frame);
 }
 
@@ -806,7 +812,7 @@ export const Space = {
     layout();
     rocket.park = { id: "dock", a: 0 }; [rocket.x, rocket.y] = dockWorld();
     rocket.ang = DOCK_DIR;
-    if (intro) { scene = "intro"; hubAlpha = 0; }
+    if (intro) { scene = "intro"; hubAlpha = 0; introGalaxy = makeIntro(); }
     else { scene = "home"; hubAlpha = 1; goal = boxFraming(homeBox); Object.assign(cam, goal); }
     requestAnimationFrame(frame);
   },
@@ -846,6 +852,8 @@ export const Space = {
     });
   },
   frameDest(id, box, instant) { goal = destFraming(D[id], box); camTau = 0.62; if (instant || RM) { Object.assign(cam, goal); camV.x = camV.y = camV.l = 0; } },
+  // stop drawing the universe while something opaque covers it; resume where it left off
+  hold(v) { held = !!v; if (!held && !running) { last = 0; running = true; requestAnimationFrame(frame); } },
   setPanel(p) { panel = p; if (!p) stationDim = 1; },
   dimStation(v) { stationDim = v; },
   highlight(mod) { station.set(mod); },

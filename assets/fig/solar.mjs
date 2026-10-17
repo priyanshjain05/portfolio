@@ -76,6 +76,10 @@ function wing(e, b) {
   for (const [x, , z] of lon) mast.push(k.segment(R([x, -12, z]), R([x, tipY, z]), P));
   for (let y = -12 + 9; y < tipY - 2; y += 9) { mast.push(k.segment(R([lon[0][0], y, lon[0][2]]), R([lon[1][0], y, lon[1][2]]), P), k.segment(R([lon[1][0], y, lon[1][2]]), R([lon[2][0], y + 4.5, lon[2][2]]), P)); }
   put([R([0, -12, 0]), R([0, tipY, 0])], Ln(mast.join(""), { tone: "mid" }));
+  // the mast canister at the root, which the longerons run out of
+  const root = [[-6, -26, -5], [6, -26, -5], [6, -12, -5], [-6, -12, -5], [-6, -26, 6], [6, -26, 6], [6, -12, 6], [-6, -12, 6]].map(R);
+  items.push({ k: 1e4 - 1, svg: boxSvg(root, "mid") });
+  items.push({ k: 2e4, svg: Dt(lon.flatMap(([x, , z]) => [at(R([x, -12, z])), at(R([x, tipY, z]))]), { size: 0.55 }) });
   // tip fitting: the bar that holds both blankets' outer edges
   const tip = [[-GAP - W, tipY, -2], [GAP + W, tipY, -2], [GAP + W, tipY + 6, -2], [-GAP - W, tipY + 6, -2], [-GAP - W, tipY, 3], [GAP + W, tipY, 3], [GAP + W, tipY + 6, 3], [-GAP - W, tipY + 6, 3]].map(R);
   items.push({ k: 1e4, svg: boxSvg(tip, "hi") + Dt([R([-GAP - W + 3, tipY + 3, 3]), R([GAP + W - 3, tipY + 3, 3])].map(at), { size: 0.5 }) });

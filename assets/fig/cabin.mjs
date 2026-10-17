@@ -80,7 +80,7 @@ function build(label) {
   // the door, built once at rest and translated along its rail
   const d = [];
   d.push(S(slab(5, -41, 3.2, 82, 6, TOP - 8, 1, 0.6), { tone: "mid", inner: L(k.sideSeam({ x: 5, y: -41, w: 3.2, d: 82, r: 1 }, 30, P, 2), { tone: "faint" }) }));
-  const louver = []; for (let z = 12; z <= 26; z += 2.8) louver.push(k.segment([8.2, -26, z], [8.2, 26, z], P));
+  const louver = []; for (let z = 12.8; z <= 26; z += 2.6) louver.push(k.segment([8.2, -28, z], [8.2, 28, z], P));
   d.push(L(poly([[8.2, -28, 10], [8.2, 28, 10], [8.2, 28, 28], [8.2, -28, 28]]), { tone: "lo" }), L(louver.join(""), { tone: "faint" }));
   d.push(L(poly([[8.2, -24, 52], [8.2, 24, 52], [8.2, 24, 98], [8.2, -24, 98]]), { tone: "faint" }));
   d.push(S(slab(8.2, -14, 0.8, 28, 108, 12, 0.3, 0.2), { tone: "lo", crease: "none" }));

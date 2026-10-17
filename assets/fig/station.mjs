@@ -163,11 +163,13 @@ const CSS = `
 @media (prefers-reduced-motion:reduce){.st .st-nav{animation:none;opacity:.8}}
 `;
 
+const LABEL = "An orbital station that works as the site menu: a lab module with a docking port (Work), two solar arrays (Experience), an observatory cupola with a telescope (Skills), crew quarters below the central node (About), and a comms dish (Contact).";
+export const markup = () => k.figureSvg({ width: VIEW.w, height: VIEW.h, label: LABEL, body: build() });
 export function mount(root, { onHover, onSelect } = {}) {
   const style = document.createElement("style"); style.textContent = CSS;
   root.classList.add("st", "iso", "space");
-  const label = "An orbital station that works as the site menu: a lab module with a docking port (Work), two solar arrays (Experience), an observatory cupola with a telescope (Skills), crew quarters below the central node (About), and a comms dish (Contact).";
-  root.innerHTML = k.figureSvg({ width: VIEW.w, height: VIEW.h, label, body: build() });
+  // tools/build.mjs writes the drawing into the page ahead of time; build it here only if it isn't there
+  if (!root.querySelector("svg")) root.innerHTML = markup();
   root.prepend(style);
   let on = null;
   const set = (mod) => {

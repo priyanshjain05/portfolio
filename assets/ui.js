@@ -46,9 +46,10 @@ function slotRect() {
 /* ============================ hotspots follow the station every frame ============================ */
 let lineEls = {}, hintPos = null;
 function frame(f) {
-  const show = Space.scene === "home" && !panelOpen && !dive && performance.now() > menuHold && f.station.visible && f.station.alpha > 0.15;
+  const show = Space.scene === "home" && !panelOpen && !dive && f.station.visible && f.station.alpha > 0.15;
+  const holding = performance.now() < menuHold;      // labels wait for the camera to settle, but stay focusable
   menu.style.visibility = show ? "visible" : "hidden";
-  menu.style.opacity = show ? Math.min(1, f.station.alpha).toFixed(3) : "0";
+  menu.style.opacity = show && !holding ? Math.min(1, f.station.alpha).toFixed(3) : "0";
   for (const a of Object.values(hots)) a.tabIndex = show ? 0 : -1;
   if (!show) { hint.style.opacity = "0"; return; }
   const { left, top, sc } = f.station, sw = 900 * sc, sh = 560 * sc;
@@ -208,17 +209,17 @@ function openSection(sec, sub) {
     origin = "home"; current = { sec, sub, dest };
     Space.setPanel({ origin });
     if (!panelOpen && !dive && booted && !RM && !document.hidden) {
-      // from the station: fly into the part, cycle its airlock, push through into the module
+      // from the station: fly to the part and play its own arrival
       hidePanelVisual(); render(sec, sub, false);
-      runDive(sec).then((ok) => { if (ok && current && current.sec === sec) showPanel(true); });
+      runScene(sec).then((ok) => { if (ok && current && current.sec === sec) showPanel(true); });
+    } else if (panelOpen && prev && prev.sec !== sec && !RM) {
+      transit(prev.sec, sec, sub);
     } else if (dive && dive.sec === sec) {
-      render(sec, sub, false);
+      if (!panelOpen) render(sec, sub, false);
     } else if (dive) {
       cancelDive(); render(sec, sub, false); Space.focus(sec, insideView()); showPanel(true);
     } else if (!panelOpen) {
       render(sec, sub, false); Space.focus(sec, { ...insideView(), instant: true }); showPanel(firstOpen);
-    } else if (prev && prev.sec !== sec && !RM) {
-      transit(prev.sec, sec, sub);
     } else {
       render(sec, sub); Space.focus(sec, insideView());
     }
@@ -236,6 +237,7 @@ function hidePanelVisual() { wrap.classList.remove("open"); wrap.inert = true; }
 function closePanel() {
   clearTimeout(transitT); panel.classList.remove("transit");
   if (dive) { cancelDive(); menuHold = performance.now() + 700; burst("out"); }
+  dropScene(false);
   if (!panelOpen) return;
   panelOpen = false; current = null;
   menuHold = performance.now() + (RM ? 0 : 700);
@@ -341,92 +343,145 @@ async function mountFigure(scope) {
 function unmountFigures() { for (const [m, h] of figs) { h.destroy?.(); } figs.clear(); }
 
 /* ============================ cinematic: dive into a part, cycle its airlock, move between modules ============================ */
-const airlock = $("#airlock"), alFig = $(".al-fig", airlock), alLight = $(".al-light", airlock), zoomfx = $("#zoomfx");
-const TAG = { work: "LAB", experience: "TRUSS", skills: "OBS", about: "CREW", contact: "COMMS" };
-let dive = null, booted = false, menuHold = 0, transitT = 0, hatchMod = null;
+const airlock = $("#airlock"), alFig = $(".al-fig", airlock), alLight = $(".al-light", airlock), alRings = $(".al-rings", airlock), zoomfx = $("#zoomfx");
+// each part has its own arrival: inside parts are entered (a hatch, a cabin door, the cupola's shutters),
+// outside parts are reached on EVA (the solar wing unfolding, the dish locking on and transmitting)
+const SCENE = {
+  work: { mod: "hatch", label: "LAB 01", cap: "Airlock" },
+  experience: { mod: "solar", cap: "EVA · truss" },
+  skills: { mod: "cupola", cap: "Shutters" },
+  about: { mod: "cabin", label: "CREW 04", cap: "Hatch" },
+  contact: { mod: "dish", cap: "Uplink" },
+};
+const LOADERS = { hatch: () => import("./fig/hatch.mjs"), solar: () => import("./fig/solar.mjs"), cupola: () => import("./fig/cupola.mjs"), cabin: () => import("./fig/cabin.mjs"), dish: () => import("./fig/dish.mjs") };
+const mods = {}, warmed = new Set();
+let dive = null, scene = null, booted = false, menuHold = 0, transitT = 0;
 const clamp01 = (x) => Math.max(0, Math.min(1, x));
 const smooth = (a, b, x) => { const t = clamp01((x - a) / (b - a)); return t * t * (3 - 2 * t); };
+const speed = () => globalThis.__diveSpeed || 1;
+const loadScene = (sec) => { const m = SCENE[sec].mod; return (mods[m] = mods[m] || LOADERS[m]().catch(() => { mods[m] = null; return null; })); };
+// fetch a part's scene and build its static art in idle time, as soon as someone points at it
+function warm(sec) {
+  if (RM || !SCENE[sec] || warmed.has(sec)) return;
+  warmed.add(sec);
+  loadScene(sec).then((m) => { if (m) (window.requestIdleCallback || setTimeout)(() => { try { m.mount(document.createElement("div"), SCENE[sec].label ? { label: SCENE[sec].label } : {}); } catch {} }); });
+}
+for (const [k2, a2] of Object.entries(hots)) { a2.addEventListener("pointerenter", () => warm(k2)); a2.addEventListener("focus", () => warm(k2)); }
+$$("[data-sec-link]").forEach((l) => { l.addEventListener("pointerenter", () => warm(l.dataset.secLink)); l.addEventListener("focus", () => warm(l.dataset.secLink)); });
 // inside a module the part sits behind the glass, close up
 const insideView = () => ({ at: [innerWidth / 2, innerHeight / 2], zoom: tall ? 2.4 : 3.4, dim: tall ? 0.5 : 0.8, tau: 0.6 });
-function burst(kind) {
-  zoomfx.classList.remove("in", "out"); void zoomfx.offsetWidth; zoomfx.classList.add(kind);
+function burst(kind) { zoomfx.classList.remove("in", "out"); void zoomfx.offsetWidth; zoomfx.classList.add(kind); }
+function place(fx, fy, s, cx, cy) { alFig.style.transform = `translate3d(${(cx - fx * s).toFixed(1)}px,${(cy - fy * s).toFixed(1)}px,0) scale(${s.toFixed(4)})`; }
+// drop the backdrop scene (when leaving, or moving to another part)
+function dropScene(fast) {
+  const sc = scene; scene = null;
+  Space.hold(false);
+  if (!sc) return;
+  airlock.classList.remove("behind"); airlock.classList.add("leaving");
+  setTimeout(() => { if (scene || dive) return; airlock.classList.remove("on", "leaving"); alFig.replaceChildren(); }, fast ? 260 : 520);
 }
-function runDive(sec) {
-  const quick = session.get("pj-airlock") === "1";
-  session.set("pj-airlock", "1");
-  body.classList.add("diving");
-  setHot(null); Space.highlight(sec);
-  Space.focus(sec, { at: [innerWidth / 2, innerHeight / 2], zoom: tall ? 2 : 2.6, tau: 0.34 });
-  burst("in");
-  live(`Entering ${PART[sec]}`);
-  const d = dive = { sec };
+// play a part's arrival. `fast` is used when moving between parts with the panel already open.
+function runScene(sec, { fast = false } = {}) {
+  const quick = fast || session.get(`pj-arrive-${sec}`) === "1";
+  session.set(`pj-arrive-${sec}`, "1");
+  if (!fast) { body.classList.add("diving"); setHot(null); burst("in"); }
+  Space.highlight(sec);
+  Space.focus(sec, { at: [innerWidth / 2, innerHeight / 2], zoom: tall ? 2 : 2.6, tau: fast ? 0.4 : 0.34 });
+  live(`${SCENE[sec].mod === "solar" || SCENE[sec].mod === "dish" ? "Going out to" : "Entering"} ${PART[sec]}`);
+  const d = dive = { sec, fast };
   return new Promise(async (resolve) => {
     d.resolve = resolve;
-    try { hatchMod = hatchMod || (await import("./fig/hatch.mjs")); } catch { hatchMod = null; }
+    const m = await loadScene(sec);
     if (dive !== d) return resolve(false);
-    if (!hatchMod) { finishDive(d); return resolve(true); }
+    if (!m) { finishDive(d); return resolve(true); }
     const host = document.createElement("div"); alFig.replaceChildren(host);
-    const h = hatchMod.mount(host, { label: `${TAG[sec]} 0${SECTIONS.indexOf(sec) + 1}` });
-    $(".al-n", airlock).textContent = PART[sec];
-    airlock.classList.add("on");
-    const A = quick ? 0.4 : 0.55, CYC = quick ? 0.85 : 1.3, PUSH = 0.62;
-    const pushAt = A * 0.6 + CYC * 0.94, end = pushAt + PUSH + 0.35;
-    const V = hatchMod.VIEW, dw = hatchMod.DOORWAY;
+    const h = m.mount(host, SCENE[sec].label ? { label: SCENE[sec].label } : {});
+    alFig.style.width = `${m.VIEW.w}px`; alFig.style.height = `${m.VIEW.h}px`;
+    $(".al-k", airlock).textContent = SCENE[sec].cap; $(".al-n", airlock).textContent = PART[sec];
+    airlock.classList.remove("leaving", "behind"); airlock.classList.add("on");
+    airlock.classList.toggle("in-transit", fast);
+    const k2 = fast ? 0.55 : quick ? 0.75 : 1;
+    const A = 0.55 * k2, CYC = h.cycle * k2, FIN = (h.mode === "push" ? 0.62 : 0.8) * (fast ? 0.8 : 1);
+    const finAt = A * 0.6 + CYC * 0.94, end = finAt + FIN + 0.3;
     const vw = innerWidth, vh = innerHeight, cx = vw / 2, cy = vh / 2;
-    const fitS = Math.min((vw * 0.9) / V.w, (vh * 0.74) / V.h);
-    const coverS = (Math.hypot(vw, vh) / 2 / Math.min(dw.rx, dw.ry)) * 1.25;
+    const V = m.VIEW, f0 = h.focus;
+    const fitS = Math.min((vw * 0.92) / V.w, (vh * (tall ? 0.62 : 0.74)) / V.h);
+    const coverS = (Math.hypot(vw, vh) / 2 / Math.min(f0.rx, f0.ry)) * 1.2;
+    const settleS = fitS * (tall ? 1.15 : 1.3);
+    // the figure grows in around its own centre, then the camera moves onto the scene's focus
+    const centre = [V.w / 2, V.h / 2];
     airlock.style.setProperty("--cx", `${cx}px`); airlock.style.setProperty("--cy", `${cy}px`);
-    d.t0 = performance.now(); d.pushAt = pushAt; d.shown = false;
+    d.t0 = performance.now(); d.finAt = finAt; d.shown = false;
+    d.lastStep = performance.now();
     const step = (now) => {
       if (dive !== d) return;
-      const t = ((now - d.t0) / 1000) * (globalThis.__diveSpeed || 1);
-      const a = smooth(0, A, t), p = clamp01((t - pushAt) / PUSH);
+      d.lastStep = performance.now();
+      const t = ((now - d.t0) / 1000) * speed();
+      const a = smooth(0, A, t), p = clamp01((t - finAt) / FIN);
       h.play(clamp01((t - A * 0.6) / CYC));
-      const grow = 0.5 + 0.5 * (1 - Math.pow(1 - a, 3));
-      const s = fitS * grow * Math.exp(Math.log(coverS / fitS) * p * p * p);
-      alFig.style.transform = `translate3d(${(cx - dw.x * s).toFixed(1)}px,${(cy - dw.y * s).toFixed(1)}px,0) scale(${s.toFixed(4)})`;
-      alFig.style.opacity = (a * (1 - smooth(0.55, 0.95, p))).toFixed(3);
-      airlock.style.setProperty("--bg", (a * (1 - smooth(0.4, 1, p))).toFixed(3));
-      alLight.style.opacity = (smooth(0.3, 0.8, p) * (1 - smooth(pushAt + PUSH, end, t))).toFixed(3);
+      const f = h.focus, grow = 0.55 + 0.45 * (1 - Math.pow(1 - a, 3));
+      // drift from the figure's centre toward its focus as the cycle plays, so the camera arrives at the part
+      const lead = smooth(finAt * 0.5, finAt + FIN * 0.4, t);
+      const fx = centre[0] + (f.x - centre[0]) * lead, fy = centre[1] + (f.y - centre[1]) * lead;
+      let sc;
+      if (h.mode === "push") sc = fitS * grow * Math.exp(Math.log(coverS / fitS) * p * p * p);
+      else sc = fitS * grow + (settleS - fitS) * smooth(0, 1, p);
+      place(fx, fy, sc, cx, cy);
+      const back = h.mode === "push" ? 0.42 : 0.6;
+      alFig.style.opacity = (a * (1 - (1 - back) * smooth(0.5, 1, p))).toFixed(3);
+      airlock.style.setProperty("--bg", (a * (fast ? 0.88 : 1)).toFixed(3));
+      if (h.mode === "push") alLight.style.opacity = (smooth(0.3, 0.8, p) * (1 - smooth(finAt + FIN, end, t))).toFixed(3);
+      if (h.mode === "beam" && p > 0 && !d.rang) { d.rang = true; alRings.style.setProperty("--fx", `${cx}px`); alRings.style.setProperty("--fy", `${cy}px`); alRings.classList.remove("go"); void alRings.offsetWidth; alRings.classList.add("go"); }
       if (p > 0 && !d.pushed) { d.pushed = true; Space.focus(sec, insideView()); }
-      if (p >= 0.6 && !d.shown) { d.shown = true; resolve(true); }
+      if (p >= (h.mode === "push" ? 0.6 : 0.35) && !d.shown) { d.shown = true; resolve(true); }
       if (t >= end) { finishDive(d); return; }
       requestAnimationFrame(step);
     };
     requestAnimationFrame(step);
-    // if frames stall (a background tab), never leave the visitor outside the hatch
-    d.guard = setTimeout(() => finishDive(d), (end / (globalThis.__diveSpeed || 1)) * 1000 + 1500);
+    // if frames stall (a background tab), never leave the visitor waiting outside
+    d.guard = setInterval(() => { if (performance.now() - d.lastStep > 1200) finishDive(d); }, 600);
   });
 }
 function skipDive() {
   const d = dive; if (!d || d.t0 == null) return;
-  const k = globalThis.__diveSpeed || 1, t = ((performance.now() - d.t0) / 1000) * k;
-  if (t < d.pushAt) d.t0 -= ((d.pushAt - t) * 1000) / k;
+  const k2 = speed(), t = ((performance.now() - d.t0) / 1000) * k2;
+  if (t < d.finAt) d.t0 -= ((d.finAt - t) * 1000) / k2;
 }
+// the arrival is done: the scene stays dimmed behind the panel as the place you are in, and the universe stops drawing
 function finishDive(d) {
   if (dive !== d) return;
-  clearTimeout(d.guard);
-  dive = null; airlock.classList.remove("on"); body.classList.remove("diving");
-  alFig.replaceChildren(); alLight.style.opacity = "0";
+  clearInterval(d.guard);
+  dive = null; body.classList.remove("diving"); alLight.style.opacity = "0";
   if (!d.shown) { d.shown = true; Space.focus(d.sec, insideView()); d.resolve?.(true); }
+  if (current && current.sec === d.sec && alFig.firstChild) {
+    scene = d.sec; airlock.classList.remove("in-transit"); airlock.classList.add("behind");
+    setTimeout(() => { if (scene === d.sec && !dive) Space.hold(true); }, 600);
+  } else { airlock.classList.remove("on"); alFig.replaceChildren(); }
 }
 function cancelDive() {
   const d = dive; if (!d) return;
-  clearTimeout(d.guard);
-  dive = null; airlock.classList.remove("on"); body.classList.remove("diving");
+  clearInterval(d.guard);
+  dive = null; airlock.classList.remove("on", "behind", "in-transit"); body.classList.remove("diving");
   alFig.replaceChildren(); alLight.style.opacity = "0";
   d.resolve?.(false);
 }
 airlock.addEventListener("click", skipDive);
-// moving between modules: the glass clears, the camera travels along the station, the next module's content arrives
+// moving between parts: the glass clears, the old scene fades, the camera travels along the station,
+// and the next part's own arrival plays behind the clear glass before its content comes in
 function transit(from, to, sub) {
   const dir = SECTIONS.indexOf(to) > SECTIONS.indexOf(from) ? 1 : -1;
   panel.style.setProperty("--dir", dir);
   panel.classList.add("transit");
-  Space.focus(to, { ...insideView(), tau: 0.4 });
-  live(`Moving to ${PART[to]}`);
   clearTimeout(transitT);
-  transitT = setTimeout(() => { panel.classList.remove("transit"); if (current && current.sec === to) render(to, sub); }, 620);
+  if (dive) cancelDive();
+  dropScene(true);
+  render(to, sub, false);
+  live(`Moving to ${PART[to]}`);
+  Space.focus(to, { ...insideView(), tau: 0.4 });
+  transitT = setTimeout(() => {
+    if (!current || current.sec !== to) return;
+    runScene(to, { fast: true }).then((ok) => { if (ok && current && current.sec === to) { panel.classList.remove("transit"); fit(); enterAnim(); } });
+  }, 360 / speed());
 }
 // content arrives in a short stagger from depth
 const STAG = ".chips, .cards li, .stats li, .timeline li, .skill, .about-photo, .about > div > *, .contact-text > *, .contact-fig, .back, .case-head, .case-media, .case-text > *, .case-grid > .part, .pager, .role-detail > *";
@@ -529,5 +584,4 @@ if (showIntro) { body.classList.add("intro"); $("#intro").classList.remove("gone
 Space.start({ intro: showIntro });
 if (!showIntro) { Space.home(homeBox, { instant: true }); route(); }
 booted = !showIntro;
-// fetch the airlock drawing while idle so the first dive starts at once
-(window.requestIdleCallback || ((f) => setTimeout(f, 1200)))(() => { if (!RM) import("./fig/hatch.mjs").then((m) => { hatchMod = m; }).catch(() => {}); });
+

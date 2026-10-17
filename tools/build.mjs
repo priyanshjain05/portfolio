@@ -226,7 +226,7 @@ let html = readFileSync(file, "utf8");
 const put = (name, body) => {
   const re = new RegExp(`(<!-- gen:${name} -->)[\\s\\S]*?(<!-- /gen:${name} -->)`);
   if (!re.test(html)) throw new Error(`index.html is missing the gen:${name} markers`);
-  html = html.replace(re, `$1${body}$2`);
+  html = html.replace(re, (_, a, b) => a + body + b);
 };
 put("head", head());
 put("hero", hero());
@@ -234,6 +234,10 @@ put("hotspots", hotspots());
 put("tabbar", tabbar());
 put("tabs", sectionTabs());
 put("panels", panels());
+// the figure styles, inlined so they don't block the first paint as separate requests
+put("isocss", "\n" + readFileSync(join(ROOT, "assets/kit/iso.css"), "utf8") + readFileSync(join(ROOT, "assets/fig/space-iso.css"), "utf8"));
+// the station drawing, rendered here so the page doesn't spend a second building it on a phone
+put("station", (await import("../assets/fig/station.mjs")).markup());
 writeFileSync(file, html);
 
 const routes = [""];

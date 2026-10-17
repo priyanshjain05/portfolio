@@ -66,14 +66,51 @@ function coaming() {
   out.push(Dt(G.dotsOf(F0, 7, R_COAM - 3.2, 24, P, { all: true, phase: 7.5 * DEG }), { size: 0.5 }));
   return out.join("");
 }
+// the lab seen through the doorway: a rack wall far inside, placed so it sits centred in the opening
+const LAB_X = -64;
+const LAB = (() => {
+  const ax = k.axisVector(P, [1, 0, 0]), ay = k.axisVector(P, [0, 1, 0]), az = k.axisVector(P, [0, 0, 1]);
+  const bx = -LAB_X * ax[0], by = -LAB_X * ax[1], det = ay[0] * az[1] - ay[1] * az[0];
+  return { y: (bx * az[1] - by * az[0]) / det, z: C[2] + (ay[0] * by - ay[1] * bx) / det };
+})();
+const SCREEN = [[LAB_X + 4.6, LAB.y - 7, LAB.z + 2], [LAB_X + 4.6, LAB.y + 7, LAB.z + 2], [LAB_X + 4.6, LAB.y + 7, LAB.z + 13], [LAB_X + 4.6, LAB.y - 7, LAB.z + 13]];
+export const LAB_FOCUS = (() => { const c = at([LAB_X + 4.6, LAB.y, LAB.z + 7.5]); return { x: c[0], y: c[1], rx: 16, ry: 12 }; })();
+function lab() {
+  const out = [], y0 = LAB.y, z0 = LAB.z, x = LAB_X;
+  out.push(`<path class="hz-wall" d="${G.circleOf(F0, 0.01, R_OPEN, P)}"/>`);
+  // three racks, the outer two with drawer fronts and handles, the middle one a workstation
+  for (let i = -1; i <= 1; i++) {
+    const ry = y0 + i * 21 - 9.5;
+    out.push(S(k.slabOf({ x: x - 4, y: ry, w: 4, d: 19, r: 0.5 }, z0 - 40, 80, P, 2, 0.5), { tone: "mid" }));
+    if (i === 0) continue;
+    for (let j = 0; j < 6; j++) {
+      const dz = z0 - 34 + j * 12;
+      out.push(S(k.slabOf({ x, y: ry + 1.5, w: 1.4, d: 16, r: 0.4 }, dz, 10, P, 2, 0.3), { tone: "lo", crease: "none" }));
+      out.push(Dt([at([x + 1.4, ry + 6, dz + 5]), at([x + 1.4, ry + 13, dz + 5])], { size: 0.5 }));
+    }
+  }
+  // workstation: a keyboard shelf and a screen on the middle rack
+  out.push(S(k.slabOf({ x, y: y0 - 8.5, w: 4.6, d: 17, r: 0.5 }, z0 - 4, 2, P, 2, 0.3), { tone: "hi" }));
+  out.push(Dt(k.dotGrid(x + 1, y0 - 7, 6, 2, 2.4, z0 - 2, P), { size: 0.35, tone: "lo" }));
+  out.push(S(k.slabOf({ x, y: y0 - 8, w: 4.6, d: 16, r: 0.5 }, z0 + 1, 13, P, 2, 0.3), { tone: "lo" }));
+  out.push(`<path class="hz-screen" d="${k.pathOf(SCREEN.map(at), true)}"/>`);
+  const rules = [[5, 9], [7.5, 6], [10, 8]].map(([dz, l]) => k.segment([x + 4.7, y0 - 5.6, z0 + dz], [x + 4.7, y0 - 5.6 + l, z0 + dz], P)).join("");
+  out.push(`<g class="hz-ui">${L(rules, { tone: "lit", free: true })}</g>`);
+  // a handrail along the racks and a light strip overhead
+  const rail = G.frameOf([x + 6, y0 - 34, z0 - 22], [0, 1, 0], [0, 0, 1], [1, 0, 0]);
+  out.push(S(G.solidOf([[0, 0], [0.6, 1.4, 1], [1.4, 1.8, 1], [66.6, 1.8, 1], [67.4, 1.4, 1], [68, 0]], rail, P), { tone: "hi" }));
+  out.push(S(k.slabOf({ x: x - 4, y: y0 - 34, w: 8, d: 68, r: 0.5 }, z0 + 42, 3, P, 2, 0.3), { tone: "hi", lit: true }));
+  out.push(`<path class="hz-dim" d="${G.circleOf(F0, 0.01, R_OPEN, P)}"/>`);
+  return out.join("");
+}
 function doorway() {
-  // the tunnel through the bulkhead, with its frames, ending on the lit module interior
+  // the tunnel through the bulkhead, with its frames, opening into the lab
   const id = "hz-clip";
   const rim = G.circleOf(F0, 0.01, R_OPEN, P);
   const far = G.circleOf(F0, -15, R_OPEN, P);
   const ribs = [-5, -10].map((s) => G.circleOf(F0, s, R_OPEN, P)).join("");
   return `<clipPath id="${id}"><path d="${rim}"/></clipPath>
-  <g clip-path="url(#${id})"><path class="hz-tunnel" d="${rim}"/><path class="hz-rib" d="${ribs}"/><path class="hz-far" d="${far}"/><path class="hz-glow" d="${far}"/></g>`;
+  <g clip-path="url(#${id})">${lab()}<path class="hz-tunnel" d="${rim}${far}"/><path class="hz-rib" d="${ribs}"/><path class="hz-glow" d="${far}"/></g>`;
 }
 function gasket() { return S(G.ringBand(7, 8.2, R_OPEN, R_OPEN + 2.4, F0, P, { hole: [8.2, R_OPEN] }), { tone: "lo", crease: "none", className: "hz-rim" }); }
 function hingeLeaves() {
@@ -165,10 +202,14 @@ function door(phi, wheel, dogs) {
 
 /* ---------------- figure ---------------- */
 const CSS = `
-.hz .hz-tunnel{fill:var(--anatomy-shade-1)}
+.hz .hz-tunnel{fill:var(--anatomy-shade-1);fill-rule:evenodd}
+.hz .hz-wall{fill:#0d1430}
+.hz .hz-dim{fill:#02030a;opacity:calc(.8 - var(--hz-glow,0) * .8)}
+.hz .hz-screen{fill:color-mix(in srgb,#7fe3ff calc(var(--hz-glow,0) * 55%),var(--anatomy-paper))}
+.hz .hz-ui{opacity:var(--hz-glow,0)}
 .hz .hz-rib{fill:none;stroke:var(--anatomy-faint);stroke-width:.8}
 .hz .hz-far{fill:#060a1c}
-.hz .hz-glow{fill:url(#hz-light);opacity:var(--hz-glow,0);transition:none}
+.hz .hz-glow{fill:url(#hz-light);opacity:calc(var(--hz-glow,0) * .45);transition:none}
 .hz .hz-rim path{fill-rule:evenodd}
 .hz .iso-face-text{font-family:"JetBrains Mono",ui-monospace,monospace!important;font-size:5.4px!important;font-weight:500;letter-spacing:.06em!important}
 .hz .hz-face{fill:var(--anatomy-paper);stroke:none}
@@ -176,12 +217,13 @@ const CSS = `
 .hz .hz-lens-on .iso-fill,.hz .hz-lens-on .iso-top{fill:#7fe3ff}
 .hz .hz-lens-on{filter:drop-shadow(0 0 4px #7fe3ff)}
 `;
-export function mount(root, { label = "MODULE" } = {}) {
+const CACHE = {}, POSES = new Map();
+export function mount(root, { label = "LAB 01" } = {}) {
   const style = document.createElement("style"); style.textContent = CSS;
   root.classList.add("hz", "iso", "space");
   const defs = `<defs><radialGradient id="hz-light" cx="50%" cy="50%" r="55%"><stop offset="0" stop-color="#eafaff" stop-opacity=".95"/><stop offset=".35" stop-color="#7fe3ff" stop-opacity=".55"/><stop offset="1" stop-color="#7fe3ff" stop-opacity="0"/></radialGradient></defs>`;
-  const fixed = defs + bulkhead(label) + coaming() + doorway() + gasket() + hingeLeaves();
-  const front = knuckles() + handrail() + gauge() + lamp();
+  if (!CACHE[label]) CACHE[label] = { fixed: defs + bulkhead(label) + coaming() + doorway() + gasket() + hingeLeaves(), front: knuckles() + handrail() + gauge() + lamp() };
+  const { fixed, front } = CACHE[label];
   const desc = `An airlock hatch in a riveted bulkhead, labelled ${label}: the pressure gauge falls to zero, the lamp lights, the handwheel turns, the six dogs pull in and the door swings open.`;
   root.innerHTML = k.figureSvg({ width: VIEW.w, height: VIEW.h, label: desc, body: `${fixed}<g class="hz-door"></g><g class="hz-front">${front}</g><g class="hz-needle"></g>` });
   root.prepend(style);
@@ -199,12 +241,15 @@ export function mount(root, { label = "MODULE" } = {}) {
     root.style.setProperty("--hz-lamp", lampOn.toFixed(3));
     root.style.setProperty("--hz-glow", (seg(t, 0.58, 0.9)).toFixed(3));
     needleG.innerHTML = needle(p);
-    const key = `${phi.toFixed(3)}|${wheel.toFixed(3)}`;
+    const qs = Math.round(swing * 60), qt = Math.round(turn * 60);
+    const key = qs + "|" + qt;
     if (key !== lastKey) {
       lastKey = key;
-      doorG.innerHTML = doorKnuckle() + door(phi, wheel, dogs);
+      let svg = POSES.get(key);
+      if (!svg) { svg = doorKnuckle() + door((qs / 60) * 104 * DEG, (qt / 60) * 1.25 * 2 * Math.PI, 1 - qt / 60); if (POSES.size > 400) POSES.clear(); POSES.set(key, svg); }
+      doorG.innerHTML = svg;
     }
   }
   play(0);
-  return { play, doorway: DOORWAY, view: VIEW };
+  return { play, doorway: DOORWAY, focus: LAB_FOCUS, mode: "push", cycle: 1.3 };
 }
