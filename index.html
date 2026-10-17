@@ -28,6 +28,7 @@
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
+<script>/* decide before the first paint whether the intro plays, so the station never flashes first */try{if(!location.hash.replace(/^#\/?/,"")&&!matchMedia("(prefers-reduced-motion: reduce)").matches&&!sessionStorage.getItem("pj-intro"))document.documentElement.classList.add("pre-intro")}catch(e){}</script>
 <style id="iso-css"><!-- gen:isocss -->
 .iso{
   --anatomy-page:#0b0b0b;--anatomy-card:#131313;--anatomy-text:#a3a3a3;--anatomy-strong:#e6e6e6;--anatomy-muted:#6e6e6e;
@@ -201,6 +202,9 @@ body.intro .hud *,body.warping .hud *{pointer-events:none}
 #intro{position:fixed;inset:0;z-index:35;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;transition:opacity .9s var(--ease),transform 1.2s var(--ease)}
 #intro::before{content:"";position:absolute;left:50%;top:50%;width:min(900px,120vw);height:min(440px,70vh);transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(4,5,11,.66),rgba(4,5,11,0));z-index:-1;pointer-events:none}
 #intro.gone{opacity:0;transform:scale(1.06);pointer-events:none;visibility:hidden;transition:opacity .9s var(--ease),transform 1.2s var(--ease),visibility 0s 1.2s}
+html.pre-intro .home,html.pre-intro .hud,html.pre-intro .tabbar,html.pre-intro #station,html.pre-intro #hint{visibility:hidden}
+html.pre-intro #intro.gone{opacity:1;transform:none;visibility:visible;pointer-events:auto;transition:none}
+html.pre-intro .skip-intro{display:inline-flex!important}
 .i-kicker{font:500 12px var(--mono);letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
 .i-name{font:600 clamp(48px,9vw,128px)/.95 var(--display);letter-spacing:-.035em;margin:18px 0;text-shadow:0 0 60px rgba(4,5,11,.9)}
 .i-tag{font:400 clamp(19px,2.4vw,28px) var(--display);color:var(--ink-2)}
