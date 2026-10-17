@@ -83,7 +83,7 @@ function build() {
   out.push(S(G.ringBand(0, 2, TOPWIN, TOPWIN + 5, TOP_F, P, { hole: [2, TOPWIN] }), { tone: "hi", className: "cu-rim" }));
   const clip = G.circleOf(TOP_F, 2.05, TOPWIN, P);
   let s = 11; const r = () => ((s = (s * 16807) % 2147483647) / 2147483647);
-  const stars = Array.from({ length: 110 }, () => { const a = r() * 6.283, d = Math.sqrt(r()) * TOPWIN; const p = at([Math.cos(a) * d, Math.sin(a) * d, Z1 + 2.05]); return `<path d="M${p[0].toFixed(1)} ${p[1].toFixed(1)}h.01" stroke-width="${(0.8 + r() * 1.4).toFixed(2)}"/>`; }).join("");
+  const stars = Array.from({ length: 110 }, () => { const a = r() * 6.283, d = Math.sqrt(r()) * TOPWIN; const p = at([Math.cos(a) * d, Math.sin(a) * d, Z1 + 2.05]); return `<path d="M${p[0].toFixed(1)} ${p[1].toFixed(1)}h.01" style="--w:${(0.8 + r() * 1.4).toFixed(2)}"/>`; }).join("");
   out.push(`<clipPath id="cu-clip"><path d="${clip}"/></clipPath><g clip-path="url(#cu-clip)"><path class="cu-sky" d="${clip}"/><g class="cu-stars">${stars}</g><path class="cu-earth" d="${clip}"/></g>`);
   out.push(Dt(G.dotsOf(TOP_F, 2, TOPWIN + 2.6, 12, P, { all: true }), { size: 0.45 }));
   return out.join("");
@@ -111,7 +111,7 @@ const CSS = `
 .cu .cu-glass{fill:color-mix(in srgb,#2a5d86 calc(var(--cu-glow,0) * 60%),#060a1c)}
 .cu .cu-sky{fill:#02030b}
 .cu .cu-stars{opacity:var(--cu-open,0)}
-.cu .cu-stars path{fill:none;stroke:#eaf4ff;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.cu .cu-stars path{fill:none;stroke:#eaf4ff;stroke-linecap:round;stroke-width:calc(var(--w) / var(--zoom, 1))}
 .cu .cu-earth{fill:url(#cu-earth);opacity:var(--cu-open,0)}
 .cu .cu-rim path{fill-rule:evenodd}
 `;

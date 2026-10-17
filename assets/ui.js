@@ -315,7 +315,7 @@ panel.addEventListener("click", (e) => {
 function applyFilter(f) {
   filter = f;
   for (const c of $$(".chip", panel)) c.setAttribute("aria-selected", String(c.dataset.filter === f));
-  for (const li of $$(".cards li", panel)) li.hidden = !li.dataset.cats.split(" ").includes(f);
+  for (const li of $$(".missions li", panel)) li.hidden = !li.dataset.cats.split(" ").includes(f);
 }
 async function copy(text) {
   const out = $(".copied", panel);
@@ -427,6 +427,7 @@ function runScene(sec, { fast = false } = {}) {
       if (h.mode === "push") sc = fitS * grow * Math.exp(Math.log(coverS / fitS) * p * p * p);
       else sc = fitS * grow + (settleS - fitS) * smooth(0, 1, p);
       place(fx, fy, sc, cx, cy);
+      alFig.style.setProperty("--zoom", sc.toFixed(3));        // pinpoint stars stay pinpoints however far the camera pushes
       const back = h.mode === "push" ? 0.42 : 0.6;
       alFig.style.opacity = (a * (1 - (1 - back) * smooth(0.5, 1, p))).toFixed(3);
       airlock.style.setProperty("--bg", (a * (fast ? 0.88 : 1)).toFixed(3));
@@ -484,7 +485,7 @@ function transit(from, to, sub) {
   }, 360 / speed());
 }
 // content arrives in a short stagger from depth
-const STAG = ".chips, .cards li, .stats li, .timeline li, .skill, .about-photo, .about > div > *, .contact-text > *, .contact-fig, .back, .case-head, .case-media, .case-text > *, .case-grid > .part, .pager, .role-detail > *";
+const STAG = ".chips, .missions li, .telemetry li, .traj-list li, .sc-con, .sl-group, .about-photo, .about > div > *, .contact-text > *, .contact-fig, .back, .case-head, .case-media, .case-text > *, .case-grid > .part, .pager, .role-detail > *";
 function enterAnim() {
   const el = $(".sec:not([hidden])", panel); if (!el || RM) return;
   el.classList.remove("arrive");

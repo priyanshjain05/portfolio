@@ -99,25 +99,11 @@ function tabbar() {
   }).join("\n");
 }
 
-const thumb = (p) => p.image
-  ? `<img src="${esc(p.image)}" alt="" loading="lazy">`
-  : `<span class="glyph" aria-hidden="true">${esc(p.name.replace(/[^A-Za-z0-9]/g, "").slice(0, 2))}</span>`; // TODO(image): no image yet for this project
 const media = (p) => p.figure
   ? `<div class="fig-mount" data-figure="${esc(p.figure)}"><p class="fig-fallback">Interactive illustration of the concept. Turn on JavaScript to see it.</p></div>`
   : p.image
     ? `<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy">`
     : `<div class="img-coming" role="img" aria-label="Image coming"><span>Image coming</span></div>`; // TODO(image): add assets/work/<slug>.jpg and set image in content.js
-
-function card(p) {
-  const c = cat(p.category);
-  const cats = [p.featured ? "featured" : "", p.category].filter(Boolean).join(" ");
-  return `<li data-cats="${cats}"><a class="card" href="#/work/${p.slug}" style="--c:${c.color}">
-  <span class="thumb">${thumb(p)}</span>
-  <span class="c-body"><span class="c-top"><span class="status ${statusClass(p.status)}">${esc(p.status)}</span>${p.award ? `<span class="award">${esc(p.award)}</span>` : ""}<span class="c-cat">${esc(c.short)}</span></span>
-  <b class="c-name">${esc(p.name)}</b>
-  <span class="c-one">${esc(p.oneLiner)}</span>${p.outcome ? `\n  <span class="c-out">${esc(p.outcome)}</span>` : ""}</span>
-</a></li>`;
-}
 
 function caseView(p, i) {
   const c = cat(p.category), prev = ORDER[(i - 1 + ORDER.length) % ORDER.length], next = ORDER[(i + 1) % ORDER.length];
@@ -158,14 +144,104 @@ function roleDetail(e, i) {
 </article>`;
 }
 
+
+// ---- list views: mission patches (work), a trajectory (experience), a star chart (skills) ----
+const rand = (seed) => () => { seed |= 0; seed = (seed + 0x6d2b79f5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+const f1 = (n) => Math.round(n * 10) / 10;
+const STAR_RGB = ["#9bb0ff", "#afc4ff", "#cddaff", "#f8f7ff", "#fff3e6", "#ffd6a8", "#ffc478"];
+const starColor = (r) => { const w = [0.03, 0.08, 0.16, 0.26, 0.24, 0.15, 0.08]; let x = r(); for (let i = 0; i < w.length; i++) { x -= w[i]; if (x <= 0) return STAR_RGB[i]; } return STAR_RGB[3]; };
+
+// an embroidered-style mission patch: stitched rim in the category colour, an orbit, the project's initials, a star per award
+function patch(p, i) {
+  const c = cat(p.category), r = rand(i * 97 + 13), id = `pt-${p.slug}`;
+  const initials = esc(p.name.replace(/[^A-Za-z0-9 ]/g, "").split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase() || p.name.slice(0, 2));
+  const tilt = Math.round(-30 + r() * 60), dots = Array.from({ length: 7 }, () => { const a = r() * 6.283, d = 18 + r() * 22; return `<circle cx="${f1(60 + Math.cos(a) * d)}" cy="${f1(60 + Math.sin(a) * d)}" r="${f1(0.5 + r() * 0.8)}"/>`; }).join("");
+  const art = p.image
+    ? `<clipPath id="${id}-c"><circle cx="60" cy="60" r="40"/></clipPath><image href="${esc(p.image)}" x="20" y="20" width="80" height="80" preserveAspectRatio="xMidYMid slice" clip-path="url(#${id}-c)"/>`
+    : `<g class="pt-stars">${dots}</g><text x="60" y="66" class="pt-ini">${initials}</text>`;
+  return `<svg class="pt" viewBox="0 0 120 120" aria-hidden="true" focusable="false"><defs><radialGradient id="${id}-g" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="${c.color}" stop-opacity=".34"/><stop offset=".55" stop-color="#0b1330"/><stop offset="1" stop-color="#050816"/></radialGradient></defs>
+  <circle cx="60" cy="60" r="56" class="pt-rim"/><circle cx="60" cy="60" r="51.5" class="pt-stitch"/><circle cx="60" cy="60" r="47" fill="url(#${id}-g)" class="pt-face"/>
+  ${art}<ellipse cx="60" cy="60" rx="46" ry="15" transform="rotate(${tilt} 60 60)" class="pt-orbit"/><circle cx="${f1(60 + Math.cos(((tilt + 200) * Math.PI) / 180) * 46 * 0.98)}" cy="${f1(60 + Math.sin(((tilt + 200) * Math.PI) / 180) * 15)}" r="2.6" class="pt-moon"/>
+  ${p.award ? `<path class="pt-award" d="M60 0.8l2.9 6 6.5.9-4.7 4.6 1.1 6.5L60 15.7l-5.8 3.1 1.1-6.5-4.7-4.6 6.5-.9z"/>` : ""}</svg>`;
+}
+function patchItem(p, i) {
+  const c = cat(p.category), cats = [p.featured ? "featured" : "", p.category].filter(Boolean).join(" ");
+  return `<li data-cats="${cats}"><a class="mission" href="#/work/${p.slug}" style="--c:${c.color}">
+  ${patch(p, i)}
+  <span class="m-body"><span class="m-top"><span class="m-status ${statusClass(p.status)}">${esc(p.status)}</span>${p.award ? `<span class="m-award">★ ${esc(p.award)}</span>` : ""}</span>
+  <b class="m-name">${esc(p.name)}</b>
+  <span class="m-one">${esc(p.oneLiner)}</span>${p.outcome ? `\n  <span class="m-out">${esc(p.outcome)}</span>` : ""}</span>
+</a></li>`;
+}
+
+// the experience trajectory: a rising transfer orbit, one waypoint per role, oldest on the left
+function trajectory() {
+  const roles = EXPERIENCE, n = roles.length, H = 128;
+  // a burn that steepens: height grows faster with time, like a transfer orbit leaving its parking orbit
+  const climb = (t) => f1(120 - 108 * Math.pow(t, 1.8));
+  const ys = roles.map((_, i) => climb((i + 0.5) / n));
+  const xs = roles.map((_, i) => ((i + 0.5) / n) * 1000);
+  const pts = [[0, climb(0)], ...xs.map((x, i) => [x, ys[i]]), [1000, climb(1)]];
+  let d = `M${pts[0][0]} ${pts[0][1]}`;
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[Math.max(0, i - 1)], p1 = pts[i], p2 = pts[i + 1], p3 = pts[Math.min(pts.length - 1, i + 2)];
+    d += `C${f1(p1[0] + (p2[0] - p0[0]) / 6)} ${f1(p1[1] + (p2[1] - p0[1]) / 6)} ${f1(p2[0] - (p3[0] - p1[0]) / 6)} ${f1(p2[1] - (p3[1] - p1[1]) / 6)} ${p2[0]} ${p2[1]}`;
+  }
+  const stats = `<ul class="telemetry" aria-label="Highlights">${STATS.map(([v, l]) => `<li><b>${esc(v)}</b><span>${esc(l)}</span></li>`).join("")}</ul>`;
+  return `${stats}
+    <div class="traj" style="--n:${n}">
+      <svg class="traj-arc" viewBox="0 0 1000 ${H}" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="traj-path" d="${d}"/><path class="traj-glow" d="${d}"/></svg>
+      <ol class="traj-list">
+${roles.map((e, i) => `        <li style="--c:${e.color};--y:${ys[i]}px"${i === n - 1 ? ' class="latest"' : ""}><a class="wp" href="#/experience/${e.id}"><span class="wp-when">${esc(e.when)}</span><b class="wp-org">${esc(e.org)}</b><span class="wp-role">${esc(e.role)}</span><span class="wp-metric">${esc(e.headline)}</span><span class="wp-more">All details →</span></a></li>`).join("\n")}
+      </ol>
+    </div>`;
+}
+
+// the skills star chart: one constellation per group over a faint celestial grid, field stars and a band of haze
+function starChart() {
+  const W = 1000, H = 540, r = rand(4242);
+  const BOX = [[24, 34], [524, 34], [24, 296], [524, 296]];
+  const grid = [];
+  for (let k = 1; k <= 5; k++) grid.push(`<ellipse cx="500" cy="${H + 380}" rx="${360 + k * 150}" ry="${300 + k * 120}"/>`);
+  for (let k = -4; k <= 4; k++) grid.push(`<path d="M500 ${H + 380}L${f1(500 + k * 260)} -40"/>`);
+  const field = Array.from({ length: 170 }, () => { const m = r(); return `<circle cx="${f1(r() * W)}" cy="${f1(r() * H)}" r="${f1(0.35 + m * m * 1.2)}" fill="${starColor(r)}" opacity="${f1(0.25 + r() * 0.55)}"/>`; }).join("");
+  const groups = SKILLS.map((g, gi) => {
+    const [x0, y0] = BOX[gi], rr = rand(gi * 71 + 9), n = g.items.length, rows = Math.ceil(n / 2), rowH = Math.min(46, 200 / rows);
+    const stars = g.items.map((name, i) => {
+      const col = i % 2, row = Math.floor(i / 2);
+      const x = x0 + 26 + col * 222 + (rr() - 0.5) * 26 + (row % 2 ? 14 : 0), y = y0 + 46 + row * rowH + (rr() - 0.5) * 12 + col * rowH * 0.42;
+      return { name, x: f1(x), y: f1(y), m: i === 0 ? 3.4 : 1.6 + rr() * 1.3, c: i === 0 ? "#f8f7ff" : starColor(rr) };
+    });
+    // one chain: down the left column, across, and back up the right, like a real asterism with no crossings
+    const left = stars.map((_, k) => k).filter((k) => k % 2 === 0), right = stars.map((_, k) => k).filter((k) => k % 2 === 1).reverse();
+    const order = [...left, ...right];
+    const edges = order.slice(1).map((k, i) => [order[i], k]);
+    const lines = edges.map(([a, b]) => `<line x1="${stars[a].x}" y1="${stars[a].y}" x2="${stars[b].x}" y2="${stars[b].y}"/>`).join("");
+    const body = stars.map((s, i) => `<g class="sc-star" style="--d:${f1(rr() * 4)}s"><circle class="sc-halo" cx="${s.x}" cy="${s.y}" r="${f1(s.m * 4.2)}" fill="url(#sc-h${STAR_RGB.indexOf(s.c) < 0 ? 3 : STAR_RGB.indexOf(s.c)})"/>${i === 0 ? `<path class="sc-spike" d="M${f1(s.x - s.m * 7)} ${s.y}H${f1(s.x + s.m * 7)}M${s.x} ${f1(s.y - s.m * 7)}V${f1(s.y + s.m * 7)}"/>` : ""}<circle cx="${s.x}" cy="${s.y}" r="${f1(s.m * 0.62)}" fill="#fff"/><text x="${f1(+s.x + 11 + s.m)}" y="${f1(+s.y + 5)}">${esc(s.name)}</text></g>`).join("");
+    return `<g class="sc-con" style="--c:${g.color}"><text class="sc-name" x="${x0 + 6}" y="${y0 + 12}">${esc(g.name)}<tspan dx="10">${n} stars</tspan></text><g class="sc-lines">${lines}</g>${body}</g>`;
+  }).join("");
+  const halos = STAR_RGB.map((c, i) => `<radialGradient id="sc-h${i}"><stop offset="0" stop-color="${c}" stop-opacity=".6"/><stop offset=".22" stop-color="${c}" stop-opacity=".18"/><stop offset="1" stop-color="${c}" stop-opacity="0"/></radialGradient>`).join("");
+  return `<svg class="starchart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false"><defs>${halos}<radialGradient id="sc-band" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#9fb4ff" stop-opacity=".09"/><stop offset="1" stop-color="#9fb4ff" stop-opacity="0"/></radialGradient></defs>
+  <ellipse cx="500" cy="270" rx="620" ry="120" transform="rotate(-18 500 270)" fill="url(#sc-band)"/><g class="sc-grid">${grid.join("")}</g><g class="sc-field">${field}</g>${groups}</svg>`;
+}
+// the same skills as text: a small sketch of each constellation, then its stars by name (the phone view, and what screen readers get)
+function starList() {
+  return `<div class="starlist">${SKILLS.map((g, gi) => {
+    const rr = rand(gi * 71 + 9), n = g.items.length;
+    const pts = g.items.map((_, i) => [f1(6 + (i / (n - 1)) * 44 + (rr() - 0.5) * 6), f1(8 + ((i % 3) / 2) * 20 + (rr() - 0.5) * 6)]);
+    const sketch = `<svg class="sl-sketch" viewBox="0 0 56 36" aria-hidden="true" focusable="false"><polyline points="${pts.map((p) => p.join(",")).join(" ")}"/>${pts.map((p, i) => `<circle cx="${p[0]}" cy="${p[1]}" r="${i === 0 ? 2 : 1.3}"/>`).join("")}</svg>`;
+    return `<section class="sl-group" style="--c:${g.color}" aria-label="${esc(g.name)}">${sketch}<div><h4>${esc(g.name)}</h4><ul>${g.items.map((t) => `<li>${esc(t)}</li>`).join("")}</ul></div></section>`;
+  }).join("")}</div>`;
+}
+
 function panels() {
   const filters = [{ id: "featured", label: "Featured", n: featured.length }, ...CATEGORIES.map((c) => ({ id: c.id, label: c.short, n: PROJECTS.filter((p) => p.category === c.id).length }))];
   const work = `<section class="sec" id="sec-work" data-sec="work" aria-labelledby="sec-work-h" hidden>
   <h3 class="sr" id="sec-work-h">Work</h3>
   <div class="work-list" data-list>
     <div class="chips" role="tablist" aria-label="Filter projects">${filters.map((f, i) => `<button type="button" role="tab" class="chip" data-filter="${f.id}" aria-selected="${i === 0}">${esc(f.label)} <span>${f.n}</span></button>`).join("")}</div>
-    <ul class="cards">
-${ORDER.map(card).join("\n")}
+    <ul class="missions">
+${ORDER.map(patchItem).join("\n")}
     </ul>
   </div>
 ${ORDER.map(caseView).join("\n")}
@@ -173,18 +249,14 @@ ${ORDER.map(caseView).join("\n")}
   const experience = `<section class="sec" id="sec-experience" data-sec="experience" aria-labelledby="sec-experience-h" hidden>
   <h3 class="sr" id="sec-experience-h">Experience</h3>
   <div class="exp-list" data-list>
-    <ul class="stats" aria-label="Highlights">${STATS.map(([n, l]) => `<li><b>${esc(n)}</b><span>${esc(l)}</span></li>`).join("")}</ul>
-    <ol class="timeline">
-${newestFirst.map((e) => `      <li><a class="role" href="#/experience/${e.id}" style="--c:${e.color}"><span class="r-when">${esc(e.when)}</span><span class="r-main"><b>${esc(e.org)}</b><span class="r-role">${esc(e.role)}</span></span><span class="r-metric">${esc(e.headline)}</span><span class="r-more">All details →</span></a></li>`).join("\n")}
-    </ol>
+    ${trajectory()}
   </div>
 ${newestFirst.map(roleDetail).join("\n")}
 </section>`;
   const skills = `<section class="sec" id="sec-skills" data-sec="skills" aria-labelledby="sec-skills-h" hidden>
   <h3 class="sr" id="sec-skills-h">Skills</h3>
-  <div class="skill-grid">
-${SKILLS.map((g) => `    <section class="skill" style="--c:${g.color}" aria-label="${esc(g.name)}"><h4><i aria-hidden="true"></i>${esc(g.name)}</h4><ul class="tags">${g.items.map((t) => `<li>${esc(t)}</li>`).join("")}</ul></section>`).join("\n")}
-  </div>
+  ${starChart()}
+  ${starList()}
 </section>`;
   const about = `<section class="sec" id="sec-about" data-sec="about" aria-labelledby="sec-about-h" hidden>
   <h3 class="sr" id="sec-about-h">About</h3>
