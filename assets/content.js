@@ -14,6 +14,8 @@ export const SITE = {
   kicker: "Product · Space · NYU Stern",
   tagline: "I build products for what comes next.",
   target: "Looking for PM internships and full-time roles, especially at space companies.",
+  // the invitation in the Contact panel
+  contactLead: "If you’re shaping product strategy, building something genuinely new, or working on a problem that doesn’t have an answer yet, I’d like to hear about it.",
   title: "Priyansh Jain · Product & Space Portfolio",
   description: "Priyansh Jain studies Business, Technology & Entrepreneurship at NYU Stern and builds products for what comes next. Looking for PM internships and full-time roles, especially at space companies.",
   url: "https://priyanshjain.info/",

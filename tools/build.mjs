@@ -278,7 +278,7 @@ ${newestFirst.map(roleDetail).join("\n")}
     <div class="contact-text">
       <p class="ct-k">Open a channel</p>
       <p class="ct-h">Let's build what comes next.</p>
-      <p class="lead">${esc(SITE.target)}</p>
+      <p class="lead">${esc(SITE.contactLead)}</p>
       <ul class="ct-links">
         <li><a href="mailto:${esc(SITE.email)}">${esc(SITE.email)} <span aria-hidden="true">→</span></a><button type="button" class="ct-copy" data-copy="${esc(SITE.email)}">Copy</button></li>
         <li><a href="${esc(SITE.linkedin)}" target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">→</span></a></li>
