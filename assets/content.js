@@ -7,6 +7,9 @@
 // structured data) and sitemap.xml. Never invent facts: if something is missing,
 // leave the field empty ("" or []) and add a `// TODO:` note next to it.
 // Images: put files in assets/work/ and set `image: "assets/work/<file>"`.
+// `image` shows in the project page (letterboxed, any shape; `imageAlt` describes it). Optional `patch`
+// is a square picture for the round mission patch in the list; without one the patch shows initials.
+// `imageSize: [width, height]` keeps the image's own shape in the project page (otherwise it sits in a 4:3 frame).
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const SITE = {
@@ -62,7 +65,7 @@ export const PROJECTS = [
     links: [],
   },
   {
-    slug: "dreamweaver", name: "Dreamweaver", category: "im", status: "Shipped", featured: 3,
+    slug: "dreamweaver", name: "Dreamweaver", category: "im", status: "Shipped", featured: 4,
     oneLiner: "Hand-tracking interactive experience",
     outcome: "Played live by 25 people at a public showcase",
     meta: "Class project · Public showcase",
@@ -74,7 +77,7 @@ export const PROJECTS = [
     links: [], // TODO: add a demo video link
   },
   {
-    slug: "meroo-design-sprint", name: "Meroo Design Sprint", category: "ps", status: "Concept", featured: 4,
+    slug: "meroo-design-sprint", name: "Meroo Design Sprint", category: "ps", status: "Concept", featured: 5,
     oneLiner: "Gamified career discovery · BTE design sprint",
     outcome: "Founder implemented some of our ideas",
     meta: "BTE Design Sprint · Product Manager · Team of 4 · Nov 2024",
@@ -86,7 +89,7 @@ export const PROJECTS = [
     links: [],
   },
   {
-    slug: "unblur", name: "Unblur", category: "ai", status: "In progress", featured: 5,
+    slug: "unblur", name: "Unblur", category: "ai", status: "In progress", featured: 6,
     oneLiner: "AI onboarding assistant",
     outcome: "Direction grounded in 20 user interviews",
     meta: "Project · Solo",
@@ -98,16 +101,18 @@ export const PROJECTS = [
     links: [],
   },
   {
-    slug: "mission-001", name: "Mission 001", category: "ai", status: "In progress", featured: 6, figure: "mission001",
+    slug: "mission-001", name: "Mission 001", category: "ai", status: "In progress", featured: 3,
     oneLiner: "Autonomous spacecraft inspection",
-    outcome: "",
-    meta: "Project · Solo · Python · MuJoCo",
-    problem: "Inspecting a spacecraft in orbit calls for a robot that can work around the vehicle on its own: seeing it, spotting anomalies, planning its moves, and recovering when something goes wrong.",
-    whatIDid: "Building the simulation and full technical stack myself in Python and MuJoCo, centered on a free-flying 6-DOF robot operating around a spacecraft. The architecture covers perception, anomaly detection, planning, failure recovery, and mission evaluation.",
-    result: "In active development, with a working prototype coming soon.", // TODO: replace with the first milestone and its date
-    tools: ["Python", "MuJoCo", "Physics simulation", "Robotics"],
-    image: "", // the interactive anatomy figure is shown instead; TODO: add a simulation GIF when ready
-    links: [],
+    outcome: "197/197 hidden faults found on 100 unseen missions · 0 debris hits in 400 adversarial encounters",
+    meta: "Project · Solo · Python · MuJoCo · 2026",
+    problem: "A robot inspecting a spacecraft in orbit has to find what's wrong on its own, and keep working when the world stops matching its assumptions: navigation error, bad lighting, drifting debris.",
+    whatIDid: "Built a Python and MuJoCo testbed: a 6-DOF free-flyer inspects a spacecraft and compares each RGB-D view with a digital twin to find faults. It aligns the twin to the camera, learns a calibrated confidence, looks again when unsure, and dodges drifting debris. The autonomy never touches simulator state, so it can move to ROS 2 or hardware.",
+    result: "All 197 hidden faults found with 0 false alarms on 100 unseen missions. Aligning the twin raised navigation-error tolerance 5–10×; the learned confidence cut calibration error from 0.119 to 0.009; looking again rescued 292 verdicts and spoiled 5; debris hits fell from 100% to 0% in 400 adversarial encounters.",
+    tools: ["Python", "MuJoCo", "NumPy & SciPy", "Digital twin", "ICP & Lucas–Kanade", "Logistic regression", "pytest"],
+    image: "assets/work/mission-001.webp", // from the space-autonomy repo (docs/media/mission.gif), re-encoded
+    imageSize: [800, 300],
+    imageAlt: "Simulation: the inspector robot flying its route around the spacecraft Alpha-03 (left) and what its onboard camera sees (right)",
+    links: [], // TODO: link the repo or demo page once they're public
   },
   {
     slug: "cnc-space-p", name: "CNC Space \"P\"", category: "hw", status: "Shipped", featured: 0,

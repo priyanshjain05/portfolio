@@ -103,7 +103,7 @@ function tabbar() {
 const media = (p) => p.figure
   ? `<div class="fig-mount" data-figure="${esc(p.figure)}"><p class="fig-fallback">Interactive illustration of the concept. Turn on JavaScript to see it.</p></div>`
   : p.image
-    ? `<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy">`
+    ? `<img src="${esc(p.image)}" alt="${esc(p.imageAlt || p.name)}"${p.imageSize ? ` width="${p.imageSize[0]}" height="${p.imageSize[1]}"` : ""} loading="lazy" decoding="async">`
     : `<div class="img-coming" role="img" aria-label="Image coming"><span>Image coming</span></div>`; // TODO(image): add assets/work/<slug>.jpg and set image in content.js
 
 function caseView(p, i) {
@@ -157,8 +157,9 @@ function patch(p, i) {
   const c = cat(p.category), r = rand(i * 97 + 13), id = `pt-${p.slug}`;
   const initials = esc(p.name.replace(/[^A-Za-z0-9 ]/g, "").split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase() || p.name.slice(0, 2));
   const tilt = Math.round(-30 + r() * 60), dots = Array.from({ length: 7 }, () => { const a = r() * 6.283, d = 18 + r() * 22; return `<circle cx="${f1(60 + Math.cos(a) * d)}" cy="${f1(60 + Math.sin(a) * d)}" r="${f1(0.5 + r() * 0.8)}"/>`; }).join("");
-  const art = p.image
-    ? `<clipPath id="${id}-c"><circle cx="60" cy="60" r="40"/></clipPath><image href="${esc(p.image)}" x="20" y="20" width="80" height="80" preserveAspectRatio="xMidYMid slice" clip-path="url(#${id}-c)"/>`
+  // a project can give its patch its own square picture (`patch` in content.js); otherwise it shows its initials
+  const art = p.patch
+    ? `<clipPath id="${id}-c"><circle cx="60" cy="60" r="40"/></clipPath><image href="${esc(p.patch)}" x="20" y="20" width="80" height="80" preserveAspectRatio="xMidYMid slice" clip-path="url(#${id}-c)"/>`
     : `<g class="pt-stars">${dots}</g><text x="60" y="66" class="pt-ini">${initials}</text>`;
   return `<svg class="pt" viewBox="0 0 120 120" aria-hidden="true" focusable="false"><defs><radialGradient id="${id}-g" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="${c.color}" stop-opacity=".34"/><stop offset=".55" stop-color="#0b1330"/><stop offset="1" stop-color="#050816"/></radialGradient></defs>
   <circle cx="60" cy="60" r="56" class="pt-rim"/><circle cx="60" cy="60" r="51.5" class="pt-stitch"/><circle cx="60" cy="60" r="47" fill="url(#${id}-g)" class="pt-face"/>

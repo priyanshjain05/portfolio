@@ -302,6 +302,8 @@ function fit() {
     }
   }
 }
+// web fonts load without blocking the page, and text reflows when they arrive: fit again then
+if (document.fonts) { document.fonts.ready.then(() => panelOpen && fit()); document.fonts.addEventListener?.("loadingdone", () => panelOpen && fit()); }
 function selectStep(t, key) {
   for (const b of $$(".step", t)) b.setAttribute("aria-selected", String(b.dataset.step === key));
   for (const p of $$(".part", t)) p.classList.toggle("on", p.dataset.part === key);

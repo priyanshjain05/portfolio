@@ -28,7 +28,7 @@
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
-<!-- gen:importmap --><script type="importmap">{"imports":{"./assets/content.js":"./assets/content.js?v=6c12268861","./assets/fig/cabin.mjs":"./assets/fig/cabin.mjs?v=8d2423ef7b","./assets/fig/comms.mjs":"./assets/fig/comms.mjs?v=f41a34821a","./assets/fig/cupola.mjs":"./assets/fig/cupola.mjs?v=9efcadfe44","./assets/fig/dish.mjs":"./assets/fig/dish.mjs?v=bbfd6af994","./assets/fig/hatch.mjs":"./assets/fig/hatch.mjs?v=3fabeb8b1d","./assets/fig/mission001.mjs":"./assets/fig/mission001.mjs?v=1d2d597f9d","./assets/fig/solar.mjs":"./assets/fig/solar.mjs?v=6298cb9a65","./assets/fig/station.mjs":"./assets/fig/station.mjs?v=6fb38ef629","./assets/kit/audit.mjs":"./assets/kit/audit.mjs?v=0edd59b8fa","./assets/kit/gl.mjs":"./assets/kit/gl.mjs?v=37e76fedb1","./assets/kit/iso-kit.mjs":"./assets/kit/iso-kit.mjs?v=46c0b262a4","./assets/kit/lathe.mjs":"./assets/kit/lathe.mjs?v=034310ce13","./assets/kit/tube.mjs":"./assets/kit/tube.mjs?v=1bafc8d37c","./assets/render.js":"./assets/render.js?v=a40a4958bb","./assets/space.js":"./assets/space.js?v=28867e3955","./assets/ui.js":"./assets/ui.js?v=b403ab8f62"}}</script><link rel="modulepreload" href="assets/ui.js?v=b403ab8f62"><link rel="modulepreload" href="assets/space.js?v=28867e3955"><link rel="modulepreload" href="assets/fig/station.mjs?v=6fb38ef629"><!-- /gen:importmap -->
+<!-- gen:importmap --><script type="importmap">{"imports":{"./assets/content.js":"./assets/content.js?v=4d3239185b","./assets/fig/cabin.mjs":"./assets/fig/cabin.mjs?v=8d2423ef7b","./assets/fig/comms.mjs":"./assets/fig/comms.mjs?v=f41a34821a","./assets/fig/cupola.mjs":"./assets/fig/cupola.mjs?v=9efcadfe44","./assets/fig/dish.mjs":"./assets/fig/dish.mjs?v=bbfd6af994","./assets/fig/hatch.mjs":"./assets/fig/hatch.mjs?v=3fabeb8b1d","./assets/fig/mission001.mjs":"./assets/fig/mission001.mjs?v=1d2d597f9d","./assets/fig/solar.mjs":"./assets/fig/solar.mjs?v=6298cb9a65","./assets/fig/station.mjs":"./assets/fig/station.mjs?v=6fb38ef629","./assets/kit/audit.mjs":"./assets/kit/audit.mjs?v=0edd59b8fa","./assets/kit/gl.mjs":"./assets/kit/gl.mjs?v=37e76fedb1","./assets/kit/iso-kit.mjs":"./assets/kit/iso-kit.mjs?v=46c0b262a4","./assets/kit/lathe.mjs":"./assets/kit/lathe.mjs?v=034310ce13","./assets/kit/tube.mjs":"./assets/kit/tube.mjs?v=1bafc8d37c","./assets/render.js":"./assets/render.js?v=a40a4958bb","./assets/space.js":"./assets/space.js?v=28867e3955","./assets/ui.js":"./assets/ui.js?v=273924492d"}}</script><link rel="modulepreload" href="assets/ui.js?v=273924492d"><link rel="modulepreload" href="assets/space.js?v=28867e3955"><link rel="modulepreload" href="assets/fig/station.mjs?v=6fb38ef629"><!-- /gen:importmap -->
 <style id="iso-css"><!-- gen:isocss -->
 .iso{
   --anatomy-page:#0b0b0b;--anatomy-card:#131313;--anatomy-text:#a3a3a3;--anatomy-strong:#e6e6e6;--anatomy-muted:#6e6e6e;
@@ -400,6 +400,7 @@ body.diving .tabbar{opacity:0;pointer-events:none}
 .back{display:inline-flex;align-items:center;min-height:32px;font:500 14px var(--body);color:var(--cyan);text-decoration:none}
 .case-head{margin-top:4px}
 .case-kicker{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:400 12px var(--mono);color:var(--muted)}
+.case-title:focus,.p-title:focus{outline:none}
 .case-title{font:500 clamp(24px,2.1vw,32px)/1.08 var(--display);letter-spacing:-.025em;margin-top:6px}
 .case-one{font-size:15px;color:var(--ink-2);margin-top:2px}
 .case-meta{font:400 12.5px var(--mono);color:var(--muted);margin-top:4px}
@@ -410,7 +411,9 @@ body.diving .tabbar{opacity:0;pointer-events:none}
 .case-text:not(.stepped) .part[data-part="details"]{grid-column:1;grid-row:3 / span 3}
 .case-text.stepped{grid-column:2;grid-row:1 / span 3}
 .case-media{border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#070a18;aspect-ratio:4/3;display:grid}
-.case-media img{width:100%;height:100%;object-fit:cover}
+.case-media img{width:100%;height:100%;object-fit:contain;background:#03040a}
+.case-media:has(img[width]){aspect-ratio:auto}
+.case-media img[width]{height:auto}
 .img-coming{display:grid;place-items:center;background:repeating-linear-gradient(135deg,rgba(255,255,255,.025) 0 10px,transparent 10px 20px);color:var(--muted);font:500 13px var(--mono);letter-spacing:.08em}
 .fig-mount{position:relative;display:grid;place-items:center;overflow:hidden}
 .fig-mount .iso-figure{margin:0;width:100%}
@@ -703,6 +706,8 @@ body.diving .tabbar{opacity:0;pointer-events:none}
   .status{font-size:12px;padding:1px 7px}
   .case-meta{display:none}
   .case-title{font-size:22px;margin-top:2px}
+  .case-text.stepped .part p{font-size:14.5px;line-height:1.45}
+  .case-media:not(:has(img[width])){aspect-ratio:2.4/1}
   .case-media{aspect-ratio:21/9}
   .back{min-height:28px}
   .part p{font-size:14.5px}
@@ -896,10 +901,20 @@ body.diving .tabbar{opacity:0;pointer-events:none}
   <span class="m-one">CoreWeave · Product Management Intern</span>
   <span class="m-out">PR/FAQ mapping 30 partners to 10 enterprise use cases</span></span>
 </a></li>
+<li data-cats="featured ai"><a class="mission" href="#/work/mission-001" style="--c:#7fe3ff">
+  <svg class="pt" viewBox="0 0 120 120" aria-hidden="true" focusable="false"><defs><radialGradient id="pt-mission-001-g" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#7fe3ff" stop-opacity=".34"/><stop offset=".55" stop-color="#0b1330"/><stop offset="1" stop-color="#050816"/></radialGradient></defs>
+  <circle cx="60" cy="60" r="56" class="pt-rim"/><circle cx="60" cy="60" r="51.5" class="pt-stitch"/><circle cx="60" cy="60" r="47" fill="url(#pt-mission-001-g)" class="pt-face"/>
+  <g class="pt-stars"><circle cx="89.4" cy="38.7" r="1.1"/><circle cx="84.8" cy="89.2" r="0.9"/><circle cx="56.7" cy="88.3" r="1.2"/><circle cx="64.6" cy="93.2" r="1.3"/><circle cx="55.3" cy="80.3" r="0.9"/><circle cx="75.6" cy="83.7" r="1"/><circle cx="79.4" cy="61.1" r="0.9"/></g><text x="60" y="66" class="pt-ini">M0</text><ellipse cx="60" cy="60" rx="46" ry="15" transform="rotate(-23 60 60)" class="pt-orbit"/><circle cx="15" cy="60.8" r="2.6" class="pt-moon"/>
+  </svg>
+  <span class="m-body"><span class="m-top"><span class="m-status s-progress">In progress</span></span>
+  <b class="m-name">Mission 001</b>
+  <span class="m-one">Autonomous spacecraft inspection</span>
+  <span class="m-out">197/197 hidden faults found on 100 unseen missions · 0 debris hits in 400 adversarial encounters</span></span>
+</a></li>
 <li data-cats="featured im"><a class="mission" href="#/work/dreamweaver" style="--c:#b69cff">
   <svg class="pt" viewBox="0 0 120 120" aria-hidden="true" focusable="false"><defs><radialGradient id="pt-dreamweaver-g" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#b69cff" stop-opacity=".34"/><stop offset=".55" stop-color="#0b1330"/><stop offset="1" stop-color="#050816"/></radialGradient></defs>
   <circle cx="60" cy="60" r="56" class="pt-rim"/><circle cx="60" cy="60" r="51.5" class="pt-stitch"/><circle cx="60" cy="60" r="47" fill="url(#pt-dreamweaver-g)" class="pt-face"/>
-  <g class="pt-stars"><circle cx="89.4" cy="38.7" r="1.1"/><circle cx="84.8" cy="89.2" r="0.9"/><circle cx="56.7" cy="88.3" r="1.2"/><circle cx="64.6" cy="93.2" r="1.3"/><circle cx="55.3" cy="80.3" r="0.9"/><circle cx="75.6" cy="83.7" r="1"/><circle cx="79.4" cy="61.1" r="0.9"/></g><text x="60" y="66" class="pt-ini">D</text><ellipse cx="60" cy="60" rx="46" ry="15" transform="rotate(-23 60 60)" class="pt-orbit"/><circle cx="15" cy="60.8" r="2.6" class="pt-moon"/>
+  <g class="pt-stars"><circle cx="39.6" cy="87.2" r="1"/><circle cx="31.4" cy="45.7" r="0.7"/><circle cx="47.5" cy="42.2" r="0.9"/><circle cx="39.6" cy="82.4" r="0.8"/><circle cx="42.5" cy="74.1" r="1"/><circle cx="43.4" cy="76.8" r="1"/><circle cx="34.7" cy="78.9" r="1"/></g><text x="60" y="66" class="pt-ini">D</text><ellipse cx="60" cy="60" rx="46" ry="15" transform="rotate(-5 60 60)" class="pt-orbit"/><circle cx="16.5" cy="56.1" r="2.6" class="pt-moon"/>
   </svg>
   <span class="m-body"><span class="m-top"><span class="m-status s-shipped">Shipped</span></span>
   <b class="m-name">Dreamweaver</b>
@@ -909,7 +924,7 @@ body.diving .tabbar{opacity:0;pointer-events:none}
 <li data-cats="featured ps"><a class="mission" href="#/work/meroo-design-sprint" style="--c:#7cf2b9">
   <svg class="pt" viewBox="0 0 120 120" aria-hidden="true" focusable="false"><defs><radialGradient id="pt-meroo-design-sprint-g" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#7cf2b9" stop-opacity=".34"/><stop offset=".55" stop-color="#0b1330"/><stop offset="1" stop-color="#050816"/></radialGradient></defs>
   <circle cx="60" cy="60" r="56" class="pt-rim"/><circle cx="60" cy="60" r="51.5" class="pt-stitch"/><circle cx="60" cy="60" r="47" fill="url(#pt-meroo-design-sprint-g)" class="pt-face"/>
-  <g class="pt-stars"><circle cx="39.6" cy="87.2" r="1"/><circle cx="31.4" cy="45.7" r="0.7"/><circle cx="47.5" cy="42.2" r="0.9"/><circle cx="39.6" cy="82.4" r="0.8"/><circle cx="42.5" cy="74.1" r="1"/><circle cx="43.4" cy="76.8" r="1"/><circle cx="34.7" cy="78.9" r="1"/></g><text x="60" y="66" class="pt-ini">MD</text><ellipse cx="60" cy="60" rx="46" ry="15" transform="rotate(-5 60 60)" class="pt-orbit"/><circle cx="16.5" cy="56.1" r="2.6" class="pt-moon"/>
+  <g class="pt-stars"><circle cx="61.5" cy="32.3" r="1.2"/><circle cx="83.8" cy="83" r="0.5"/><circle cx="75.9" cy="47.8" r="0.7"/><circle cx="75.9" cy="46.2" r="0.8"/><circle cx="23.3" cy="55.4" r="0.5"/><circle cx="85.2" cy="42.2" r="0.7"/><circle cx="46.3" cy="38.1" r="0.7"/></g><text x="60" y="66" class="pt-ini">MD</text><ellipse cx="60" cy="60" rx="46" ry="15" transform="rotate(-9 60 60)" class="pt-orbit"/><circle cx="15.7" cy="57.1" r="2.6" class="pt-moon"/>
   </svg>
   <span class="m-body"><span class="m-top"><span class="m-status s-concept">Concept</span></span>
   <b class="m-name">Meroo Design Sprint</b>
@@ -919,21 +934,12 @@ body.diving .tabbar{opacity:0;pointer-events:none}
 <li data-cats="featured ai"><a class="mission" href="#/work/unblur" style="--c:#7fe3ff">
   <svg class="pt" viewBox="0 0 120 120" aria-hidden="true" focusable="false"><defs><radialGradient id="pt-unblur-g" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#7fe3ff" stop-opacity=".34"/><stop offset=".55" stop-color="#0b1330"/><stop offset="1" stop-color="#050816"/></radialGradient></defs>
   <circle cx="60" cy="60" r="56" class="pt-rim"/><circle cx="60" cy="60" r="51.5" class="pt-stitch"/><circle cx="60" cy="60" r="47" fill="url(#pt-unblur-g)" class="pt-face"/>
-  <g class="pt-stars"><circle cx="61.5" cy="32.3" r="1.2"/><circle cx="83.8" cy="83" r="0.5"/><circle cx="75.9" cy="47.8" r="0.7"/><circle cx="75.9" cy="46.2" r="0.8"/><circle cx="23.3" cy="55.4" r="0.5"/><circle cx="85.2" cy="42.2" r="0.7"/><circle cx="46.3" cy="38.1" r="0.7"/></g><text x="60" y="66" class="pt-ini">U</text><ellipse cx="60" cy="60" rx="46" ry="15" transform="rotate(-9 60 60)" class="pt-orbit"/><circle cx="15.7" cy="57.1" r="2.6" class="pt-moon"/>
+  <g class="pt-stars"><circle cx="35.4" cy="60.1" r="1"/><circle cx="60" cy="84.8" r="0.9"/><circle cx="33.6" cy="67.5" r="1.2"/><circle cx="52.6" cy="98.7" r="0.7"/><circle cx="39.1" cy="30.2" r="0.8"/><circle cx="67.1" cy="21.3" r="0.9"/><circle cx="34.1" cy="85.8" r="0.6"/></g><text x="60" y="66" class="pt-ini">U</text><ellipse cx="60" cy="60" rx="46" ry="15" transform="rotate(14 60 60)" class="pt-orbit"/><circle cx="22.6" cy="51.6" r="2.6" class="pt-moon"/>
   </svg>
   <span class="m-body"><span class="m-top"><span class="m-status s-progress">In progress</span></span>
   <b class="m-name">Unblur</b>
   <span class="m-one">AI onboarding assistant</span>
   <span class="m-out">Direction grounded in 20 user interviews</span></span>
-</a></li>
-<li data-cats="featured ai"><a class="mission" href="#/work/mission-001" style="--c:#7fe3ff">
-  <svg class="pt" viewBox="0 0 120 120" aria-hidden="true" focusable="false"><defs><radialGradient id="pt-mission-001-g" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#7fe3ff" stop-opacity=".34"/><stop offset=".55" stop-color="#0b1330"/><stop offset="1" stop-color="#050816"/></radialGradient></defs>
-  <circle cx="60" cy="60" r="56" class="pt-rim"/><circle cx="60" cy="60" r="51.5" class="pt-stitch"/><circle cx="60" cy="60" r="47" fill="url(#pt-mission-001-g)" class="pt-face"/>
-  <g class="pt-stars"><circle cx="35.4" cy="60.1" r="1"/><circle cx="60" cy="84.8" r="0.9"/><circle cx="33.6" cy="67.5" r="1.2"/><circle cx="52.6" cy="98.7" r="0.7"/><circle cx="39.1" cy="30.2" r="0.8"/><circle cx="67.1" cy="21.3" r="0.9"/><circle cx="34.1" cy="85.8" r="0.6"/></g><text x="60" y="66" class="pt-ini">M0</text><ellipse cx="60" cy="60" rx="46" ry="15" transform="rotate(14 60 60)" class="pt-orbit"/><circle cx="22.6" cy="51.6" r="2.6" class="pt-moon"/>
-  </svg>
-  <span class="m-body"><span class="m-top"><span class="m-status s-progress">In progress</span></span>
-  <b class="m-name">Mission 001</b>
-  <span class="m-one">Autonomous spacecraft inspection</span></span>
 </a></li>
 <li data-cats="ai"><a class="mission" href="#/work/astryn" style="--c:#7fe3ff">
   <svg class="pt" viewBox="0 0 120 120" aria-hidden="true" focusable="false"><defs><radialGradient id="pt-astryn-g" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#7fe3ff" stop-opacity=".34"/><stop offset=".55" stop-color="#0b1330"/><stop offset="1" stop-color="#050816"/></radialGradient></defs>
@@ -1021,7 +1027,27 @@ body.diving .tabbar{opacity:0;pointer-events:none}
       <section class="part" data-part="details"><h4>Tools</h4><ul class="tags"><li>Customer discovery</li><li>ICP definition</li><li>PR/FAQ</li><li>GTM strategy</li></ul></section>
     </div>
   </div>
-  <nav class="pager" aria-label="More projects"><a href="#/work/uber-av-strategy">← Uber AV Strategy</a><a href="#/work/dreamweaver">Dreamweaver →</a></nav>
+  <nav class="pager" aria-label="More projects"><a href="#/work/uber-av-strategy">← Uber AV Strategy</a><a href="#/work/mission-001">Mission 001 →</a></nav>
+</article>
+<article class="case" id="work-mission-001" data-case="mission-001" aria-labelledby="h-mission-001" style="--c:#7fe3ff" hidden>
+  <a class="back" href="#/work">← All work</a>
+  <header class="case-head">
+    <p class="case-kicker"><span class="status s-progress">In progress</span><span>AI, Software &amp; Startups</span></p>
+    <h3 class="case-title" id="h-mission-001">Mission 001</h3>
+    <p class="case-one">Autonomous spacecraft inspection</p>
+    <p class="case-meta">Project · Solo · Python · MuJoCo · 2026</p>
+  </header>
+  <div class="case-grid">
+    <figure class="case-media"><img src="assets/work/mission-001.webp" alt="Simulation: the inspector robot flying its route around the spacecraft Alpha-03 (left) and what its onboard camera sees (right)" width="800" height="300" loading="lazy" decoding="async"></figure>
+    <div class="case-text" data-fit>
+      <div class="steps" role="tablist" aria-label="Mission 001 sections"><button type="button" role="tab" class="step" data-step="problem" aria-selected="true">Problem</button><button type="button" role="tab" class="step" data-step="did" aria-selected="false">What I did</button><button type="button" role="tab" class="step" data-step="result" aria-selected="false">Result</button><button type="button" role="tab" class="step" data-step="details" aria-selected="false">Tools</button></div>
+      <section class="part" data-part="problem"><h4>Problem</h4><p>A robot inspecting a spacecraft in orbit has to find what's wrong on its own, and keep working when the world stops matching its assumptions: navigation error, bad lighting, drifting debris.</p></section>
+      <section class="part" data-part="did"><h4>What I did</h4><p>Built a Python and MuJoCo testbed: a 6-DOF free-flyer inspects a spacecraft and compares each RGB-D view with a digital twin to find faults. It aligns the twin to the camera, learns a calibrated confidence, looks again when unsure, and dodges drifting debris. The autonomy never touches simulator state, so it can move to ROS 2 or hardware.</p></section>
+      <section class="part" data-part="result"><h4>Result</h4><p>All 197 hidden faults found with 0 false alarms on 100 unseen missions. Aligning the twin raised navigation-error tolerance 5–10×; the learned confidence cut calibration error from 0.119 to 0.009; looking again rescued 292 verdicts and spoiled 5; debris hits fell from 100% to 0% in 400 adversarial encounters.</p></section>
+      <section class="part" data-part="details"><h4>Tools</h4><ul class="tags"><li>Python</li><li>MuJoCo</li><li>NumPy &amp; SciPy</li><li>Digital twin</li><li>ICP &amp; Lucas–Kanade</li><li>Logistic regression</li><li>pytest</li></ul></section>
+    </div>
+  </div>
+  <nav class="pager" aria-label="More projects"><a href="#/work/ai-infrastructure-marketplace">← AI Infrastructure Marketplace</a><a href="#/work/dreamweaver">Dreamweaver →</a></nav>
 </article>
 <article class="case" id="work-dreamweaver" data-case="dreamweaver" aria-labelledby="h-dreamweaver" style="--c:#b69cff" hidden>
   <a class="back" href="#/work">← All work</a>
@@ -1041,7 +1067,7 @@ body.diving .tabbar{opacity:0;pointer-events:none}
       <section class="part" data-part="details"><h4>Tools</h4><ul class="tags"><li>p5.js</li><li>ml5.js</li><li>JavaScript</li><li>Gesture recognition</li></ul></section>
     </div>
   </div>
-  <nav class="pager" aria-label="More projects"><a href="#/work/ai-infrastructure-marketplace">← AI Infrastructure Marketplace</a><a href="#/work/meroo-design-sprint">Meroo Design Sprint →</a></nav>
+  <nav class="pager" aria-label="More projects"><a href="#/work/mission-001">← Mission 001</a><a href="#/work/meroo-design-sprint">Meroo Design Sprint →</a></nav>
 </article>
 <article class="case" id="work-meroo-design-sprint" data-case="meroo-design-sprint" aria-labelledby="h-meroo-design-sprint" style="--c:#7cf2b9" hidden>
   <a class="back" href="#/work">← All work</a>
@@ -1081,27 +1107,7 @@ body.diving .tabbar{opacity:0;pointer-events:none}
       <section class="part" data-part="details"><h4>Tools</h4><ul class="tags"><li>Customer discovery</li><li>User interviews</li><li>Product strategy</li><li>AI</li></ul></section>
     </div>
   </div>
-  <nav class="pager" aria-label="More projects"><a href="#/work/meroo-design-sprint">← Meroo Design Sprint</a><a href="#/work/mission-001">Mission 001 →</a></nav>
-</article>
-<article class="case" id="work-mission-001" data-case="mission-001" aria-labelledby="h-mission-001" style="--c:#7fe3ff" hidden>
-  <a class="back" href="#/work">← All work</a>
-  <header class="case-head">
-    <p class="case-kicker"><span class="status s-progress">In progress</span><span>AI, Software &amp; Startups</span></p>
-    <h3 class="case-title" id="h-mission-001">Mission 001</h3>
-    <p class="case-one">Autonomous spacecraft inspection</p>
-    <p class="case-meta">Project · Solo · Python · MuJoCo</p>
-  </header>
-  <div class="case-grid">
-    <figure class="case-media"><div class="fig-mount" data-figure="mission001"><p class="fig-fallback">Interactive illustration of the concept. Turn on JavaScript to see it.</p></div></figure>
-    <div class="case-text" data-fit>
-      <div class="steps" role="tablist" aria-label="Mission 001 sections"><button type="button" role="tab" class="step" data-step="problem" aria-selected="true">Problem</button><button type="button" role="tab" class="step" data-step="did" aria-selected="false">What I did</button><button type="button" role="tab" class="step" data-step="result" aria-selected="false">Result</button><button type="button" role="tab" class="step" data-step="details" aria-selected="false">Tools</button></div>
-      <section class="part" data-part="problem"><h4>Problem</h4><p>Inspecting a spacecraft in orbit calls for a robot that can work around the vehicle on its own: seeing it, spotting anomalies, planning its moves, and recovering when something goes wrong.</p></section>
-      <section class="part" data-part="did"><h4>What I did</h4><p>Building the simulation and full technical stack myself in Python and MuJoCo, centered on a free-flying 6-DOF robot operating around a spacecraft. The architecture covers perception, anomaly detection, planning, failure recovery, and mission evaluation.</p></section>
-      <section class="part" data-part="result"><h4>Result</h4><p>In active development, with a working prototype coming soon.</p></section>
-      <section class="part" data-part="details"><h4>Tools</h4><ul class="tags"><li>Python</li><li>MuJoCo</li><li>Physics simulation</li><li>Robotics</li></ul></section>
-    </div>
-  </div>
-  <nav class="pager" aria-label="More projects"><a href="#/work/unblur">← Unblur</a><a href="#/work/astryn">Astryn →</a></nav>
+  <nav class="pager" aria-label="More projects"><a href="#/work/meroo-design-sprint">← Meroo Design Sprint</a><a href="#/work/astryn">Astryn →</a></nav>
 </article>
 <article class="case" id="work-astryn" data-case="astryn" aria-labelledby="h-astryn" style="--c:#7fe3ff" hidden>
   <a class="back" href="#/work">← All work</a>
@@ -1120,7 +1126,7 @@ body.diving .tabbar{opacity:0;pointer-events:none}
       <section class="part" data-part="details"><h4>Tools</h4><ul class="tags"><li>Product design</li><li>Interaction design</li><li>Engagement loops</li></ul></section>
     </div>
   </div>
-  <nav class="pager" aria-label="More projects"><a href="#/work/mission-001">← Mission 001</a><a href="#/work/velostat-heart">Velostat Heart →</a></nav>
+  <nav class="pager" aria-label="More projects"><a href="#/work/unblur">← Unblur</a><a href="#/work/velostat-heart">Velostat Heart →</a></nav>
 </article>
 <article class="case" id="work-velostat-heart" data-case="velostat-heart" aria-labelledby="h-velostat-heart" style="--c:#b69cff" hidden>
   <a class="back" href="#/work">← All work</a>
@@ -1323,6 +1329,6 @@ body.diving .tabbar{opacity:0;pointer-events:none}
 </ul></nav>
 <div class="sr" aria-live="polite" id="live"></div>
 <div class="cine" aria-hidden="true"></div>
-<!-- gen:entry --><script type="module" src="assets/ui.js?v=b403ab8f62"></script><!-- /gen:entry -->
+<!-- gen:entry --><script type="module" src="assets/ui.js?v=273924492d"></script><!-- /gen:entry -->
 </body>
 </html>
