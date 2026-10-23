@@ -112,7 +112,7 @@ export const PROJECTS = [
     image: "assets/work/mission-001.webp", // from the space-autonomy repo (docs/media/mission.gif), re-encoded
     imageSize: [800, 300],
     imageAlt: "Simulation: the inspector robot flying its route around the spacecraft Alpha-03 (left) and what its onboard camera sees (right)",
-    links: [], // TODO: link the repo or demo page once they're public
+    links: [{ label: "Code, results and write-up on GitHub", url: "https://github.com/priyanshjain05/space-autonomy" }],
   },
   {
     slug: "cnc-space-p", name: "CNC Space \"P\"", category: "hw", status: "Shipped", featured: 0,
