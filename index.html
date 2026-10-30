@@ -28,7 +28,7 @@
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
-<!-- gen:importmap --><script type="importmap">{"imports":{"./assets/content.js":"./assets/content.js?v=9078da7c46","./assets/fig/cabin.mjs":"./assets/fig/cabin.mjs?v=8d2423ef7b","./assets/fig/comms.mjs":"./assets/fig/comms.mjs?v=f41a34821a","./assets/fig/cupola.mjs":"./assets/fig/cupola.mjs?v=9efcadfe44","./assets/fig/dish.mjs":"./assets/fig/dish.mjs?v=bbfd6af994","./assets/fig/hatch.mjs":"./assets/fig/hatch.mjs?v=3fabeb8b1d","./assets/fig/mission001.mjs":"./assets/fig/mission001.mjs?v=1d2d597f9d","./assets/fig/solar.mjs":"./assets/fig/solar.mjs?v=6298cb9a65","./assets/fig/station.mjs":"./assets/fig/station.mjs?v=6fb38ef629","./assets/game/game.mjs":"./assets/game/game.mjs?v=b9802922cf","./assets/game/parts.js":"./assets/game/parts.js?v=9d47013048","./assets/game/ship.mjs":"./assets/game/ship.mjs?v=7abf9c99bb","./assets/kit/audit.mjs":"./assets/kit/audit.mjs?v=0edd59b8fa","./assets/kit/gl.mjs":"./assets/kit/gl.mjs?v=37e76fedb1","./assets/kit/iso-kit.mjs":"./assets/kit/iso-kit.mjs?v=46c0b262a4","./assets/kit/lathe.mjs":"./assets/kit/lathe.mjs?v=034310ce13","./assets/kit/tube.mjs":"./assets/kit/tube.mjs?v=1bafc8d37c","./assets/render.js":"./assets/render.js?v=a40a4958bb","./assets/space.js":"./assets/space.js?v=c7ee2b1e4f","./assets/ui.js":"./assets/ui.js?v=ee6f2da953"}}</script><link rel="modulepreload" href="assets/ui.js?v=ee6f2da953"><link rel="modulepreload" href="assets/space.js?v=c7ee2b1e4f"><link rel="modulepreload" href="assets/fig/station.mjs?v=6fb38ef629"><!-- /gen:importmap -->
+<!-- gen:importmap --><script type="importmap">{"imports":{"./assets/content.js":"./assets/content.js?v=9078da7c46","./assets/fig/cabin.mjs":"./assets/fig/cabin.mjs?v=8d2423ef7b","./assets/fig/comms.mjs":"./assets/fig/comms.mjs?v=f41a34821a","./assets/fig/cupola.mjs":"./assets/fig/cupola.mjs?v=9efcadfe44","./assets/fig/dish.mjs":"./assets/fig/dish.mjs?v=bbfd6af994","./assets/fig/hatch.mjs":"./assets/fig/hatch.mjs?v=3fabeb8b1d","./assets/fig/mission001.mjs":"./assets/fig/mission001.mjs?v=1d2d597f9d","./assets/fig/solar.mjs":"./assets/fig/solar.mjs?v=6298cb9a65","./assets/fig/station.mjs":"./assets/fig/station.mjs?v=6fb38ef629","./assets/game/game.mjs":"./assets/game/game.mjs?v=b9802922cf","./assets/game/parts.js":"./assets/game/parts.js?v=9d47013048","./assets/game/ship.mjs":"./assets/game/ship.mjs?v=7abf9c99bb","./assets/kit/audit.mjs":"./assets/kit/audit.mjs?v=0edd59b8fa","./assets/kit/gl.mjs":"./assets/kit/gl.mjs?v=37e76fedb1","./assets/kit/iso-kit.mjs":"./assets/kit/iso-kit.mjs?v=46c0b262a4","./assets/kit/lathe.mjs":"./assets/kit/lathe.mjs?v=034310ce13","./assets/kit/tube.mjs":"./assets/kit/tube.mjs?v=1bafc8d37c","./assets/render.js":"./assets/render.js?v=a40a4958bb","./assets/space.js":"./assets/space.js?v=c7ee2b1e4f","./assets/ui.js":"./assets/ui.js?v=e36b0d72a4"}}</script><link rel="modulepreload" href="assets/ui.js?v=e36b0d72a4"><link rel="modulepreload" href="assets/space.js?v=c7ee2b1e4f"><link rel="modulepreload" href="assets/fig/station.mjs?v=6fb38ef629"><!-- /gen:importmap -->
 <style id="iso-css"><!-- gen:isocss -->
 .iso{
   --anatomy-page:#0b0b0b;--anatomy-card:#131313;--anatomy-text:#a3a3a3;--anatomy-strong:#e6e6e6;--anatomy-muted:#6e6e6e;
@@ -621,28 +621,30 @@ body.diving .tabbar{opacity:0;pointer-events:none}
 .sl-group li:not(:last-child)::after{content:" ·";color:var(--dim)}
 
 /* ---------- the game's way in: a small ship orbiting the station ---------- */
-.orb-ship{position:fixed;left:0;top:0;width:48px;height:48px;padding:6px;border-radius:50%;z-index:16;cursor:pointer;will-change:transform;visibility:hidden;filter:drop-shadow(0 0 6px rgba(255,191,115,.55))}
-.orb-ship svg{display:block;width:100%;height:100%;overflow:visible}
-.orb-ship .o-body{fill:#1d2a4f;stroke:#ffe6c4;stroke-width:1.5;stroke-linejoin:round}
-.orb-ship .o-canopy{fill:#7fe3ff}
-.orb-ship .o-flame{fill:#ffbf73;opacity:.9;transform-origin:0 8px;animation:orbflame .35s ease-in-out infinite alternate}
+.orb-art{position:fixed;left:0;top:0;width:48px;height:48px;padding:6px;z-index:16;pointer-events:none;will-change:transform;visibility:hidden;filter:drop-shadow(0 0 6px rgba(255,191,115,.55));transition:filter .3s}
+.orb-art.lit{filter:drop-shadow(0 0 11px rgba(255,191,115,.95))}
+.orb-art svg{display:block;width:100%;height:100%;overflow:visible}
+.orb-art .o-body{fill:#1d2a4f;stroke:#ffe6c4;stroke-width:1.5;stroke-linejoin:round}
+.orb-art .o-canopy{fill:#7fe3ff}
+.orb-art .o-flame{fill:#ffbf73;opacity:.9;transform-origin:0 8px;animation:orbflame .35s ease-in-out infinite alternate}
+.orb-ship{position:fixed;left:0;top:0;width:56px;height:56px;border-radius:50%;z-index:17;cursor:pointer;background:transparent;visibility:hidden}
 @keyframes orbflame{from{transform:scaleY(.7)}to{transform:scaleY(1.15)}}
-.orb-label{position:fixed;left:0;top:0;z-index:18;display:inline-flex;align-items:center;gap:9px;min-height:44px;padding:0 15px 0 12px;border-radius:12px;background:var(--glass);border:1px solid rgba(255,191,115,.45);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);white-space:nowrap;font:500 15px var(--display);color:#fff;box-shadow:0 8px 30px -12px rgba(0,0,0,.8),0 0 22px -8px rgba(255,191,115,.55);visibility:hidden;cursor:pointer;transition:border-color .3s,box-shadow .3s,background .3s}
-.orb-label:hover,.orb-label:focus-visible{border-color:#ffbf73;background:rgba(10,16,34,.92);box-shadow:0 0 30px -6px rgba(255,191,115,.65)}
-.orb-label:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
-.orb-dot{width:8px;height:8px;border-radius:50%;background:var(--amber);box-shadow:0 0 10px var(--amber);animation:breathe 2.4s var(--ease) infinite}
-.orb-lines{position:fixed;inset:0;width:100%;height:100%;z-index:17;pointer-events:none;visibility:hidden}
-.orb-lines line{stroke:rgba(255,191,115,.4);stroke-width:1;stroke-dasharray:3 4}
-.orb-hint{position:fixed;left:0;top:0;z-index:19;padding:6px 12px;border-radius:999px;background:var(--glass);border:1px solid var(--line-2);font:400 13px var(--body);color:var(--ink);pointer-events:none;transition:opacity .8s var(--ease)}
-.orb-hint.gone{opacity:0}
+.orb-ship::before{content:"";position:absolute;inset:-8px;border-radius:50%}
+.orb-ship:focus-visible{outline:2px solid var(--amber);outline-offset:4px}
+.orb-tag{position:fixed;left:0;top:0;z-index:19;display:inline-flex;align-items:center;gap:8px;padding:7px 13px 7px 11px;border-radius:12px;background:var(--glass);border:1px solid rgba(255,191,115,.5);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);white-space:nowrap;font:500 15px var(--display);color:#fff;box-shadow:0 8px 30px -12px rgba(0,0,0,.8),0 0 22px -8px rgba(255,191,115,.55);pointer-events:none;opacity:0;transition:opacity .35s var(--ease)}
+.orb-tag.on{opacity:1}
+.orb-arr{color:var(--amber)}
+.orb-dot{width:7px;height:7px;border-radius:50%;background:var(--amber);box-shadow:0 0 10px var(--amber)}
+.orb-trail{position:fixed;inset:0;width:100%;height:100%;z-index:13;pointer-events:none;visibility:hidden}
+.orb-trail line{stroke:#ffbf73;stroke-width:1.6;stroke-linecap:round}
 .orb-skip{position:fixed;right:var(--gutter);top:18px;z-index:72}
 .orb-skip[hidden]{display:none}
 body.gaming .home{opacity:0;pointer-events:none}
 body.gaming .hero{visibility:hidden}
 body.gaming .hud{opacity:0;pointer-events:none}
 body.game-in #station{opacity:0!important;transition:opacity .5s var(--ease)}
-body.gaming .tabbar,body.gaming .orb-hint,body.gaming #hint{visibility:hidden}
-@media (prefers-reduced-motion:reduce){.orb-ship .o-flame,.orb-dot{animation:none}}
+body.gaming .tabbar,body.gaming .orb-tag,body.gaming #hint{visibility:hidden}
+@media (prefers-reduced-motion:reduce){.orb-art .o-flame{animation:none}.orb-tag{transition:none}}
 
 /* mobile tab bar (text menu backup) */
 .tabbar{display:none}
@@ -1355,6 +1357,6 @@ body.gaming .tabbar,body.gaming .orb-hint,body.gaming #hint{visibility:hidden}
 </ul></nav>
 <div class="sr" aria-live="polite" id="live"></div>
 <div class="cine" aria-hidden="true"></div>
-<!-- gen:entry --><script type="module" src="assets/ui.js?v=ee6f2da953"></script><!-- /gen:entry -->
+<!-- gen:entry --><script type="module" src="assets/ui.js?v=e36b0d72a4"></script><!-- /gen:entry -->
 </body>
 </html>
