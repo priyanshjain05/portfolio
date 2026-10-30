@@ -419,7 +419,7 @@ function drawRocket(x, y, size, ang, thrust, t) {
 }
 
 /* ============================ warp ============================ */
-let warp = null;
+let warp = null, streakFx = null;
 const warpStars = Array.from({ length: 760 }, () => ({ x: (Math.random() - 0.5) * 2, y: (Math.random() - 0.5) * 2, z: Math.random() }));
 const WARP_T = 2.9;
 function drawWarp(dt, wt) {
@@ -728,6 +728,12 @@ function frame(now) {
     ctx.globalAlpha = 1;
   }
   if (warp) drawWarp(dt, warpWt);
+  if (streakFx) {                                             // the same warp streaks, replayed for the game's entry and exit
+    streakFx.t += dt;
+    const k = clamp(streakFx.t / streakFx.dur, 0, 1), e = k * k * (3 - 2 * k);
+    drawWarp(dt, streakFx.from + (streakFx.to - streakFx.from) * e);
+    if (k >= 1) streakFx = null;
+  }
 
   // ---- station overlay: the anatomy figure, placed and scaled with the world ----
   const sc = cam.s * SU, [hx, hy] = toScreen(0, 0), sw = SV.w * sc, sh = SV.h * sc;
@@ -853,6 +859,8 @@ export const Space = {
   },
   frameDest(id, box, instant) { goal = destFraming(D[id], box); camTau = 0.62; if (instant || RM) { Object.assign(cam, goal); camV.x = camV.y = camV.l = 0; } },
   // stop drawing the universe while something opaque covers it; resume where it left off
+  // replay the intro's warp streaks between two points of its timeline (0.2 = barely moving, 1.9 = full warp)
+  streak(from, to, dur) { if (RM) return; streakFx = { from, to, dur, t: 0 }; this.hold(false); },
   hold(v) { held = !!v; if (!held && !running) { last = 0; running = true; requestAnimationFrame(frame); } },
   setPanel(p) { panel = p; if (!p) stationDim = 1; },
   dimStation(v) { stationDim = v; },

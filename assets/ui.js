@@ -46,7 +46,8 @@ function slotRect() {
 /* ============================ hotspots follow the station every frame ============================ */
 let lineEls = {}, hintPos = null;
 function frame(f) {
-  const show = Space.scene === "home" && !panelOpen && !dive && f.station.visible && f.station.alpha > 0.15;
+  const show = Space.scene === "home" && !panelOpen && !dive && !gameOpen && f.station.visible && f.station.alpha > 0.15;
+  orbit(f, show && !body.classList.contains("intro") && !body.classList.contains("warping"));
   const holding = performance.now() < menuHold;      // labels wait for the camera to settle, but stay focusable
   menu.style.visibility = show ? "visible" : "hidden";
   menu.style.opacity = show && !holding ? Math.min(1, f.station.alpha).toFixed(3) : "0";
@@ -546,6 +547,7 @@ function enterAnim() {
 
 /* ============================ keyboard: Esc, arrows, focus trap ============================ */
 addEventListener("keydown", (e) => {
+  if (gameOpen) return;                                   // the game handles its own keys while it's open
   if (body.classList.contains("intro")) {
     if (e.key === "Enter" && !e.target.closest?.("button,a")) { e.preventDefault(); enter(); }
     if (e.key === "Escape") skip();
@@ -623,6 +625,119 @@ Space.on("resize", () => {
   else if (Space.scene === "home") Space.home(homeBox, { instant: true });
   for (const a of Object.values(hots)) { a.lastElementChild._w = 0; a.lastElementChild._h = 0; }
 });
+
+/* ============================ the game: a small ship orbiting the station, and the way into it ============================ */
+// The ship and its label are made here, not in the HTML, so the page's text content and SEO stay exactly as they were.
+let gameOpen = false, gameMod = null, game = null, orbitA = 0.9, orbitLast = 0, gameTimers = [];
+const svgNS = "http://www.w3.org/2000/svg";
+const orbShip = document.createElement("button");
+orbShip.className = "orb-ship"; orbShip.type = "button"; orbShip.tabIndex = -1; orbShip.setAttribute("aria-hidden", "true");
+// a little delta-winged runabout: nothing like the docked rocket
+orbShip.innerHTML = `<svg viewBox="-16 -16 32 32" aria-hidden="true"><path class="o-flame" d="M-3 8 L0 15 L3 8Z"/><path class="o-body" d="M0 -12 L4 -2 L11 7 L4 6 L0 9 L-4 6 L-11 7 L-4 -2Z"/><path class="o-canopy" d="M0 -8 L1.8 -3 L-1.8 -3Z"/></svg>`;
+const orbLabel = document.createElement("button");
+orbLabel.className = "orb-label"; orbLabel.type = "button"; orbLabel.setAttribute("aria-label", "Play the spacecraft game");
+orbLabel.innerHTML = `<span class="orb-dot" aria-hidden="true"></span><span aria-hidden="true">Play · 60 sec</span>`;
+const orbLine = document.createElementNS(svgNS, "svg"); orbLine.setAttribute("class", "orb-lines"); orbLine.setAttribute("aria-hidden", "true");
+const orbPath = document.createElementNS(svgNS, "line"); orbLine.appendChild(orbPath);
+const orbHint = document.createElement("p"); orbHint.className = "orb-hint gone"; orbHint.setAttribute("aria-hidden", "true"); orbHint.textContent = "New: build a ship and fly it";
+const orbSkip = document.createElement("button"); orbSkip.className = "btn orb-skip"; orbSkip.type = "button"; orbSkip.textContent = "Skip"; orbSkip.hidden = true;
+const gameRoot = document.createElement("section");
+gameRoot.id = "game"; gameRoot.hidden = true; gameRoot.setAttribute("role", "dialog"); gameRoot.setAttribute("aria-modal", "true"); gameRoot.setAttribute("aria-labelledby", "g-title");
+document.body.append(orbLine, orbShip, orbLabel, orbHint, orbSkip, gameRoot);
+
+const loadGame = () => (gameMod = gameMod || import("./game/game.mjs").catch(() => { gameMod = null; return null; }));
+for (const el of [orbLabel, orbShip]) { el.addEventListener("pointerenter", loadGame); el.addEventListener("focus", loadGame); el.addEventListener("click", openGame); }
+(window.requestIdleCallback || ((f) => setTimeout(f, 3000)))(() => !RM && loadGame(), { timeout: 6000 });
+
+let orbPos = [0, 0], orbVisible = false, hintShown = false;
+function orbit(f, show) {
+  orbVisible = show;
+  for (const el of [orbLabel, orbLine]) el.style.visibility = show ? "visible" : "hidden";
+  if (!orbShip.classList.contains("leaving")) orbShip.style.visibility = show ? "visible" : "hidden";   // mid-swoop it is ours
+  orbLabel.tabIndex = show ? 0 : -1;
+  if (!show) { orbHint.classList.add("gone"); return; }
+  const now = performance.now(), dt = orbitLast ? Math.min(0.05, (now - orbitLast) / 1000) : 0; orbitLast = now;
+  if (!gameOpen && !RM) orbitA += dt * ((Math.PI * 2) / 28);          // one slow lap every 28 s
+  const { left, top, sc } = f.station, sw = 900 * sc, sh = 560 * sc;
+  const cx = left + sw * 0.5, cy = top + sh * 0.53, rx = sw * 0.4, ry = sw * 0.12, tilt = -0.32;
+  const a = RM ? 2.3 : orbitA, ex = Math.cos(a) * rx, ey = Math.sin(a) * ry;
+  const x = cx + ex * Math.cos(tilt) - ey * Math.sin(tilt), y = cy + ex * Math.sin(tilt) + ey * Math.cos(tilt);
+  const front = Math.sin(a) > 0, depth = 0.78 + 0.22 * (Math.sin(a) + 1) / 2;
+  // heading along the orbit
+  const dx = -Math.sin(a) * rx, dy = Math.cos(a) * ry, hx = dx * Math.cos(tilt) - dy * Math.sin(tilt), hy = dx * Math.sin(tilt) + dy * Math.cos(tilt);
+  const ang = RM ? -20 : (Math.atan2(hy, hx) * 180) / Math.PI + 90;
+  const k = Math.max(0.75, Math.min(1.25, sc / 0.9));
+  orbPos = [x, y];
+  if (!orbShip.classList.contains("leaving")) {
+    orbShip.style.transform = `translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,0) translate(-50%,-50%) rotate(${ang.toFixed(1)}deg) scale(${(depth * k).toFixed(3)})`;
+    orbShip.style.zIndex = front ? 16 : 14;
+    orbShip.style.opacity = front ? 1 : 0.7;
+  }
+  // the label sits still, clear of the station, with a connector to the moving ship (like the part labels)
+  const lw = orbLabel._w || (orbLabel._w = orbLabel.offsetWidth), lh = orbLabel._h || (orbLabel._h = orbLabel.offsetHeight);
+  let lx = labelMode ? left + sw * 0.0 : left + sw * 0.02, ly = labelMode ? top + sh * 0.7 : top + sh * 0.9;
+  lx = Math.max(12, Math.min(innerWidth - lw - 12, lx)); ly = Math.max(76, Math.min(innerHeight - lh - (tall ? 70 : 12), ly));
+  orbLabel.style.transform = `translate3d(${lx.toFixed(1)}px,${ly.toFixed(1)}px,0)`;
+  const ex2 = Math.max(lx, Math.min(lx + lw, x)), ey2 = Math.max(ly, Math.min(ly + lh, y));
+  orbPath.setAttribute("x1", x.toFixed(1)); orbPath.setAttribute("y1", y.toFixed(1)); orbPath.setAttribute("x2", ex2.toFixed(1)); orbPath.setAttribute("y2", ey2.toFixed(1));
+  // a quiet one-time hint the first time the ship is seen
+  if (!hintShown && !store.get("pj-game-hint") && performance.now() > menuHold + 1500 && (!tall || hint.classList.contains("gone"))) {   // on phones, after the station's own hint
+    hintShown = true; store.set("pj-game-hint", "1");
+    orbHint.classList.remove("gone"); gameTimers.push(setTimeout(() => orbHint.classList.add("gone"), 7000));
+  }
+  if (!orbHint.classList.contains("gone")) orbHint.style.transform = `translate3d(${lx.toFixed(1)}px,${(tall ? ly + lh + 8 : ly - (orbHint.offsetHeight || 30) - 8).toFixed(1)}px,0)`;
+}
+
+async function openGame() {
+  if (gameOpen || !orbVisible) return;
+  orbHint.classList.add("gone");
+  const mod = await loadGame(); if (!mod) return;
+  gameOpen = true; seenHint();
+  body.classList.add("gaming");
+  for (const el of $$(".home, .hud, .tabbar, #labels, #beacons, .radar-wrap")) el.inert = true;
+  orbLabel.style.visibility = "hidden"; orbLine.style.visibility = "hidden";
+  if (!game) game = mod.createGame({ root: gameRoot, reduced: RM, links: { work: "#/work", contact: "#/contact" }, onClose: closeGame });
+  const show = () => {
+    gameTimers.forEach(clearTimeout); gameTimers = [];
+    orbSkip.hidden = true; orbShip.classList.remove("leaving"); orbShip.style.visibility = "hidden";
+    body.classList.add("game-in"); gameRoot.hidden = false; game.open();
+    requestAnimationFrame(() => gameRoot.classList.add("show"));
+    gameTimers.push(setTimeout(() => gameOpen && Space.hold(true), 520));
+  };
+  if (RM) { show(); return; }                              // reduced motion: a short crossfade, no swoop
+  // the ship breaks orbit and swoops toward the viewer, then the site's warp streaks carry it into the game
+  orbSkip.hidden = false; orbSkip.onclick = () => { Space.streak(1.9, 1.9, 0.01); show(); };
+  orbShip.classList.add("leaving");
+  const [sx, sy] = orbPos, tx = innerWidth / 2, ty = innerHeight * 0.58, c1 = [sx + (tx - sx) * 0.15, sy + 160];
+  const t0 = performance.now(), dur = 820;
+  const fly = (now) => {
+    if (!orbShip.classList.contains("leaving")) return;
+    const k = Math.min(1, (now - t0) / dur), e = k * k * (3 - 2 * k), u = 1 - e;
+    const x = u * u * sx + 2 * u * e * c1[0] + e * e * tx, y = u * u * sy + 2 * u * e * c1[1] + e * e * ty;
+    const vx = 2 * u * (c1[0] - sx) + 2 * e * (tx - c1[0]), vy = 2 * u * (c1[1] - sy) + 2 * e * (ty - c1[1]);
+    const ang = (Math.atan2(vy, vx) * 180) / Math.PI + 90;
+    orbShip.style.zIndex = 31;
+    orbShip.style.opacity = String(1 - Math.max(0, (k - 0.75) / 0.25));
+    orbShip.style.transform = `translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,0) translate(-50%,-50%) rotate(${(ang * (1 - e) + 180 * e).toFixed(1)}deg) scale(${(1 + 7 * e * e).toFixed(3)})`;
+    if (k < 1) requestAnimationFrame(fly);
+  };
+  requestAnimationFrame(fly);
+  gameTimers.push(setTimeout(() => Space.streak(0.25, 1.9, 1.05), 320));
+  gameTimers.push(setTimeout(show, 1050));
+}
+function closeGame(opts = {}) {
+  gameTimers.forEach(clearTimeout); gameTimers = [];
+  gameRoot.classList.remove("show"); body.classList.remove("game-in");
+  Space.hold(false);
+  if (!RM) Space.streak(1.7, 0.15, 0.6);                   // the streaks wind down as the station comes back
+  gameTimers.push(setTimeout(() => {
+    gameRoot.hidden = true; gameOpen = false; body.classList.remove("gaming");
+    for (const el of $$(".home, .hud, .tabbar, #labels, #beacons, .radar-wrap")) el.inert = false;
+    orbShip.style.visibility = ""; orbShip.style.opacity = "0"; orbShip.style.transition = "opacity .4s";
+    setTimeout(() => (orbShip.style.transition = ""), 450);
+    if (!opts.keepHash) { orbLabel.style.visibility = "visible"; orbLine.style.visibility = "visible"; orbLabel.focus({ preventScroll: true }); }
+  }, RM ? 160 : 600));
+}
 
 const liveEl = $("#live");
 function live(text) { liveEl.textContent = text; }
