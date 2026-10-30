@@ -28,7 +28,7 @@
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
-<!-- gen:importmap --><script type="importmap">{"imports":{"./assets/content.js":"./assets/content.js?v=9078da7c46","./assets/fig/cabin.mjs":"./assets/fig/cabin.mjs?v=8d2423ef7b","./assets/fig/comms.mjs":"./assets/fig/comms.mjs?v=f41a34821a","./assets/fig/cupola.mjs":"./assets/fig/cupola.mjs?v=9efcadfe44","./assets/fig/dish.mjs":"./assets/fig/dish.mjs?v=bbfd6af994","./assets/fig/hatch.mjs":"./assets/fig/hatch.mjs?v=3fabeb8b1d","./assets/fig/mission001.mjs":"./assets/fig/mission001.mjs?v=1d2d597f9d","./assets/fig/solar.mjs":"./assets/fig/solar.mjs?v=6298cb9a65","./assets/fig/station.mjs":"./assets/fig/station.mjs?v=6fb38ef629","./assets/game/game.mjs":"./assets/game/game.mjs?v=b9802922cf","./assets/game/parts.js":"./assets/game/parts.js?v=9d47013048","./assets/game/ship.mjs":"./assets/game/ship.mjs?v=7abf9c99bb","./assets/kit/audit.mjs":"./assets/kit/audit.mjs?v=0edd59b8fa","./assets/kit/gl.mjs":"./assets/kit/gl.mjs?v=37e76fedb1","./assets/kit/iso-kit.mjs":"./assets/kit/iso-kit.mjs?v=46c0b262a4","./assets/kit/lathe.mjs":"./assets/kit/lathe.mjs?v=034310ce13","./assets/kit/tube.mjs":"./assets/kit/tube.mjs?v=1bafc8d37c","./assets/render.js":"./assets/render.js?v=a40a4958bb","./assets/space.js":"./assets/space.js?v=c7ee2b1e4f","./assets/ui.js":"./assets/ui.js?v=e36b0d72a4"}}</script><link rel="modulepreload" href="assets/ui.js?v=e36b0d72a4"><link rel="modulepreload" href="assets/space.js?v=c7ee2b1e4f"><link rel="modulepreload" href="assets/fig/station.mjs?v=6fb38ef629"><!-- /gen:importmap -->
+<!-- gen:importmap --><script type="importmap">{"imports":{"./assets/content.js":"./assets/content.js?v=9078da7c46","./assets/fig/cabin.mjs":"./assets/fig/cabin.mjs?v=8d2423ef7b","./assets/fig/comms.mjs":"./assets/fig/comms.mjs?v=f41a34821a","./assets/fig/cupola.mjs":"./assets/fig/cupola.mjs?v=9efcadfe44","./assets/fig/dish.mjs":"./assets/fig/dish.mjs?v=bbfd6af994","./assets/fig/hatch.mjs":"./assets/fig/hatch.mjs?v=3fabeb8b1d","./assets/fig/mission001.mjs":"./assets/fig/mission001.mjs?v=1d2d597f9d","./assets/fig/solar.mjs":"./assets/fig/solar.mjs?v=6298cb9a65","./assets/fig/station.mjs":"./assets/fig/station.mjs?v=6fb38ef629","./assets/game/game.mjs":"./assets/game/game.mjs?v=b9802922cf","./assets/game/parts.js":"./assets/game/parts.js?v=9d47013048","./assets/game/ship.mjs":"./assets/game/ship.mjs?v=7abf9c99bb","./assets/kit/audit.mjs":"./assets/kit/audit.mjs?v=0edd59b8fa","./assets/kit/gl.mjs":"./assets/kit/gl.mjs?v=37e76fedb1","./assets/kit/iso-kit.mjs":"./assets/kit/iso-kit.mjs?v=46c0b262a4","./assets/kit/lathe.mjs":"./assets/kit/lathe.mjs?v=034310ce13","./assets/kit/tube.mjs":"./assets/kit/tube.mjs?v=1bafc8d37c","./assets/render.js":"./assets/render.js?v=a40a4958bb","./assets/space.js":"./assets/space.js?v=c7ee2b1e4f","./assets/ui.js":"./assets/ui.js?v=40e4ac86cb"}}</script><link rel="modulepreload" href="assets/ui.js?v=40e4ac86cb"><link rel="modulepreload" href="assets/space.js?v=c7ee2b1e4f"><link rel="modulepreload" href="assets/fig/station.mjs?v=6fb38ef629"><!-- /gen:importmap -->
 <style id="iso-css"><!-- gen:isocss -->
 .iso{
   --anatomy-page:#0b0b0b;--anatomy-card:#131313;--anatomy-text:#a3a3a3;--anatomy-strong:#e6e6e6;--anatomy-muted:#6e6e6e;
@@ -631,10 +631,13 @@ body.diving .tabbar{opacity:0;pointer-events:none}
 @keyframes orbflame{from{transform:scaleY(.7)}to{transform:scaleY(1.15)}}
 .orb-ship::before{content:"";position:absolute;inset:-8px;border-radius:50%}
 .orb-ship:focus-visible{outline:2px solid var(--amber);outline-offset:4px}
-.orb-tag{position:fixed;left:0;top:0;z-index:19;display:inline-flex;align-items:center;gap:8px;padding:7px 13px 7px 11px;border-radius:12px;background:var(--glass);border:1px solid rgba(255,191,115,.5);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);white-space:nowrap;font:500 15px var(--display);color:#fff;box-shadow:0 8px 30px -12px rgba(0,0,0,.8),0 0 22px -8px rgba(255,191,115,.55);pointer-events:none;opacity:0;transition:opacity .35s var(--ease)}
-.orb-tag.on{opacity:1}
-.orb-arr{color:var(--amber)}
-.orb-dot{width:7px;height:7px;border-radius:50%;background:var(--amber);box-shadow:0 0 10px var(--amber)}
+.orb-tag{position:fixed;left:0;top:0;z-index:19;display:inline-flex;align-items:center;gap:6px;padding:3px 9px 3px 7px;border-radius:999px;background:rgba(7,9,20,.72);border:1px solid rgba(255,191,115,.35);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);white-space:nowrap;font:500 12px var(--display);letter-spacing:.01em;color:#f3f5fb;pointer-events:none;opacity:0;transition:opacity .35s var(--ease),border-color .3s,box-shadow .3s}
+.orb-tag.on{opacity:.92}
+.orb-tag.full{gap:8px;padding:7px 13px 7px 11px;border-radius:12px;background:var(--glass);border-color:rgba(255,191,115,.55);font-size:15px;opacity:1;box-shadow:0 8px 30px -12px rgba(0,0,0,.8),0 0 22px -8px rgba(255,191,115,.55)}
+.orb-arr{display:none;color:var(--amber)}
+.orb-tag.full .orb-arr{display:inline}
+.orb-dot{width:5px;height:5px;border-radius:50%;background:var(--amber);box-shadow:0 0 8px var(--amber)}
+.orb-tag.full .orb-dot{width:7px;height:7px}
 .orb-trail{position:fixed;inset:0;width:100%;height:100%;z-index:13;pointer-events:none;visibility:hidden}
 .orb-trail line{stroke:#ffbf73;stroke-width:1.6;stroke-linecap:round}
 .orb-skip{position:fixed;right:var(--gutter);top:18px;z-index:72}
@@ -1357,6 +1360,6 @@ body.gaming .tabbar,body.gaming .orb-tag,body.gaming #hint{visibility:hidden}
 </ul></nav>
 <div class="sr" aria-live="polite" id="live"></div>
 <div class="cine" aria-hidden="true"></div>
-<!-- gen:entry --><script type="module" src="assets/ui.js?v=e36b0d72a4"></script><!-- /gen:entry -->
+<!-- gen:entry --><script type="module" src="assets/ui.js?v=40e4ac86cb"></script><!-- /gen:entry -->
 </body>
 </html>

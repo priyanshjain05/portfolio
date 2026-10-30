@@ -659,6 +659,14 @@ orbShip.addEventListener("click", openGame);
 (window.requestIdleCallback || ((f) => setTimeout(f, 3000)))(() => !RM && loadGame(), { timeout: 6000 });
 
 const coarse = matchMedia("(pointer: coarse)");
+let tagSpot = 0;
+// what the tag should never sit on: the part labels or pins, the station hint, the hero's text and buttons
+function tagBlockers() {
+  const out = [];
+  for (const h of Object.values(hots)) for (const el of labelMode ? [h.firstElementChild, h.lastElementChild] : [h.firstElementChild]) { const r = el.getBoundingClientRect(); if (r.width) out.push(r); }
+  for (const el of $$(".hero h1, .hero .h-tag, .hero .h-target, .hero .h-cta, .hero .h-nav, .hero .h-explore, #hint:not(.gone)")) { const r = el.getBoundingClientRect(); if (r.width) out.push(r); }
+  return out;
+}
 let orbPos = [0, 0], orbVisible = false, trail = [], trailT = 0, wasFront = false;
 function orbit(f, show) {
   orbVisible = show;
@@ -699,13 +707,24 @@ function orbit(f, show) {
   if (!store.get("pj-game-hint") && now > menuHold + 1500 && (!tall || hint.classList.contains("gone"))) { store.set("pj-game-hint", "1"); tagUntil = now + 5500; }
   if ((tall || coarse.matches) && front && !wasFront) tagUntil = Math.max(tagUntil, now + 2600);
   wasFront = front;
-  const on = engaged || now < tagUntil;
-  orbTag.classList.toggle("on", on);
-  if (on) {
+  // the tag is always there, small and out of the way; it grows when someone reaches for the jet
+  const full = engaged || now < tagUntil;
+  orbTag.classList.add("on");
+  if (orbTag.classList.contains("full") !== full) { orbTag.classList.toggle("full", full); orbTag._w = orbTag._h = 0; }
+  {
     const tw = orbTag._w || (orbTag._w = orbTag.offsetWidth), th = orbTag._h || (orbTag._h = orbTag.offsetHeight);
-    let tx = x + 24 * k, ty = y + 10 * k;
-    if (tx + tw > innerWidth - 12) tx = x - 24 * k - tw;                           // flip to the left near the edge
-    tx = Math.max(12, tx); ty = Math.max(76, Math.min(innerHeight - th - (tall ? 72 : 12), ty));
+    // try a few spots around the jet and keep the current one until it runs into a label, pin, hint or the hero text
+    const g = (full ? 22 : 16) * k, spots = [
+      [x + g, y - th / 2], [x - g - tw, y - th / 2], [x - tw / 2, y + g], [x - tw / 2, y - g - th], [x + g, y + g * 0.6], [x - g - tw, y + g * 0.6],
+      // farther out, for crowded phone layouts
+      [x - tw / 2, y + g * 2.6], [x - tw / 2, y - g * 2.6 - th], [x + g * 2.4, y - th / 2], [x - g * 2.4 - tw, y - th / 2], [x + g * 1.8, y + g * 1.8], [x - g * 1.8 - tw, y + g * 1.8],
+    ].map(([px, py]) => [Math.max(12, Math.min(innerWidth - tw - 12, px)), Math.max(76, Math.min(innerHeight - th - (tall ? 72 : 12), py))]);
+    const blockers = tagBlockers();
+    const clear = ([px, py]) => !blockers.some((r) => px < r.right + 6 && px + tw > r.left - 6 && py < r.bottom + 4 && py + th > r.top - 4);
+    let pick = clear(spots[tagSpot]) ? tagSpot : spots.findIndex(clear);
+    if (pick < 0) pick = tagSpot;
+    tagSpot = pick;
+    const [tx, ty] = spots[pick];
     orbTag.style.transform = `translate3d(${tx.toFixed(1)}px,${ty.toFixed(1)}px,0)`;
   }
 }
