@@ -630,13 +630,13 @@ body.diving .tabbar{opacity:0;pointer-events:none}
 .orb-ship{position:fixed;left:0;top:0;width:56px;height:56px;border-radius:50%;z-index:17;cursor:pointer;background:transparent;visibility:hidden}
 @keyframes orbflame{from{transform:scaleY(.7)}to{transform:scaleY(1.15)}}
 .orb-ship::before{content:"";position:absolute;inset:-8px;border-radius:50%}
-.orb-ship:focus-visible{outline:2px solid var(--amber);outline-offset:4px}
-.orb-tag{position:fixed;left:0;top:0;z-index:19;display:inline-flex;align-items:center;gap:6px;padding:3px 9px 3px 7px;border-radius:999px;background:rgba(7,9,20,.72);border:1px solid rgba(255,191,115,.35);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);white-space:nowrap;font:500 12px var(--display);letter-spacing:.01em;color:#f3f5fb;pointer-events:none;opacity:0;transition:opacity .35s var(--ease),border-color .3s,box-shadow .3s}
+.orb-ship:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
+.orb-tag{position:fixed;left:0;top:0;z-index:19;display:inline-flex;align-items:center;gap:6px;padding:3px 9px 3px 7px;border-radius:999px;background:rgba(7,9,20,.72);border:1px solid rgba(127,227,255,.32);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);white-space:nowrap;font:500 12px var(--display);letter-spacing:.01em;color:#f3f5fb;pointer-events:none;opacity:0;transition:opacity .35s var(--ease),border-color .3s,box-shadow .3s}
 .orb-tag.on{opacity:.92}
-.orb-tag.full{gap:8px;padding:7px 13px 7px 11px;border-radius:12px;background:var(--glass);border-color:rgba(255,191,115,.55);font-size:15px;opacity:1;box-shadow:0 8px 30px -12px rgba(0,0,0,.8),0 0 22px -8px rgba(255,191,115,.55)}
-.orb-arr{display:none;color:var(--amber)}
+.orb-tag.full{gap:8px;padding:7px 13px 7px 11px;border-radius:12px;background:var(--glass);border-color:var(--cyan);font-size:15px;opacity:1;box-shadow:0 0 30px -6px rgba(127,227,255,.55)}
+.orb-arr{display:none;color:var(--cyan)}
 .orb-tag.full .orb-arr{display:inline}
-.orb-dot{width:5px;height:5px;border-radius:50%;background:var(--amber);box-shadow:0 0 8px var(--amber)}
+.orb-dot{width:5px;height:5px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
 .orb-tag.full .orb-dot{width:7px;height:7px}
 .orb-trail{position:fixed;inset:0;width:100%;height:100%;z-index:13;pointer-events:none;visibility:hidden}
 .orb-trail line{stroke:#ffbf73;stroke-width:1.6;stroke-linecap:round}
